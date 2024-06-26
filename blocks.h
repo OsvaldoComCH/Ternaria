@@ -61,7 +61,7 @@ void writeArchive(LList *lista)
     for(int i = 0; i < lista->Size; ++i)
     {
         block * B = (block *) N->Value;
-        fprintf("%i,%i,%i\n", B->x, B->y, B->type);
+        fprintf(File, "%i,%i,%i\n", B->x, B->y, B->type);
         N = N->Next;
     }
 }

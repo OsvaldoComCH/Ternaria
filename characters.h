@@ -32,7 +32,7 @@ typedef struct zombie
     wchar_t * img;
 } zombie;
 
-int zombieJump(zombie * zombie, int pixels)
+/*int zombieJump(zombie * zombie, int pixels)
 {
     block * b = MapCollision(&zombie->hitbox);
     int C = Collision(&zombie->hitbox, &b->hitbox);
@@ -40,6 +40,6 @@ int zombieJump(zombie * zombie, int pixels)
     {
         
     }
-}
+}*/
 
 #endif
