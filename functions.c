@@ -163,5 +163,9 @@ void moveZombie(character * player, zombie * zombie)
     {
         moveLeftZombie(zombie, 2);
     }
-    int Damage = Collision(player, zombie);
+    // int Damage = Collision(player, zombie);
+    // if (Damage = 1)
+    // {
+    //     player->life -= 1;
+    // }
 }

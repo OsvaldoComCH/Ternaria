@@ -17,11 +17,21 @@ void RenderPlayer(const character * Player, HDC hdc)
     wchar_t * img;
     if(Player->state == 0)
     {
-        img = L"imagens/Ferzinho3.bmp";
+        if (Player->facing == 1)
+        {
+            img = L"imagens/Ferzinho3.bmp";
+        } else {
+            img = L"imagens/Ferzinho3DireitaParado.bmp";
+        }
     }
     else
     {
-        img = L"imagens/Ferzinho3Andante.bmp";
+        if (Player->facing == 1)
+        {
+            img = L"imagens/Ferzinho3Andante.bmp";
+        } else {
+            img = L"imagens/FerzinhoDireita.bmp";
+        }
     }
     DrawImg(hdc, &Player->hitbox, img);
 }
@@ -38,4 +48,11 @@ void RenderZombie(const zombie * zombie, HDC hdc)
         img = L"imagens/ZumbiDireita.bmp";
     }
     DrawImg(hdc, &zombie->hitbox, img);
+}
+
+void renderInv(HDC hdc)
+{
+    wchar_t * img = L"BarraInv.bmp";
+    RECT rect = {10, 10, 288, 32};
+    DrawImg(hdc, &rect, img);
 }
