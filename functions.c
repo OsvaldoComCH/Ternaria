@@ -90,7 +90,6 @@ void moveDownZombie(zombie * zombie, int pixels)
     if(B != NULL)
     {
         zombieGravity = 0;
-        // canJump = 1;
         zombie->hitbox.bottom = B->hitbox.top;
         zombie->hitbox.top = zombie->hitbox.bottom - 63;
     }
