@@ -25,3 +25,17 @@ void RenderPlayer(const character * Player, HDC hdc)
     }
     DrawImg(hdc, &Player->hitbox, img);
 }
+
+void RenderZombie(const zombie * zombie, HDC hdc)
+{
+    wchar_t * img;
+    if(zombie->state == 0)
+    {
+        img = L"imagens/Zumbi.bmp";
+    }
+    else
+    {
+        img = L"imagens/Zumbi.bmp";
+    }
+    DrawImg(hdc, &zombie->hitbox, img);
+}

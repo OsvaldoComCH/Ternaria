@@ -34,7 +34,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie.jumpBot = 0;
     zombie.canJumpBot = 1;
     zombie.state = 1;
-    zombie.img = NULL;
 
     LListCreate(&Map);
     readArchive(&Map); 
