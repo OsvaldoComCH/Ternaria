@@ -1,5 +1,8 @@
 #include "imports.h"
 
+int gravity = 0;
+int canJump = 1;
+
 int Collision(const RECT * R1, const RECT * R2)
 {
     RECT Inter;
@@ -65,6 +68,8 @@ void MoveDown(character * Player, int Pixels)
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
+        gravity = 0;
+        canJump = 1;
         Player->hitbox.bottom = B->hitbox.top;
         Player->hitbox.top = Player->hitbox.bottom - 63;
     }
@@ -81,21 +86,17 @@ void MoveUp(character * Player, int Pixels)
         Player->hitbox.bottom = Player->hitbox.top + 63;
     }
 }
-
-void Jump(character * Player, int Pixels)
+//! ta dando flick
+void Jump(character * Player, int Pixels) 
 {
-    if(Player->jump <= 0)
+    if(canJump == 1)
     {
-        if(Player->canJump == 1)
+        MoveUp(Player, Pixels);
+        if(gravity == 20)
         {
-            Player->jump = 65;
-            Player->canJump = 0;
+            canJump = 0;
+            gravity = 0;
         }
-    }
-    else
-    {
-        Player->jump -= 5;
-        MoveUp(Player, 5);
     }
 }
 
@@ -111,9 +112,13 @@ void moveUpZombie(zombie * zombie, int pixels)
     }
 }
 
-void Gravity(character * Player, int Pixels)
+void Gravity(character * Player)
 {
-    MoveDown(Player, Pixels);
+    MoveDown(Player, gravity);
+    if(gravity < 20)
+    {
+        gravity++;
+    }
 }
 
 void input(character * Player, LList * Map)
@@ -128,7 +133,7 @@ void input(character * Player, LList * Map)
     }
     if(GetAsyncKeyState(VK_W))
     {
-        MoveUp(Player, 5);
+        MoveUp(Player, 20);
     }
     if(GetAsyncKeyState(VK_S))
     {
@@ -136,10 +141,12 @@ void input(character * Player, LList * Map)
     }
     if(GetAsyncKeyState(VK_SPACE))
     {
-        Jump(Player, 5);
+        Jump(Player, 15);
     }
-    if(GetAsyncKeyState(VK_G))
+    else if(canJump == 1)
     {
-        Gravity(Player, 5);
+        canJump = 0;
+        gravity = 0;
     }
+    Gravity(Player);
 }
