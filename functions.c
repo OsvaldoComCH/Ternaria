@@ -2,6 +2,8 @@
 
 HWND Ghwnd;
 
+int zombieGravity = 0;
+
 //Desenha a imagem
 void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
 {
@@ -80,6 +82,20 @@ int DestroyBlocks()
     return 0;
 }
 
+void moveDownZombie(zombie * zombie, int pixels)
+{
+    zombie->hitbox.top += pixels;
+    zombie->hitbox.bottom += pixels;
+    block * B = MapCollision(&zombie->hitbox);
+    if(B != NULL)
+    {
+        zombieGravity = 0;
+        // canJump = 1;
+        zombie->hitbox.bottom = B->hitbox.top;
+        zombie->hitbox.top = zombie->hitbox.bottom - 63;
+    }
+}
+
 void moveUpZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top -= pixels;
@@ -87,6 +103,7 @@ void moveUpZombie(zombie * zombie, int pixels)
     block * B = MapCollision(&zombie->hitbox);
     if(B != NULL)
     {
+        zombieGravity = 0;
         zombie->hitbox.top = B->hitbox.bottom;
         zombie->hitbox.bottom = zombie->hitbox.top + 63;
     }
@@ -102,6 +119,7 @@ void moveRightZombie(zombie * zombie, int pixels)
     {
         zombie->hitbox.right = B->hitbox.left;
         zombie->hitbox.left = zombie->hitbox.right - 31;
+        moveUpZombie(zombie, 16);
     }
 }
 
@@ -111,34 +129,39 @@ void moveLeftZombie(zombie * zombie, int pixels)
     zombie->hitbox.left -= pixels;
     zombie->hitbox.right -= pixels;
     block * B = MapCollision(&zombie->hitbox);
+    
     if(B != NULL)
     {
+
         zombie->hitbox.right = B->hitbox.left;
         zombie->hitbox.left = zombie->hitbox.right + 31;
-    }
-
-}
-
-void zombieJump(zombie * zombie, int pixels)
-{
-    block * b = MapCollision(&zombie->hitbox);
-    int C = Collision(&zombie->hitbox, &b->hitbox);
-    if (C == 2)
-    {
         moveUpZombie(zombie, 16);
     }
+
 }
 
-void moveZombie(RECT * player, zombie * zombie)
+void ZombieGravity(zombie * zombie)
 {
-    int right = player->right;
-    int left = player->left;
+    moveDownZombie(zombie, zombieGravity);
+    if(zombieGravity < 20)
+    {
+        zombieGravity++;
+    }
+}
+
+void moveZombie(character * player, zombie * zombie)
+{
+    int right = player->hitbox.right;
+    int left = player->hitbox.left;
+    ZombieGravity(zombie);
     if (zombie->hitbox.right < right)
     {
-        moveRightZombie(zombie, 5);
+        moveRightZombie(zombie, 2);
     }
-    else if (zombie->hitbox.left < left)
+
+    if (zombie->hitbox.left > left)
     {
-        moveLeftZombie(zombie, 5);
+        moveLeftZombie(zombie, 2);
     }
+    int Damage = Collision(player, zombie);
 }
