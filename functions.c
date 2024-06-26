@@ -75,6 +75,7 @@ int DestroyBlocks()
         {
             free(B);
             LListRemove(&Map, i);
+            //writeArchive(&Map);
             return 1;
         }
         N = N->Next;
@@ -82,17 +83,33 @@ int DestroyBlocks()
     return 0;
 }
 
-void moveDownZombie(zombie * zombie, int pixels)
+int PlaceBlocks()
 {
-    zombie->hitbox.top += pixels;
-    zombie->hitbox.bottom += pixels;
-    block * B = MapCollision(&zombie->hitbox);
-    if(B != NULL)
+    LLNode * N = Map.Head;
+    POINT Mouse;
+    RECT WindowRect;
+    GetWindowRect(Ghwnd, &WindowRect);
+    if(!GetCursorPos(&Mouse))
     {
-        zombieGravity = 0;
-        zombie->hitbox.bottom = B->hitbox.top;
-        zombie->hitbox.top = zombie->hitbox.bottom - 63;
+        return -1;
     }
+    ScreenToClient(Ghwnd, &Mouse);
+    for(int i = 0; i < Map.Size; ++i)
+    {
+        block * B = (block *)N->Value;
+        if(PtInRect(&B->hitbox, Mouse))
+        {
+            return 0;
+        }
+        N = N->Next;
+    }
+    block * B = malloc(sizeof(block));
+    B->x = Mouse.x / 32;
+    B->y = (675 - Mouse.y) / 32;
+    B->type = 1;
+    blockDefine(B);
+    LListAdd(&Map, B);
+    //writeArchive(&Map);
 }
 
 void moveUpZombie(zombie * zombie, int pixels)

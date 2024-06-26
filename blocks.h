@@ -51,6 +51,7 @@ void readArchive(LList *lista)
         blockDefine(bloco);
         LListAdd(lista, bloco);
     }
+    fclose(File);
 }
 
 void writeArchive(LList *lista)
@@ -64,5 +65,6 @@ void writeArchive(LList *lista)
         fprintf(File, "%i,%i,%i\n", B->x, B->y, B->type);
         N = N->Next;
     }
+    fclose(File);
 }
 #endif
