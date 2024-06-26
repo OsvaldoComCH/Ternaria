@@ -1,4 +1,5 @@
 #include "imports.h"
+#include "render.c"
 
 int Collision(const RECT * R1, const RECT * R2)
 {
@@ -108,6 +109,10 @@ void Gravity(character * Player, int Pixels)
 
 void input(character * Player, LList * Map)
 {
+    if(GetAsyncKeyState(VK_RBUTTON))
+    {
+        printf("%i", DestroyBlocks());
+    }
     if(GetAsyncKeyState(VK_A))
     {
         MoveLeft(Player, 5);
