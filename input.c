@@ -7,6 +7,7 @@ int canJump = 1;
 void MoveLeft(character * Player, int Pixels)
 {
     Player->state = Player->state ^ 1;
+    Player->facing = 1;
     Player->hitbox.left -= Pixels;
     Player->hitbox.right -= Pixels;
     block * B = MapCollision(&Player->hitbox);
@@ -20,6 +21,7 @@ void MoveLeft(character * Player, int Pixels)
 void MoveRight(character * Player, int Pixels)
 {
     Player->state = Player->state ^ 1;
+    Player->facing = 2;
     Player->hitbox.left += Pixels;
     Player->hitbox.right += Pixels;
     block * B = MapCollision(&Player->hitbox);

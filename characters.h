@@ -13,6 +13,7 @@ typedef struct character
     int life;
     int damage;
     int state;
+    int facing;
 } character;
 
 /*
