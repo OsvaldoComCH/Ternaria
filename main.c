@@ -28,18 +28,26 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.state = 0;
 
     zombie zombie;
+    zombie.hitbox.left =320;
+    zombie.hitbox.right = 351;
+    zombie.hitbox.top = 320;
+    zombie.hitbox.bottom = 383;
     zombie.life = 12;
     zombie.damage = 2;
+    zombie.jumpBot = 0;
+    zombie.canJumpBot = 1;
+    zombie.state = 1;
     zombie.img = NULL;
 
     LListCreate(&Map);
-    readArchive(&Map);
+    readArchive(&Map); 
     
     /*
     Normalmente, se usa um sleep para esperar uma determinada quantidade de tempo. As funções de sleep são
     imprecisas, pois liberam a thread para o sistema operacional, que pode te devolver depois do prazo.
     Os timers do Windows travam a thread, mas não a liberam, tornando-os muito precisos e eficientes.
     */
+
     HANDLE Timer = CreateWaitableTimer(NULL, 0, NULL);
     LARGE_INTEGER DueTime;
     DueTime.QuadPart = -200000;

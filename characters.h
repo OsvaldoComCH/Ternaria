@@ -26,7 +26,20 @@ typedef struct zombie
     RECT hitbox;
     int life;
     int damage;
+    int state;
+    int jumpBot;
+    int canJumpBot;
     wchar_t * img;
 } zombie;
+
+int zombieJump(zombie * zombie, int pixels)
+{
+    block * b = MapCollision(&zombie->hitbox);
+    int C = Collision(&zombie->hitbox, &b->hitbox);
+    if (C == 2)
+    {
+        
+    }
+}
 
 #endif
