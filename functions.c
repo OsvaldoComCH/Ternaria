@@ -129,12 +129,10 @@ void moveLeftZombie(zombie * zombie, int pixels)
     zombie->hitbox.left -= pixels;
     zombie->hitbox.right -= pixels;
     block * B = MapCollision(&zombie->hitbox);
-    
     if(B != NULL)
     {
-
-        zombie->hitbox.right = B->hitbox.left;
-        zombie->hitbox.left = zombie->hitbox.right + 31;
+        zombie->hitbox.left = B->hitbox.right;
+        zombie->hitbox.right = zombie->hitbox.left + 31;
         moveUpZombie(zombie, 16);
     }
 
@@ -158,7 +156,6 @@ void moveZombie(character * player, zombie * zombie)
     {
         moveRightZombie(zombie, 2);
     }
-
     if (zombie->hitbox.left > left)
     {
         moveLeftZombie(zombie, 2);
