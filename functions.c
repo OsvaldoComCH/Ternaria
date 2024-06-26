@@ -112,6 +112,19 @@ int PlaceBlocks()
     //writeArchive(&Map);
 }
 
+void moveDownZombie(zombie * zombie, int pixels)
+{
+    zombie->hitbox.top += pixels;
+    zombie->hitbox.bottom += pixels;
+    block * B = MapCollision(&zombie->hitbox);
+    if(B != NULL)
+    {
+        zombieGravity = 0;
+        zombie->hitbox.bottom = B->hitbox.top;
+        zombie->hitbox.top = zombie->hitbox.bottom - 63;
+    }
+}
+
 void moveUpZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top -= pixels;
