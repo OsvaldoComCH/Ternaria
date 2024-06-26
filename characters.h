@@ -38,7 +38,7 @@ int zombieJump(zombie * zombie, int pixels)
     int C = Collision(&zombie->hitbox, &b->hitbox);
     if (C == 2)
     {
-        
+        moveUpZombie(zombie, 16);
     }
 }
 
