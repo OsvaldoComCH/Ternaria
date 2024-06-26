@@ -12,8 +12,6 @@ typedef struct character
     int inventory[32];
     int life;
     int damage;
-    int jump;
-    int canJump;
     int state;
 } character;
 
@@ -29,25 +27,6 @@ typedef struct zombie
     int state;
     int jumpBot;
     int canJumpBot;
-    wchar_t * img;
 } zombie;
-
-// void moveZombie(RECT * player)
-// {
-//     int right = player->right;
-//     int left = player->left;
-
-
-// }
-
-// void zombieJump(zombie * zombie, int pixels)
-// {
-//     block * b = MapCollision(&zombie->hitbox);
-//     int C = Collision(&zombie->hitbox, &b->hitbox);
-//     if (C == 2)
-//     {
-//         moveUpZombie(zombie, 16);
-//     }
-// }
 
 #endif

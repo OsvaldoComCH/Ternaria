@@ -47,3 +47,65 @@ int DestroyBlocks()
     }
     return 0;
 }
+
+void moveZombie(RECT * player, zombie * zombie)
+{
+    int right = player->right;
+    int left = player->left;
+    if (zombie->hitbox.right < right)
+    {
+        moveRightZombie(zombie, 5);
+    }
+    else if (zombie->hitbox.left < left)
+    {
+        moveLeftZombie(zombie, 5);
+    }
+}
+
+void zombieJump(zombie * zombie, int pixels)
+{
+    block * b = MapCollision(&zombie->hitbox);
+    int C = Collision(&zombie->hitbox, &b->hitbox);
+    if (C == 2)
+    {
+        moveUpZombie(zombie, 16);
+    }
+}
+
+void moveUpZombie(zombie * zombie, int pixels)
+{
+    zombie->hitbox.top -= pixels;
+    zombie->hitbox.bottom -= pixels;
+    block * B = MapCollision(&zombie->hitbox);
+    if(B != NULL)
+    {
+        zombie->hitbox.top = B->hitbox.bottom;
+        zombie->hitbox.bottom = zombie->hitbox.top + 63;
+    }
+}
+
+void moveRightZombie(zombie * zombie, int pixels)
+{
+    zombie->state = zombie->state ^ 1;
+    zombie->hitbox.left += pixels;
+    zombie->hitbox.right += pixels;
+    block * B = MapCollision(&zombie->hitbox);
+    if(B != NULL)
+    {
+        zombie->hitbox.right = B->hitbox.left;
+        zombie->hitbox.left = zombie->hitbox.right - 31;
+    }
+}
+
+void moveLeftZombie(zombie * zombie, int pixels)
+{
+    zombie->state = zombie->state ^ 1;
+    zombie->hitbox.left -= pixels;
+    zombie->hitbox.right -= pixels;
+    block * B = MapCollision(&zombie->hitbox);
+    if(B != NULL)
+    {
+        zombie->hitbox.right = B->hitbox.left;
+        zombie->hitbox.left = zombie->hitbox.right + 31;
+    }
+}

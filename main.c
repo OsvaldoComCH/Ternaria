@@ -22,8 +22,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.hitbox.bottom = 383;
     player.life = 10;
     player.damage = 1;
-    player.jump = 0;
-    player.canJump = 1;
     player.state = 0;
 
     zombie zombie;
@@ -36,7 +34,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie.jumpBot = 0;
     zombie.canJumpBot = 1;
     zombie.state = 1;
-    zombie.img = NULL;
 
     LListCreate(&Map);
     readArchive(&Map); 

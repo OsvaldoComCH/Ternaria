@@ -104,18 +104,6 @@ void Jump(character * Player, int Pixels)
     }
 }
 
-void moveUpZombie(zombie * zombie, int pixels)
-{
-    zombie->hitbox.top -= pixels;
-    zombie->hitbox.bottom -= pixels;
-    block * B = MapCollision(&zombie->hitbox);
-    if(B != NULL)
-    {
-        zombie->hitbox.top = B->hitbox.bottom;
-        zombie->hitbox.bottom = zombie->hitbox.top + 63;
-    }
-}
-
 void Gravity(character * Player)
 {
     MoveDown(Player, gravity);
@@ -138,14 +126,6 @@ void input(character * Player, LList * Map)
     if(GetAsyncKeyState(VK_D))
     {
         MoveRight(Player, 5);
-    }
-    if(GetAsyncKeyState(VK_W))
-    {
-        MoveUp(Player, 20);
-    }
-    if(GetAsyncKeyState(VK_S))
-    {
-        MoveDown(Player, 5);
     }
     if(GetAsyncKeyState(VK_SPACE))
     {
