@@ -1,4 +1,5 @@
 #include "imports.h"
+#include "render.c"
 
 int gravity = 0;
 int canJump = 1;
@@ -123,6 +124,10 @@ void Gravity(character * Player)
 
 void input(character * Player, LList * Map)
 {
+    if(GetAsyncKeyState(VK_RBUTTON))
+    {
+        printf("%i", DestroyBlocks());
+    }
     if(GetAsyncKeyState(VK_A))
     {
         MoveLeft(Player, 5);

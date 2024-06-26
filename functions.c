@@ -1,5 +1,8 @@
 #include "imports.h"
-//Desenha a imagem 
+
+HWND Ghwnd;
+
+//Desenha a imagem
 void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
 {
     BITMAP bm;
@@ -18,4 +21,29 @@ void DrawRect(HDC hdc, const RECT * Rect, COLORREF Color)
     SelectObject(hdc, GetStockObject(DC_BRUSH));
     SetDCBrushColor(hdc, Color);
     Rectangle(hdc, Rect->left, Rect->top, Rect->right, Rect->bottom);
+}
+
+int DestroyBlocks()
+{
+    LLNode * N = Map.Head;
+    POINT Mouse;
+    RECT WindowRect;
+    GetWindowRect(Ghwnd, &WindowRect);
+    if(!GetCursorPos(&Mouse))
+    {
+        return -1;
+    }
+    ScreenToClient(Ghwnd, &Mouse);
+    for(int i = 0; i < Map.Size; ++i)
+    {
+        block * B = (block *)N->Value;
+        if(PtInRect(&B->hitbox, Mouse))
+        {
+            free(B);
+            LListRemove(&Map, i);
+            return 1;
+        }
+        N = N->Next;
+    }
+    return 0;
 }

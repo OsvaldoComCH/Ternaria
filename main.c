@@ -3,7 +3,6 @@ gcc main.c -o Ternaria.exe -l gdi32 -l msimg32
 */
 
 #include "imports.h"
-#include "render.c"
 #include "input.c"
 
 DWORD ThreadID;
@@ -131,7 +130,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         MessageBox(NULL, L"Window Creation Failed", L"Error", MB_ICONERROR | MB_OK);
         return 0;
     }
-
+    Ghwnd = hwnd;
+    
     HICON hIcon = (HICON)LoadImage(NULL, L"imagens/iconeTernaria.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
     
     if (hIcon != NULL) {

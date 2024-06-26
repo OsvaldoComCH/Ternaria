@@ -52,4 +52,17 @@ void readArchive(LList *lista)
         LListAdd(lista, bloco);
     }
 }
+
+void writeArchive(LList *lista)
+{
+    int count = 0;
+    FILE * File = fopen("Map.txt", "w");
+    LLNode * N = lista->Head;
+    for(int i = 0; i < lista->Size; ++i)
+    {
+        block * B = (block *) N->Value;
+        fprintf("%i,%i,%i\n", B->x, B->y, B->type);
+        N = N->Next;
+    }
+}
 #endif
