@@ -35,7 +35,7 @@ void RenderZombie(const zombie * zombie, HDC hdc)
     }
     else
     {
-        img = L"imagens/Zumbi.bmp";
+        img = L"imagens/ZumbiDireita.bmp";
     }
     DrawImg(hdc, &zombie->hitbox, img);
 }

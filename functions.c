@@ -86,7 +86,7 @@ void moveUpZombie(zombie * zombie, int pixels)
 
 void moveRightZombie(zombie * zombie, int pixels)
 {
-    zombie->state = zombie->state ^ 1;
+    zombie->state = zombie->state = 1;
     zombie->hitbox.left += pixels;
     zombie->hitbox.right += pixels;
     block * B = MapCollision(&zombie->hitbox);
@@ -99,7 +99,7 @@ void moveRightZombie(zombie * zombie, int pixels)
 
 void moveLeftZombie(zombie * zombie, int pixels)
 {
-    zombie->state = zombie->state ^ 1;
+    zombie->state = zombie->state = 0;
     zombie->hitbox.left -= pixels;
     zombie->hitbox.right -= pixels;
     block * B = MapCollision(&zombie->hitbox);
