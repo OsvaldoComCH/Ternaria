@@ -73,11 +73,41 @@ int DestroyBlocks()
         {
             free(B);
             LListRemove(&Map, i);
+            //writeArchive(&Map);
             return 1;
         }
         N = N->Next;
     }
     return 0;
+}
+
+int PlaceBlocks()
+{
+    LLNode * N = Map.Head;
+    POINT Mouse;
+    RECT WindowRect;
+    GetWindowRect(Ghwnd, &WindowRect);
+    if(!GetCursorPos(&Mouse))
+    {
+        return -1;
+    }
+    ScreenToClient(Ghwnd, &Mouse);
+    for(int i = 0; i < Map.Size; ++i)
+    {
+        block * B = (block *)N->Value;
+        if(PtInRect(&B->hitbox, Mouse))
+        {
+            return 0;
+        }
+        N = N->Next;
+    }
+    block * B = malloc(sizeof(block));
+    B->x = Mouse.x / 32;
+    B->y = (675 - Mouse.y) / 32;
+    B->type = 1;
+    blockDefine(B);
+    LListAdd(&Map, B);
+    //writeArchive(&Map);
 }
 
 void moveUpZombie(zombie * zombie, int pixels)

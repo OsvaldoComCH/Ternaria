@@ -86,6 +86,10 @@ void input(character * Player, LList * Map)
     if(GetAsyncKeyState(VK_RBUTTON))
     {
         DestroyBlocks();
+    }else
+    if(GetAsyncKeyState(VK_LBUTTON))
+    {
+        PlaceBlocks();
     }
     if(GetAsyncKeyState(VK_A))
     {
