@@ -32,22 +32,4 @@ typedef struct zombie
     wchar_t * img;
 } zombie;
 
-// void moveZombie(RECT * player)
-// {
-//     int right = player->right;
-//     int left = player->left;
-
-
-// }
-
-// void zombieJump(zombie * zombie, int pixels)
-// {
-//     block * b = MapCollision(&zombie->hitbox);
-//     int C = Collision(&zombie->hitbox, &b->hitbox);
-//     if (C == 2)
-//     {
-//         moveUpZombie(zombie, 16);
-//     }
-// }
-
 #endif
