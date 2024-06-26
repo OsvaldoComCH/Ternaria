@@ -83,21 +83,24 @@ void MoveUp(character * Player, int Pixels)
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
+        canJump = 0;
+        gravity = 0;
         Player->hitbox.top = B->hitbox.bottom;
         Player->hitbox.bottom = Player->hitbox.top + 63;
     }
 }
-//! ta dando flick
+
 void Jump(character * Player, int Pixels) 
 {
     if(canJump == 1)
     {
-        MoveUp(Player, Pixels);
-        if(gravity == 20)
+        if(gravity == 15)
         {
             canJump = 0;
             gravity = 0;
+            return;
         }
+        MoveUp(Player, Pixels);
     }
 }
 
@@ -126,7 +129,7 @@ void input(character * Player, LList * Map)
 {
     if(GetAsyncKeyState(VK_RBUTTON))
     {
-        printf("%i", DestroyBlocks());
+        DestroyBlocks();
     }
     if(GetAsyncKeyState(VK_A))
     {
