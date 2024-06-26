@@ -88,7 +88,7 @@ void MoveUp(character * Player, int Pixels)
     }
 }
 //! ta dando flick
-void Jump(character * Player, int Pixels) 
+void Jump(character * Player, int Pixels)
 {
     if(canJump == 1)
     {
@@ -135,14 +135,6 @@ void input(character * Player, LList * Map)
     if(GetAsyncKeyState(VK_D))
     {
         MoveRight(Player, 5);
-    }
-    if(GetAsyncKeyState(VK_W))
-    {
-        MoveUp(Player, 20);
-    }
-    if(GetAsyncKeyState(VK_S))
-    {
-        MoveDown(Player, 5);
     }
     if(GetAsyncKeyState(VK_SPACE))
     {
