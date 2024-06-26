@@ -101,18 +101,6 @@ void Jump(character * Player, int Pixels)
     }
 }
 
-void moveUpZombie(zombie * zombie, int pixels)
-{
-    zombie->hitbox.top -= pixels;
-    zombie->hitbox.bottom -= pixels;
-    block * B = MapCollision(&zombie->hitbox);
-    if(B != NULL)
-    {
-        zombie->hitbox.top = B->hitbox.bottom;
-        zombie->hitbox.bottom = zombie->hitbox.top + 63;
-    }
-}
-
 void Gravity(character * Player)
 {
     MoveDown(Player, gravity);

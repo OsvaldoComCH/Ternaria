@@ -29,7 +29,6 @@ typedef struct zombie
     int state;
     int jumpBot;
     int canJumpBot;
-    wchar_t * img;
 } zombie;
 
 #endif
