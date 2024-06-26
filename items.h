@@ -10,6 +10,7 @@ Essa header possui os itens que serão implementados no jogo
 
 typedef struct Sword
 {
+    int id;
     int damage;
     int durability;
     int material;
@@ -18,11 +19,21 @@ typedef struct Sword
 
 typedef struct Pickaxe
 {
+    int id;
     int damage;
     int durability;
     int material;
     int speed;
 } Pickaxe;
 
+typedef struct Shotgun
+{
+    int id;
+    int damage;
+    int durability;
+    int material;
+    int ammo;
+} Shotgun;
 
-#endif // 
+
+#endif
