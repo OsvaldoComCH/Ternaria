@@ -61,7 +61,10 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         DrawImg(TempDC, &R, L"imagens/BackGround.bmp");
         RenderMap(&Map, TempDC);
         input(&player, &Map);
+        RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
+
+        moveZombie(&player.hitbox, &zombie);
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);

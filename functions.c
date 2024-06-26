@@ -23,6 +23,38 @@ void DrawRect(HDC hdc, const RECT * Rect, COLORREF Color)
     Rectangle(hdc, Rect->left, Rect->top, Rect->right, Rect->bottom);
 }
 
+int Collision(const RECT * R1, const RECT * R2)
+{
+    RECT Inter;
+    if(IntersectRect(&Inter, R1, R2))
+    {
+        if(Inter.right - Inter.left > Inter.bottom - Inter.top)
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+    return 0;
+}
+
+block * MapCollision(const RECT * R)
+{
+    LLNode * N = Map.Head;
+    for(int i = 0; i < Map.Size; ++i)
+    {
+        block * B = N->Value;
+        if(Collision(&B->hitbox, R))
+        {
+            return B;
+        }
+        N = N->Next;
+    }
+    return NULL;
+}
+
 int DestroyBlocks()
 {
     LLNode * N = Map.Head;
@@ -46,30 +78,6 @@ int DestroyBlocks()
         N = N->Next;
     }
     return 0;
-}
-
-void moveZombie(RECT * player, zombie * zombie)
-{
-    int right = player->right;
-    int left = player->left;
-    if (zombie->hitbox.right < right)
-    {
-        moveRightZombie(zombie, 5);
-    }
-    else if (zombie->hitbox.left < left)
-    {
-        moveLeftZombie(zombie, 5);
-    }
-}
-
-void zombieJump(zombie * zombie, int pixels)
-{
-    block * b = MapCollision(&zombie->hitbox);
-    int C = Collision(&zombie->hitbox, &b->hitbox);
-    if (C == 2)
-    {
-        moveUpZombie(zombie, 16);
-    }
 }
 
 void moveUpZombie(zombie * zombie, int pixels)
@@ -107,5 +115,30 @@ void moveLeftZombie(zombie * zombie, int pixels)
     {
         zombie->hitbox.right = B->hitbox.left;
         zombie->hitbox.left = zombie->hitbox.right + 31;
+    }
+
+}
+
+void zombieJump(zombie * zombie, int pixels)
+{
+    block * b = MapCollision(&zombie->hitbox);
+    int C = Collision(&zombie->hitbox, &b->hitbox);
+    if (C == 2)
+    {
+        moveUpZombie(zombie, 16);
+    }
+}
+
+void moveZombie(RECT * player, zombie * zombie)
+{
+    int right = player->right;
+    int left = player->left;
+    if (zombie->hitbox.right < right)
+    {
+        moveRightZombie(zombie, 5);
+    }
+    else if (zombie->hitbox.left < left)
+    {
+        moveLeftZombie(zombie, 5);
     }
 }

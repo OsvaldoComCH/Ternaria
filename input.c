@@ -4,38 +4,6 @@
 int gravity = 0;
 int canJump = 1;
 
-int Collision(const RECT * R1, const RECT * R2)
-{
-    RECT Inter;
-    if(IntersectRect(&Inter, R1, R2))
-    {
-        if(Inter.right - Inter.left > Inter.bottom - Inter.top)
-        {
-            return 1;
-        }
-        else
-        {
-            return 2;
-        }
-    }
-    return 0;
-}
-
-block * MapCollision(const RECT * R)
-{
-    LLNode * N = Map.Head;
-    for(int i = 0; i < Map.Size; ++i)
-    {
-        block * B = N->Value;
-        if(Collision(&B->hitbox, R))
-        {
-            return B;
-        }
-        N = N->Next;
-    }
-    return NULL;
-}
-
 void MoveLeft(character * Player, int Pixels)
 {
     Player->state = Player->state ^ 1;
