@@ -22,7 +22,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.hitbox.bottom = 383;
     player.life = 10;
     player.damage = 1;
-    player.vulnerability = 0;
     player.state = 0;
 
     zombie zombie;
@@ -131,7 +130,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     (
         0,
         WClassName,
-        L"Terraria 2",
+        L"Ternaria",
         WS_OVERLAPPEDWINDOW,
         200, 10, 975, 720,
         NULL, NULL, hInstance, NULL
