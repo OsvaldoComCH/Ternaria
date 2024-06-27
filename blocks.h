@@ -35,6 +35,30 @@ void blockDefine(block * B)
         break;
     }
 }
+
+void createArchive()
+{
+    FILE * map = fopen("Map.txt", "w");
+    int camada = rand()%6 + 2;
+    
+    for(int x = 0; x < 30; x++)
+    {
+        for(int y = camada; y >= 0; y--)
+        {
+            fprintf(map, "%d,%d,%d\n", x, y, (y == camada) ? 1 : 2);
+        }
+        camada += rand()%3 - 1;
+        if(camada < 2)
+        {
+            camada = 2;
+        }
+        if(camada > 7)
+        {
+            camada = 7;
+        }
+    }
+    fclose(map);
+}
 /* 
 Função de leitura do arquivo de mapa, fazemos a construção do mapa do Ternaria por meio da leitura desse arquivo.
 */ 

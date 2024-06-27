@@ -15,6 +15,7 @@ Essa header possui todos os imports que precisamos, para garantira que não vai 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <time.h>
 #include "VirtualKeyCodes.h"
 #include "Stack&Queue.h"
 #include "DynamicArray.h"

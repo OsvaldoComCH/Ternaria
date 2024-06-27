@@ -13,6 +13,8 @@ HANDLE Thread;
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
     HWND hwnd = *((HWND *)lpParam);
+    srand(time(NULL));
+    createArchive();
 
     int gameover = 0;
     character player;
