@@ -22,6 +22,16 @@ void RenderMap(const DArray * Map, HDC hdc)
     }
 }
 
+void RenderTool(const character * Player, HDC hdc)
+{
+    RECT R;
+    R.top = Player->hitbox.top + 24;
+    R.left = Player->hitbox.left + 8;
+    R.bottom = R.top + 15;
+    R.right = R.left + 15;
+    DrawImg(hdc, &R, Player->inventory[Player->mainSlot].img);
+}
+
 void RenderPlayer(const character * Player, HDC hdc)
 {
     wchar_t * img;
@@ -63,14 +73,14 @@ void RenderZombie(const zombie * zombie, HDC hdc)
 
 void renderInv(HDC hdc)
 {
-    wchar_t * img = L"BarraInv.bmp";
-    RECT rect = {100, 100, 288, 32};
+    wchar_t * img = L"imagens/BarraInv.bmp";
+    RECT rect = {10, 10, 317, 42};
     DrawImg(hdc, &rect, img);
 }
 
 void renderLife(HDC hdc)
 {
-    wchar_t * img = L"vida.bmp";
+    wchar_t * img = L"imagens/vida.bmp";
     RECT rect = {30, 30, 16, 16};
     DrawImg(hdc, &rect, img);
 }

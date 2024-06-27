@@ -19,18 +19,25 @@ typedef struct Item
 
 void itemDefine(Item * item)
 {
+    item->durability = 64;
     switch (item->id)
     {
     case 0:
-        item->img = L"PicaretaMadeira.bmp";
+        item->damage = 0;
+        item->ammo = -1;
+        item->img = L"imagens/PicaretaMadeira.bmp";
         break;
 
     case 1:
-        item->img = L"EspadaMadeira.bmp";
+        item->damage = 2;
+        item->ammo = -1;
+        item->img = L"imagens/EspadaMadeira.bmp";
         break;
     
     case 2:
-        item->img = L"Shotgun.bmp";
+        item->damage = 5;
+        item->ammo = 10;
+        item->img = L"imagens/Shotgun.bmp";
         break;
     
     default:
@@ -38,19 +45,4 @@ void itemDefine(Item * item)
     }
 }
 
-void readItems(DArray * listItems)
-{
-    int count = 0;
-    FILE * ItemFile = fopen("items.txt", "r");
-
-    while (!feof(ItemFile))
-    {
-        ++count;
-        Item * item = malloc(sizeof(Item));
-        fscanf(ItemFile, "%i, %i, %i, %i", &item->id, &item->damage, &item->durability, &item->ammo);
-        itemDefine(item);
-        DArrayAdd(listItems, item);
-    }
-    fclose(ItemFile);
-}
 #endif
