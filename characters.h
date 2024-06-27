@@ -9,7 +9,6 @@ A subposição serve para calcular colisões entre personagem e bloco.
 typedef struct inventory
 {
     Item slot;
-    int mainSlot;
     int quantity;
 } inventory;
 
@@ -17,6 +16,7 @@ typedef struct character
 {
     RECT hitbox;
     inventory inventory[9];
+    int mainSlot;
     int life;
     int damage;
     int vulnerability;
