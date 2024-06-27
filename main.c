@@ -22,6 +22,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.hitbox.bottom = 383;
     player.life = 10;
     player.damage = 1;
+    player.vulnerability = 0;
     player.state = 0;
 
     zombie zombie;
@@ -60,7 +61,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         DrawImg(TempDC, &R, L"imagens/BackGround.bmp");
         RenderMap(&Map, TempDC);
-        input(&player, &Map);
+        input(&player, &zombie, &Map);
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         renderInv(TempDC);
