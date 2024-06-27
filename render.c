@@ -1,14 +1,24 @@
 #include "imports.h"
 #include "functions.c"
 
-void RenderMap(const LList * Map, HDC hdc)
+void RenderBkgd(HDC hdc)
 {
-    LLNode * N = Map->Head;
+    BITMAP bm;
+    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    HDC BitmapDC = CreateCompatibleDC(hdc);
+    SelectObject(BitmapDC, Image);
+    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
+    BitBlt(hdc, 0, 0, bm.bmWidth, bm.bmHeight, BitmapDC, 0, 0, SRCCOPY);
+    DeleteDC(BitmapDC);
+    DeleteObject(Image);
+}
+
+void RenderMap(const DArray * Map, HDC hdc)
+{
     for(int i = 0; i < Map->Size; ++i)
     {
-        block * B = (block *) N->Value;
+        block * B = (block *) Map->List[i];
         DrawImg(hdc, &B->hitbox, B->img);
-        N = N->Next;
     }
 }
 
@@ -33,6 +43,7 @@ void RenderPlayer(const character * Player, HDC hdc)
             img = L"imagens/FerzinhoDireita.bmp";
         }
     }
+
     DrawImg(hdc, &Player->hitbox, img);
 }
 

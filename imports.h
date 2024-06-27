@@ -25,6 +25,6 @@ Essa header possui todos os imports que precisamos, para garantira que não vai 
 #include "characters.h"
 #include "items.h"
 
-LList Map;
+DArray Map;
 
 #endif

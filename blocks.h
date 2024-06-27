@@ -38,7 +38,7 @@ void blockDefine(block * B)
 /* 
 Função de leitura do arquivo de mapa, fazemos a construção do mapa do Ternaria por meio da leitura desse arquivo.
 */ 
-void readArchive(LList *lista)
+void readArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "r");
@@ -49,21 +49,19 @@ void readArchive(LList *lista)
         block *bloco = malloc(sizeof(block));
         fscanf(File, "%i,%i,%i", &bloco->x, &bloco->y, &bloco->type);
         blockDefine(bloco);
-        LListAdd(lista, bloco);
+        DArrayAdd(lista, bloco);
     }
     fclose(File);
 }
 
-void writeArchive(LList *lista)
+void writeArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "w");
-    LLNode * N = lista->Head;
     for(int i = 0; i < lista->Size; ++i)
     {
-        block * B = (block *) N->Value;
+        block * B = (block *) lista->List[i];
         fprintf(File, "%i,%i,%i\n", B->x, B->y, B->type);
-        N = N->Next;
     }
     fclose(File);
 }
