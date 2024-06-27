@@ -200,9 +200,10 @@ void moveZombie(character * player, zombie * zombie)
     {
         moveLeftZombie(zombie, 2);
     }
-    // int Damage = Collision(player, zombie);
-    // if (Damage = 1)
-    // {
-    //     player->life -= 1;
-    // }
+
+    if (Collision(&player->hitbox, &zombie->hitbox))
+    {
+        player->life -= 1;
+        printf("%i",player->life);
+    }
 }

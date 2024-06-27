@@ -64,6 +64,13 @@ void RenderZombie(const zombie * zombie, HDC hdc)
 void renderInv(HDC hdc)
 {
     wchar_t * img = L"BarraInv.bmp";
-    RECT rect = {10, 10, 288, 32};
+    RECT rect = {100, 100, 288, 32};
+    DrawImg(hdc, &rect, img);
+}
+
+void renderLife(HDC hdc)
+{
+    wchar_t * img = L"vida.bmp";
+    RECT rect = {30, 30, 16, 16};
     DrawImg(hdc, &rect, img);
 }
