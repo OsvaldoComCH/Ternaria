@@ -19,6 +19,7 @@ typedef struct character
     inventory inventory[9];
     int life;
     int damage;
+    int vulnerability;
     int state;
     int facing;
 } character;
