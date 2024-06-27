@@ -25,6 +25,10 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.life = 10;
     player.damage = 1;
     player.state = 0;
+    //readItems(&player);
+    player.mainSlot = 0;
+    player.inventory[0].id = 0;
+    itemDefine(&player.inventory[0]);
 
     zombie zombie;
     zombie.hitbox.left =420;
@@ -74,6 +78,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         moveZombie(&player, &zombie);
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
+        RenderTool(&player, TempDC);
+
         renderInv(TempDC);
         renderLife(TempDC);
 
