@@ -31,7 +31,7 @@ void MoveRight(character * Player, int Pixels)
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
-        Player->hitbox.right = B->hitbox.left;
+        Player->hitbox.right = B->hitbox.left - 1;
         Player->hitbox.left = Player->hitbox.right - 31;
     }
 }
