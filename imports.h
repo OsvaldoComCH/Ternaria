@@ -22,8 +22,8 @@ Essa header possui todos os imports que precisamos, para garantira que não vai 
 #include "LinkedList.h"
 #include "QuickSort.h"
 #include "blocks.h"
-#include "characters.h"
 #include "items.h"
+#include "characters.h"
 
 DArray Map;
 
