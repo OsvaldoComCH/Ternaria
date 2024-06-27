@@ -36,7 +36,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie.canJumpBot = 1;
     zombie.state = 1;
 
-    LListCreate(&Map);
+    DArrayCreate(&Map, 200);
     readArchive(&Map); 
     
     /*
@@ -47,9 +47,16 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
     HANDLE Timer = CreateWaitableTimer(NULL, 0, NULL);
     LARGE_INTEGER DueTime;
-    DueTime.QuadPart = -200000;
-    SetWaitableTimer(Timer, &DueTime, 20, NULL, NULL, 0);//Timer com intervalo de 20ms
-
+    DueTime.QuadPart = -333333;
+    SetWaitableTimer(Timer, &DueTime, 33, NULL, NULL, 0);//Timer com intervalo de 33ms (30 fps)
+    
+    HDC hdc = GetDC(hwnd);
+    RECT R;
+    GetClientRect(hwnd, &R);
+    RenderBkgd(hdc);
+    RenderMap(&Map, hdc);
+    ReleaseDC(hwnd, hdc);
+    
     while(player.life >= 0)
     {
         HDC hdc = GetDC(hwnd);
@@ -58,16 +65,17 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         HDC TempDC = CreateCompatibleDC(hdc);
         HBITMAP Bitmap = CreateCompatibleBitmap(hdc, (R.right-R.left), (R.bottom - R.top));
         SelectObject(TempDC, Bitmap);
+        BitBlt(TempDC, 0, 0, R.right-R.left, R.bottom-R.top, hdc, 0, 0, SRCCOPY);
 
-        DrawImg(TempDC, &R, L"imagens/BackGround.bmp");
-        RenderMap(&Map, TempDC);
-        input(&player, &zombie, &Map);
+        EraseRect(TempDC, &player.hitbox);
+        EraseRect(TempDC, &zombie.hitbox);
+        input(TempDC, &player, &zombie, &Map);
+        moveZombie(&player, &zombie);
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         renderInv(TempDC);
         renderLife(TempDC);
 
-        moveZombie(&player, &zombie);
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);
@@ -91,6 +99,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         }
         break;
         case WM_CLOSE:
+            DArrayDestroy(&Map);
             DestroyWindow(hwnd);
         break;
         case WM_DESTROY:

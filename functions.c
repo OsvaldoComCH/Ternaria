@@ -4,6 +4,18 @@ HWND Ghwnd;
 
 int zombieGravity = 0;
 
+void EraseRect(HDC hdc, const RECT * Rect)
+{
+    BITMAP bm;
+    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    HDC BitmapDC = CreateCompatibleDC(hdc);
+    SelectObject(BitmapDC, Image);
+    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
+    BitBlt(hdc, Rect->left, Rect->top, Rect->right - Rect->left + 1, Rect->bottom - Rect->top + 1, BitmapDC, Rect->left - 1, Rect->top - 1, SRCCOPY);
+    DeleteDC(BitmapDC);
+    DeleteObject(Image);
+}
+
 //Desenha a imagem
 void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
 {
@@ -44,22 +56,19 @@ int Collision(const RECT * R1, const RECT * R2)
 
 block * MapCollision(const RECT * R)
 {
-    LLNode * N = Map.Head;
     for(int i = 0; i < Map.Size; ++i)
     {
-        block * B = N->Value;
+        block * B = (block *) Map.List[i];
         if(Collision(&B->hitbox, R))
         {
             return B;
         }
-        N = N->Next;
     }
     return NULL;
 }
 
 int DestroyBlocks()
 {
-    LLNode * N = Map.Head;
     POINT Mouse;
     RECT WindowRect;
     GetWindowRect(Ghwnd, &WindowRect);
@@ -70,22 +79,20 @@ int DestroyBlocks()
     ScreenToClient(Ghwnd, &Mouse);
     for(int i = 0; i < Map.Size; ++i)
     {
-        block * B = (block *)N->Value;
+        block * B = (block *) Map.List[i];
         if(PtInRect(&B->hitbox, Mouse))
         {
             free(B);
-            LListRemove(&Map, i);
+            DArrayRemove(&Map, i);
             //writeArchive(&Map);
             return 1;
         }
-        N = N->Next;
     }
     return 0;
 }
 
-int PlaceBlocks()
+int PlaceBlocks(character * Player, zombie * Zombie)
 {
-    LLNode * N = Map.Head;
     POINT Mouse;
     RECT WindowRect;
     GetWindowRect(Ghwnd, &WindowRect);
@@ -96,19 +103,23 @@ int PlaceBlocks()
     ScreenToClient(Ghwnd, &Mouse);
     for(int i = 0; i < Map.Size; ++i)
     {
-        block * B = (block *)N->Value;
+        block * B = (block *) Map.List[i];
         if(PtInRect(&B->hitbox, Mouse))
         {
             return 0;
         }
-        N = N->Next;
     }
     block * B = malloc(sizeof(block));
     B->x = Mouse.x / 32;
     B->y = (675 - Mouse.y) / 32;
-    B->type = 1;
+    B->type = 2;
     blockDefine(B);
-    LListAdd(&Map, B);
+    if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
+    {
+        free(B);
+        return 0;
+    }
+    DArrayAdd(&Map, B);
     //writeArchive(&Map);
 }
 

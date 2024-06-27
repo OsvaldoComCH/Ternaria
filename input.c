@@ -104,15 +104,23 @@ void Knockback(character * Player)
     MoveUp(Player, 7);
 }
 
-void input(character * Player, zombie * Zombie, LList * Map)
+void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 {
     if(GetAsyncKeyState(VK_RBUTTON))
     {
-        DestroyBlocks();
+        if(DestroyBlocks())
+        {
+            RenderBkgd(hdc);
+            RenderMap(Map, hdc);
+        }
     }else
     if(GetAsyncKeyState(VK_LBUTTON))
     {
-        PlaceBlocks();
+        if(PlaceBlocks(Player, Zombie))
+        {
+            RenderBkgd(hdc);
+            RenderMap(Map, hdc);
+        }
     }
     if(GetAsyncKeyState(VK_A) && canMove)
     {
