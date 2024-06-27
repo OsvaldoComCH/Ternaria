@@ -6,6 +6,11 @@ Estrutura dos personagens, especificando posição e subposição.
 A subposição serve para calcular colisões entre personagem e bloco.
 */
 
+typedef struct inventory
+{
+    int slots[32];
+} inventory;
+
 typedef struct character
 {
     RECT hitbox;

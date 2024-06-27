@@ -25,10 +25,10 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.state = 0;
 
     zombie zombie;
-    zombie.hitbox.left =320;
-    zombie.hitbox.right = 351;
-    zombie.hitbox.top = 320;
-    zombie.hitbox.bottom = 383;
+    zombie.hitbox.left =420;
+    zombie.hitbox.right = 451;
+    zombie.hitbox.top = 420;
+    zombie.hitbox.bottom = 483;
     zombie.life = 12;
     zombie.damage = 2;
     zombie.jumpBot = 0;
@@ -49,7 +49,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     DueTime.QuadPart = -200000;
     SetWaitableTimer(Timer, &DueTime, 20, NULL, NULL, 0);//Timer com intervalo de 20ms
 
-    while(gameover == 0)
+    while(player.life >= 0)
     {
         HDC hdc = GetDC(hwnd);
         RECT R;
@@ -64,6 +64,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         renderInv(TempDC);
+        renderLife(TempDC);
 
         moveZombie(&player, &zombie);
 
