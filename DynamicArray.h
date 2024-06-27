@@ -16,7 +16,49 @@ void DArrayCreate(DArray * Array, int MaxSize)
     Array->List = (void **) malloc(MaxSize * sizeof(void *));
 }
 
-void DArrayDelete(DArray * Array)
+void DArrayGrow(DArray * Array)
+{
+    Array->List = (void **) realloc(Array->List, Array->MaxSize * sizeof(void *) * 2);
+}
+
+void DArrayAdd(DArray * Array, void * Value)
+{
+    Array->List[Array->Size] = Value;
+    ++Array->Size;
+    if(Array->Size >= Array->MaxSize)
+    {
+        DArrayGrow(Array);
+    }
+}
+
+void DArrayRemove(DArray * Array, int index)
+{
+    --Array->Size;
+    for(; index < Array->Size; ++index)
+    {
+        Array->List[index] = Array->List[index+1];
+    }
+}
+
+void * DArrayGet(const DArray * Array, int index)
+{
+    if(index >= Array->Size)
+    {
+        return NULL;
+    }
+    return Array->List[index];
+}
+
+void DArraySet(const DArray * Array, int index, void * Value)
+{
+    if(index >= Array->Size)
+    {
+        return;
+    }
+    Array->List[index] = Value;
+}
+
+void DArrayDestroy(DArray * Array)
 {
     free(Array->List);
     Array->MaxSize = 0;
