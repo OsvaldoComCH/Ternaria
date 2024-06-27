@@ -143,7 +143,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     if (Collision(&Player->hitbox, &Zombie->hitbox) && Player->vulnerability == 0)
     {
         Player->vulnerability = 30;
-        Player->life -= 1;
+        Player->life -= Zombie->damage;
         printf("%i",Player->life);
         knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)

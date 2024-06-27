@@ -30,6 +30,14 @@ void blockDefine(block * B)
     case 2:
         B->img = L"imagens/Terra.bmp";
         break;
+
+    case 3:
+        B->img = L"imagens/Tronco.bmp";
+        break;
+
+    case 4:
+        B->img = L"imagens/Folhas.bmp";
+        break;
         
     default:
         break;
@@ -40,6 +48,7 @@ void createArchive()
 {
     FILE * map = fopen("Map.txt", "w");
     int camada = rand()%6 + 2;
+    int arvore = 0;
     
     for(int x = 0; x < 30; x++)
     {
@@ -56,6 +65,14 @@ void createArchive()
         {
             camada = 7;
         }
+        // if(rand()%10 == 1)
+        // {
+        //     arvore = camada + 1;
+        //     for(int arvh = arvore; arvh < arvore + rand()%4 + 3; arvh++)
+        //     {
+        //         fprintf(map, "%d,%d,%d", arvh, x, 3);
+        //     }
+        // }
     }
     fclose(map);
 }
