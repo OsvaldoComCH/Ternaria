@@ -146,13 +146,13 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         Player->life -= 1;
         printf("%i",Player->life);
         knockback = 1;
-        if(&Player->hitbox.left > &Zombie->hitbox.left)
-        {
-            knockbackSide = 1;
-        }
-        else if (Zombie->hitbox.right < Player->hitbox.right)
+        if(Player->hitbox.left > Zombie->hitbox.left)
         {
             knockbackSide = 2;
+        }
+        else if (Zombie->hitbox.right > Player->hitbox.right)
+        {
+            knockbackSide = 1;
         }
     }
     if(knockback)

@@ -201,3 +201,9 @@ void moveZombie(character * player, zombie * zombie)
         moveLeftZombie(zombie, 2);
     }
 }
+
+//Dá tiro de doze
+int EstragarVelorio(zombie * Zombie, character * Player)
+{
+
+}
