@@ -11,7 +11,7 @@ void EraseRect(HDC hdc, const RECT * Rect)
     HDC BitmapDC = CreateCompatibleDC(hdc);
     SelectObject(BitmapDC, Image);
     GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
-    BitBlt(hdc, Rect->left, Rect->top, Rect->right - Rect->left + 1, Rect->bottom - Rect->top + 1, BitmapDC, Rect->left - 1, Rect->top - 1, SRCCOPY);
+    BitBlt(hdc, Rect->left, Rect->top, Rect->right - Rect->left+1, Rect->bottom - Rect->top+1, BitmapDC, Rect->left, Rect->top, SRCCOPY);
     DeleteDC(BitmapDC);
     DeleteObject(Image);
 }
