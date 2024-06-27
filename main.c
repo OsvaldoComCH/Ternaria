@@ -46,7 +46,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
     HANDLE Timer = CreateWaitableTimer(NULL, 0, NULL);
     LARGE_INTEGER DueTime;
-<<<<<<< HEAD
     DueTime.QuadPart = -333333;
     SetWaitableTimer(Timer, &DueTime, 33, NULL, NULL, 0);//Timer com intervalo de 33ms (30 fps)
     
@@ -58,7 +57,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     ReleaseDC(hwnd, hdc);
     
     while(player.life >= 0)
->>>>>>> 7231f0566ce8259a85891ba8e44deed312cda3aa
     {
         HDC hdc = GetDC(hwnd);
         RECT R;
