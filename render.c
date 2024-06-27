@@ -29,18 +29,18 @@ void RenderPlayer(const character * Player, HDC hdc)
     {
         if (Player->facing == 1)
         {
-            img = L"imagens/Ferzinho3.bmp";
+            img = L"imagens/Fer.bmp";
         } else {
-            img = L"imagens/Ferzinho3DireitaParado.bmp";
+            img = L"imagens/FerDireita.bmp";
         }
     }
     else
     {
         if (Player->facing == 1)
         {
-            img = L"imagens/Ferzinho3Andante.bmp";
+            img = L"imagens/FerAndante.bmp";
         } else {
-            img = L"imagens/FerzinhoDireita.bmp";
+            img = L"imagens/FerDireitaAndante.bmp";
         }
     }
 
