@@ -91,7 +91,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
 
-        renderInv(TempDC, &player);
+        RenderInv(TempDC, &player);
 
         count += 1;
         if(count == 300)
