@@ -76,25 +76,21 @@ void renderInv(HDC hdc)
     wchar_t * img = L"imagens/BarraInv.bmp";
     RECT rect = {10, 10, 317, 42};
     DrawImg(hdc, &rect, img);
-    int flag = 1;
-    if (flag == 1)
+
+}
+
+void renderLife(HDC hdc, int life)
+{
+    for(int i = 0; i <= life; i ++)
     {
         wchar_t * img = L"imagens/vida.bmp";
         RECT rect = {100, 100, 116, 117};
         DrawImg(hdc, &rect, img);
     }
-}
-
-void renderLife(HDC hdc, int life)
-{
-    // for(int i = 0; i <= life; i ++)
-    // {
-
-    // }
-    // for(int i = 10; i >= life; i--)
-    // {
-    //     wchar_t * img = L"imagens/BrokenHeart.bmp";
-    //     RECT rect = {120, 120, 140, 140};
-    //     DrawImg(hdc, &rect, img);
-    // }
+    for(int i = 10; i >= life; i--)
+    {
+        wchar_t * img = L"imagens/BrokenHeart.bmp";
+        RECT rect = {120, 120, 140, 140};
+        DrawImg(hdc, &rect, img);
+    }
 }
