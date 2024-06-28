@@ -83,10 +83,13 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
         Input(TempDC, &player, &zombie, &Map);
-        MoveZombie(&player, &zombie);
         if(zombie.life > 0)
         {
+            MoveZombie(&player, &zombie);
             RenderZombie(&zombie, TempDC);
+        }else
+        {
+            MoveUpZombie(&zombie, 800);
         }
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);

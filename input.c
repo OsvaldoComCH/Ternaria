@@ -106,7 +106,7 @@ void Knockback(character * Player)
 
 int CoolDown = 0;
 
-void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
+void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 {
     if(CoolDown)
     {
@@ -143,26 +143,41 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                     {
                         RenderBkgd(hdc);
                         RenderMap(Map, hdc);
-                        renderLife(hdc, Player->life);
+                        RenderLife(hdc, Player->life);
                     }
                 }
                 break;
                 case 1:
                 {
-                    if(Slash(Zombie, Player))
+                    int res = Slash(Zombie, Player);
+                    CoolDown = 10;
+                    if(res < 0)
                     {
-                        printf("%d\n", Zombie->life);
-                        CoolDown = 10;
+                        Zombie->knockback = 30;
+                        knockbackSideZombie = 1;
+                        KnockbackZombie(Zombie);
+                    }else
+                    if(res > 0)
+                    {
+                        Zombie->knockback = 30;
+                        knockbackSideZombie = 2;
+                        KnockbackZombie(Zombie);
                     }
                 }
                 break;
                 case 2:
                 {
-                    if(EstragarVelorio(Zombie, Player, Mouse))
+                    int res = EstragarVelorio(Zombie, Player, Mouse);
+                    CoolDown = 40;
+                    if(res < 0)
                     {
-                        printf("%d\n", Zombie->life);
-                        CoolDown = 40;
+                        knockbackSideZombie = 1;
+                    }else
+                    if(res > 0)
+                    {
+                        knockbackSideZombie = 2;
                     }
+                    KnockbackZombie(Zombie);
                 }
                 break;
                 case 3:
@@ -171,7 +186,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                     {
                         RenderBkgd(hdc);
                         RenderMap(Map, hdc);
-                        renderLife(hdc, Player->life);
+                        RenderLife(hdc, Player->life);
                     }
                 }
                 break;
@@ -203,7 +218,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     {
         Player->vulnerability = 30;
         Player->life -= Zombie->damage;
-        renderLife(hdc, Player->life);
+        RenderLife(hdc, Player->life);
         knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)
         {

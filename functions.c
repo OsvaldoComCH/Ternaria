@@ -172,8 +172,25 @@ void ZombieGravity(zombie * zombie)
     }
 }
 
+void KnockbackZombie(zombie * zombie)
+{
+    if(knockbackSideZombie == 1)
+    {
+        MoveLeftZombie(zombie, 7);
+    } else {
+        MoveRightZombie(zombie, 7);
+    }
+    MoveUpZombie(zombie, 7);
+}
+
 void MoveZombie(character * player, zombie * zombie)
 {
+    if(zombie->knockback)
+    {
+        KnockbackZombie(zombie);
+        --zombie->knockback;
+        return;
+    }
     int right = player->hitbox.right;
     int left = player->hitbox.left;
     ZombieGravity(zombie);
@@ -185,17 +202,6 @@ void MoveZombie(character * player, zombie * zombie)
     {
         MoveLeftZombie(zombie, 2);
     }
-}
-
-void KnockbackZombie(zombie * zombie)
-{
-    if(knockbackSideZombie == 1)
-    {
-        MoveLeftZombie(zombie, 7);
-    } else {
-        MoveRightZombie(zombie, 7);
-    }
-    MoveUpZombie(zombie, 7);
 }
 
 //Espada
@@ -216,7 +222,7 @@ int Slash(zombie * Zombie, character * Player)
     if(Collision(&Zombie->hitbox, &Damage))
     {
         Zombie->life -= Player->inventory[Player->mainSlot].damage;
-        return 1;
+        return (Zombie->hitbox.left + 16) - (Damage.left + 32);
     }
     return 0;
 }
@@ -231,6 +237,7 @@ int EstragarVelorio(zombie * Zombie, character * Player, POINT Mouse)
     if(Collision(&Zombie->hitbox, &Damage))
     {
         Zombie->life -= Player->inventory[Player->mainSlot].damage;
-        return 1;
+        return (Zombie->hitbox.left + 16) - Mouse.x;
     }
+    return 0;
 }
