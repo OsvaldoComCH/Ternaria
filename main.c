@@ -70,7 +70,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     ReleaseDC(hwnd, hdc);
     
     
-    while(player.life >= 0)
+    while(gameover == 0)
     {
         HDC hdc = GetDC(hwnd);
         RECT R;
