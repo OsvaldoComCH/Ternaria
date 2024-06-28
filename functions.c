@@ -97,8 +97,38 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     B->x = Mouse.x / 32;
     B->y = (675 - Mouse.y) / 32;
     B->type = 2;
-    BlockDefine(B);
+    int podePor = 0;
+    blockDefine(B);
     if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
+    {
+        free(B);
+        return 0;
+    }
+    for(int i = 0; i < Map.Size; ++i)
+    {
+        block * C = (block *) Map.List[i];
+        B->hitbox.right += 32;
+        B->hitbox.left -= 32;
+        if(Collision(&B->hitbox, &C->hitbox))
+        {
+            podePor = 1;
+        }
+        B->hitbox.right -= 32;
+        B->hitbox.left += 32;
+        B->hitbox.bottom += 32;
+        B->hitbox.top -= 32;
+        if(Collision(&B->hitbox, &C->hitbox))
+        {
+            podePor = 1;
+        }
+        B->hitbox.bottom -= 32;
+        B->hitbox.top += 32;
+        if(podePor)
+        {
+            break;
+        }
+    }
+    if(!podePor)
     {
         free(B);
         return 0;
