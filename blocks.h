@@ -48,13 +48,29 @@ void createArchive()
 {
     FILE * map = fopen("Map.txt", "w");
     int camada = rand()%6 + 2;
-    int arvore = 0;
+    int arvore = 0, arvtam = 0;
     
     for(int x = 0; x < 30; x++)
     {
+        if(rand()%10 == 1)
+        {
+            arvore = camada + 1;
+            arvtam = rand()%4 + 3;
+            for(int arvh = arvore; arvh < arvore + arvtam; arvh++)
+            {
+                fprintf(map, "%d,%d,%d\n", x, arvh, 3);
+            }
+            for(int folhay = arvore + arvtam; folhay < arvore + arvtam + 3; folhay++)
+            {
+                for(int folhax = x - arvtam / 2; folhax <= x + arvtam / 2; folhax++)
+                {
+                    fprintf(map, "%d,%d,%d\n", folhax, folhay, 4);
+                }
+            }
+        }
         for(int y = camada; y >= 0; y--)
         {
-            fprintf(map, "%d,%d,%d\n", x, y, (y == camada) ? 1 : 2);
+            fprintf(map, "%d,%d,%d\n", x, y, (y == camada && arvore != camada + 1) ? 1 : 2);
         }
         camada += rand()%3 - 1;
         if(camada < 2)
@@ -65,14 +81,7 @@ void createArchive()
         {
             camada = 7;
         }
-        // if(rand()%10 == 1)
-        // {
-        //     arvore = camada + 1;
-        //     for(int arvh = arvore; arvh < arvore + rand()%4 + 3; arvh++)
-        //     {
-        //         fprintf(map, "%d,%d,%d", arvh, x, 3);
-        //     }
-        // }
+        arvore = 0;
     }
     fclose(map);
 }

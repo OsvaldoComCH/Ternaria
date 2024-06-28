@@ -20,8 +20,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     character player;
     player.hitbox.left = 320;
     player.hitbox.right = 351;
-    player.hitbox.top = 320;
-    player.hitbox.bottom = 383;
+    player.hitbox.top = 120;
+    player.hitbox.bottom = 183;
     player.life = 10;
     player.damage = 1;
     player.state = 0;
@@ -33,8 +33,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie zombie;
     zombie.hitbox.left =420;
     zombie.hitbox.right = 451;
-    zombie.hitbox.top = 420;
-    zombie.hitbox.bottom = 483;
+    zombie.hitbox.top = 120;
+    zombie.hitbox.bottom = 183;
     zombie.life = 12;
     zombie.damage = 2;
     zombie.jumpBot = 0;
