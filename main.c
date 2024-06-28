@@ -16,7 +16,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     srand(time(NULL));
     createArchive();
 
-    int gameover = 0;
+    int gameover = 0, count = 0;
     character player;
     player.hitbox.left = 320;
     player.hitbox.right = 351;
@@ -84,11 +84,16 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         renderInv(TempDC);
 
-
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);
         DeleteObject(Bitmap);
         ReleaseDC(hwnd, hdc);
+        count += 1;
+        if(count == 300)
+        {
+            regeneration(&player);
+        }
+
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
 }
