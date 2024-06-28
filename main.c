@@ -79,7 +79,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
-        renderLife(TempDC, player.life);
+        // renderLife(TempDC, player.life);
         renderInv(TempDC);
 
 
