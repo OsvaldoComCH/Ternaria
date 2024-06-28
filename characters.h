@@ -6,7 +6,6 @@ Estrutura dos personagens, especificando posição e subposição.
 A subposição serve para calcular colisões entre personagem e bloco.
 */
 
-
 typedef struct character
 {
     RECT hitbox;
@@ -34,7 +33,7 @@ typedef struct zombie
     int knockback;
 } zombie;
 
-
+// Faz a leitura dos itens
 void ReadItems(character * Player)
 {
     int count = 0;

@@ -18,6 +18,7 @@ typedef struct Item
     wchar_t * imgRight;
 } Item;
 
+// Define todos os itens
 void ItemDefine(Item * item)
 {
     item->durability = 64;

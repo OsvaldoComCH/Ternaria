@@ -113,6 +113,7 @@ void ReadArchive(DArray *lista)
     fclose(File);
 }
 
+// Escreve no txt
 void WriteArchive(DArray *lista)
 {
     int count = 0;

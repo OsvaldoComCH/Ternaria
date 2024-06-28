@@ -96,7 +96,7 @@ void RenderZombie(const zombie * zombie, HDC hdc)
     DrawImg(hdc, &zombie->hitbox, img);
 }
 
-void renderInv(HDC hdc, character * player)
+void RenderInv(HDC hdc, character * player)
 {
     wchar_t * img = L"imagens/BarraInv.bmp";
     RECT rect = {10, 10, 317, 42};

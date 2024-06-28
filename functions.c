@@ -4,6 +4,7 @@ HWND Ghwnd;
 
 int zombieGravity = 0, knockbackSideZombie;
 
+// Apaga o retângulo
 void EraseRect(HDC hdc, const RECT * Rect)
 {
     BITMAP bm;
@@ -30,6 +31,7 @@ void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
     DeleteObject(Image);
 }
 
+// Desenha retângulo
 void DrawRect(HDC hdc, const RECT * Rect, COLORREF Color)
 {
     SelectObject(hdc, GetStockObject(DC_BRUSH));
@@ -37,6 +39,7 @@ void DrawRect(HDC hdc, const RECT * Rect, COLORREF Color)
     Rectangle(hdc, Rect->left, Rect->top, Rect->right, Rect->bottom);
 }
 
+// Colisão geral
 int Collision(const RECT * R1, const RECT * R2)
 {
     RECT Inter;
@@ -54,6 +57,7 @@ int Collision(const RECT * R1, const RECT * R2)
     return 0;
 }
 
+// Função de colisão de blocos
 block * MapCollision(const RECT * R)
 {
     for(int i = 0; i < Map.Size; ++i)
@@ -67,6 +71,7 @@ block * MapCollision(const RECT * R)
     return NULL;
 }
 
+// Função de destruir blocos
 int DestroyBlocks(POINT Mouse)
 {
     for(int i = 0; i < Map.Size; ++i)
@@ -83,6 +88,7 @@ int DestroyBlocks(POINT Mouse)
     return 0;
 }
 
+// Função de colocar blocos, caso não tenha nenhum bloco adjacente a outro, não é possível colocar bloco
 int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
 {
     for(int i = 0; i < Map.Size; ++i)
@@ -138,6 +144,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     return 1;
 }
 
+// Move o zumbi para baixo
 void MoveDownZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top += pixels;
@@ -151,6 +158,7 @@ void MoveDownZombie(zombie * zombie, int pixels)
     }
 }
 
+// Move o zumbi para cima
 void MoveUpZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top -= pixels;
@@ -164,6 +172,7 @@ void MoveUpZombie(zombie * zombie, int pixels)
     }
 }
 
+// Move o zumbi para a direita
 void MoveRightZombie(zombie * zombie, int pixels)
 {
     zombie->state = zombie->state = 1;
@@ -178,6 +187,7 @@ void MoveRightZombie(zombie * zombie, int pixels)
     }
 }
 
+// Move o zumbi para a esquerda
 void MoveLeftZombie(zombie * zombie, int pixels)
 {
     zombie->state = zombie->state = 0;
@@ -193,6 +203,7 @@ void MoveLeftZombie(zombie * zombie, int pixels)
 
 }
 
+// O zumbi sofre gravidade
 void ZombieGravity(zombie * zombie)
 {
     MoveDownZombie(zombie, zombieGravity);
@@ -202,6 +213,7 @@ void ZombieGravity(zombie * zombie)
     }
 }
 
+// Move o zumbi até o jogador, caso a hitbox do zumbi colida com a do player, o player toma dano
 void KnockbackZombie(zombie * zombie)
 {
     if(knockbackSideZombie == 1)
@@ -234,7 +246,7 @@ void MoveZombie(character * player, zombie * zombie)
     }
 }
 
-//Espada
+//Espadada no zumbi
 int Slash(zombie * Zombie, character * Player)
 {
     RECT Damage;
@@ -256,6 +268,7 @@ int Slash(zombie * Zombie, character * Player)
     }
     return 0;
 }
+
 //Dá tiro de doze
 int EstragarVelorio(zombie * Zombie, character * Player, POINT Mouse)
 {
