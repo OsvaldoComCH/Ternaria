@@ -28,7 +28,13 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     //readItems(&player);
     player.mainSlot = 0;
     player.inventory[0].id = 0;
+    player.inventory[1].id = 1;
+    player.inventory[2].id = 2;
+    player.inventory[3].id = 3;
     itemDefine(&player.inventory[0]);
+    itemDefine(&player.inventory[1]);
+    itemDefine(&player.inventory[2]);
+    itemDefine(&player.inventory[3]);
 
     zombie zombie;
     zombie.hitbox.left =420;

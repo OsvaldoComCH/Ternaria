@@ -84,7 +84,7 @@ int DestroyBlocks()
         {
             free(B);
             DArrayRemove(&Map, i);
-            //writeArchive(&Map);
+            writeArchive(&Map);
             return 1;
         }
     }
@@ -120,7 +120,8 @@ int PlaceBlocks(character * Player, zombie * Zombie)
         return 0;
     }
     DArrayAdd(&Map, B);
-    //writeArchive(&Map);
+    writeArchive(&Map);
+    return 1;
 }
 
 void moveDownZombie(zombie * zombie, int pixels)

@@ -25,11 +25,36 @@ void RenderMap(const DArray * Map, HDC hdc)
 void RenderTool(const character * Player, HDC hdc)
 {
     RECT R;
+    wchar_t * img;
     R.top = Player->hitbox.top + 24;
-    R.left = Player->hitbox.left + 8;
     R.bottom = R.top + 15;
-    R.right = R.left + 15;
-    DrawImg(hdc, &R, Player->inventory[Player->mainSlot].img);
+    if(Player->state)
+    {
+        if(Player->facing == 1)
+        {
+            R.left = Player->hitbox.left;
+            R.right = R.left + 15;
+            img = Player->inventory[Player->mainSlot].imgLeft;
+        }else
+        {
+            R.left = Player->hitbox.left + 16;
+            R.right = R.left + 15;
+            img = Player->inventory[Player->mainSlot].imgRight;
+        }
+    }else
+    {
+        if(Player->facing == 1)
+        {
+            img = Player->inventory[Player->mainSlot].imgLeft;
+        }else
+        {
+            img = Player->inventory[Player->mainSlot].imgRight;
+        }
+        R.left = Player->hitbox.left + 8;
+        R.right = R.left + 15;
+    }
+
+    DrawImg(hdc, &R, img);
 }
 
 void RenderPlayer(const character * Player, HDC hdc)

@@ -106,6 +106,23 @@ void Knockback(character * Player)
 
 void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 {
+    if(GetAsyncKeyState(VK_1))
+    {
+        Player->mainSlot = 0;
+    }else
+    if(GetAsyncKeyState(VK_2))
+    {
+        Player->mainSlot = 1;
+    }else
+    if(GetAsyncKeyState(VK_3))
+    {
+        Player->mainSlot = 2;
+    }else
+    if(GetAsyncKeyState(VK_4))
+    {
+        Player->mainSlot = 3;
+    }
+    /*
     if(GetAsyncKeyState(VK_RBUTTON))
     {
         if(DestroyBlocks())
@@ -115,13 +132,51 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
             renderLife(hdc, Player->life);
         }
     }else
+    */
     if(GetAsyncKeyState(VK_LBUTTON))
     {
-        if(PlaceBlocks(Player, Zombie))
+        switch(Player->inventory[Player->mainSlot].id)
         {
-            RenderBkgd(hdc);
-            RenderMap(Map, hdc);
-            renderLife(hdc, Player->life);
+            case 0:
+            {
+                if(DestroyBlocks())
+                {
+                    RenderBkgd(hdc);
+                    RenderMap(Map, hdc);
+                    renderLife(hdc, Player->life);
+                }
+            }
+            break;
+            case 1:
+            {
+                if(DestroyBlocks())
+                {
+                    RenderBkgd(hdc);
+                    RenderMap(Map, hdc);
+                }
+            }
+            break;
+            case 2:
+            {
+                if(DestroyBlocks())
+                {
+                    RenderBkgd(hdc);
+                    RenderMap(Map, hdc);
+                }
+            }
+            break;
+            case 3:
+            {
+                if(PlaceBlocks(Player, Zombie))
+                {
+                    RenderBkgd(hdc);
+                    RenderMap(Map, hdc);
+                    renderLife(hdc, Player->life);
+                }
+            }
+            break;
+            default:
+            break;
         }
     }
     if(GetAsyncKeyState(VK_A) && canMove)
