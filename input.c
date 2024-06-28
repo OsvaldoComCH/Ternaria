@@ -112,6 +112,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         {
             RenderBkgd(hdc);
             RenderMap(Map, hdc);
+            renderLife(hdc, Player->life);
         }
     }else
     if(GetAsyncKeyState(VK_LBUTTON))
@@ -120,6 +121,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         {
             RenderBkgd(hdc);
             RenderMap(Map, hdc);
+            renderLife(hdc, Player->life);
         }
     }
     if(GetAsyncKeyState(VK_A) && canMove)
@@ -145,6 +147,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         Player->vulnerability = 30;
         Player->life -= Zombie->damage;
         printf("%i",Player->life);
+        renderLife(hdc, Player->life);
         knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)
         {

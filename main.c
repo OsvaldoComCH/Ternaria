@@ -60,7 +60,9 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     GetClientRect(hwnd, &R);
     RenderBkgd(hdc);
     RenderMap(&Map, hdc);
+    renderLife(hdc, player.life);
     ReleaseDC(hwnd, hdc);
+    
     
     while(player.life >= 0)
     {
@@ -79,7 +81,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
-        // renderLife(TempDC, player.life);
+
         renderInv(TempDC);
 
 

@@ -76,21 +76,26 @@ void renderInv(HDC hdc)
     wchar_t * img = L"imagens/BarraInv.bmp";
     RECT rect = {10, 10, 317, 42};
     DrawImg(hdc, &rect, img);
-
 }
 
 void renderLife(HDC hdc, int life)
 {
+    wchar_t * img1;
+    wchar_t * img2;
+    printf("%d", life);
+    int left = 5, top = 50, right = 37, bottom = 82;
     for(int i = 0; i <= life; i ++)
     {
-        wchar_t * img = L"imagens/vida.bmp";
-        RECT rect = {100, 100, 116, 117};
-        DrawImg(hdc, &rect, img);
+        img1 = L"imagens/Vida.bmp";
+        RECT R1 = {left, top, right, bottom};
+        DrawImg(hdc, &R1, img1);
+        left += 20;
+        right += 20;
     }
     for(int i = 10; i >= life; i--)
     {
-        wchar_t * img = L"imagens/BrokenHeart.bmp";
-        RECT rect = {120, 120, 140, 140};
-        DrawImg(hdc, &rect, img);
+        img2 = L"imagens/BrokenHeart.bmp";
+        RECT R2 = {120, 120, 150, 150};
+        DrawImg(hdc, &R2, img2);
     }
 }
