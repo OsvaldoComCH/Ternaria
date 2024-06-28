@@ -107,7 +107,6 @@ void renderLife(HDC hdc, int life)
 {
     wchar_t * img1;
     wchar_t * img2;
-    printf("%d", life);
     int left = 5, top = 50, right = 37, bottom = 82;
     for(int i = 1; i <= life; i ++)
     {

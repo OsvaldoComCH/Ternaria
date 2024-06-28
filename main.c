@@ -102,6 +102,16 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
+
+    HFONT Font = CreateFont(72, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+    hdc = GetDC(hwnd);
+    RECT R1 = {200, 300, 675, 450};
+    SelectObject(hdc, Font);
+    DrawRect(hdc, &R1, RGB(100,100,100));
+    SetBkColor(hdc, RGB(100,100,100));
+    TextOut(hdc, R1.left + 50, R1.top + 40, L"GAME OVER", 10);
+    ReleaseDC(hwnd, hdc);
 }
 
 //Função para o tratamanto de mensagens

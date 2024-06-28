@@ -67,16 +67,8 @@ block * MapCollision(const RECT * R)
     return NULL;
 }
 
-int DestroyBlocks()
+int DestroyBlocks(POINT Mouse)
 {
-    POINT Mouse;
-    RECT WindowRect;
-    GetWindowRect(Ghwnd, &WindowRect);
-    if(!GetCursorPos(&Mouse))
-    {
-        return -1;
-    }
-    ScreenToClient(Ghwnd, &Mouse);
     for(int i = 0; i < Map.Size; ++i)
     {
         block * B = (block *) Map.List[i];
@@ -91,16 +83,8 @@ int DestroyBlocks()
     return 0;
 }
 
-int PlaceBlocks(character * Player, zombie * Zombie)
+int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
 {
-    POINT Mouse;
-    RECT WindowRect;
-    GetWindowRect(Ghwnd, &WindowRect);
-    if(!GetCursorPos(&Mouse))
-    {
-        return -1;
-    }
-    ScreenToClient(Ghwnd, &Mouse);
     for(int i = 0; i < Map.Size; ++i)
     {
         block * B = (block *) Map.List[i];
@@ -203,8 +187,39 @@ void moveZombie(character * player, zombie * zombie)
     }
 }
 
-//Dá tiro de doze
-int EstragarVelorio(zombie * Zombie, character * Player)
+//Espada
+int Slash(zombie * Zombie, character * Player)
 {
-
+    RECT Damage;
+    Damage.top = Player->hitbox.top;
+    Damage.bottom = Player->hitbox.bottom;
+    if(Player->facing == 1)
+    {
+        Damage.right = Player->hitbox.left;
+        Damage.left = Damage.right - 64;
+    }else
+    {
+        Damage.left = Player->hitbox.right;
+        Damage.right = Damage.left + 64;
+    }
+    if(Collision(&Zombie->hitbox, &Damage))
+    {
+        Zombie->life -= Player->inventory[Player->mainSlot].damage;
+        return 1;
+    }
+    return 0;
+}
+//Dá tiro de doze
+int EstragarVelorio(zombie * Zombie, character * Player, POINT Mouse)
+{
+    RECT Damage;
+    Damage.top = Mouse.y - 16;
+    Damage.bottom = Mouse.y + 15;
+    Damage.left = Mouse.x - 16;
+    Damage.right = Mouse.x + 15;
+    if(Collision(&Zombie->hitbox, &Damage))
+    {
+        Zombie->life -= Player->inventory[Player->mainSlot].damage;
+        return 1;
+    }
 }
