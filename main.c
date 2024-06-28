@@ -70,7 +70,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     ReleaseDC(hwnd, hdc);
     
     
-    while(gameover == 0)
+    while(player.life >= 0)
     {
         HDC hdc = GetDC(hwnd);
         RECT R;
@@ -88,18 +88,20 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
 
-        renderInv(TempDC);
+        renderInv(TempDC, &player);
+
+        count += 1;
+        if(count == 300)
+        {
+            regeneration(&player);
+            renderLife(TempDC, player.life);
+            count = 0;
+        }
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);
         DeleteObject(Bitmap);
         ReleaseDC(hwnd, hdc);
-        count += 1;
-        if(count == 300)
-        {
-            regeneration(&player);
-            count = 0;
-        }
 
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
@@ -174,7 +176,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     } else {
         MessageBox(NULL, L"Erro ao carregar o icone!", L"Erro", MB_ICONERROR);
     }
-    
+
+    HCURSOR Cursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+
+    SetCursor(Cursor);
     
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);

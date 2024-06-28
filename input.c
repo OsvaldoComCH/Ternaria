@@ -121,6 +121,8 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     if(GetAsyncKeyState(VK_4))
     {
         Player->mainSlot = 3;
+        HCURSOR Cursor = (HCURSOR)LoadImage(NULL, L"imagens/Bloquinho.bmp", IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
+        SetCursor(Cursor);
     }
     /*
     if(GetAsyncKeyState(VK_RBUTTON))
@@ -227,9 +229,8 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 void regeneration(character * player)
 {
     HDC hdc;
-    if (player->life <= 10)
+    if (player->life < 10)
     {
         player->life += 1;
-        renderLife(hdc, player->life);
     }
 }
