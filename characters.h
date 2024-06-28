@@ -30,6 +30,7 @@ typedef struct zombie
     int state;
     int jumpBot;
     int canJumpBot;
+    int knockback;
 } zombie;
 
 // Faz a leitura dos itens
