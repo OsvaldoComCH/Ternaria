@@ -14,7 +14,8 @@ typedef struct Item
     int damage;
     int durability;
     int ammo;
-    wchar_t * img;
+    wchar_t * imgLeft;
+    wchar_t * imgRight;
 } Item;
 
 void itemDefine(Item * item)
@@ -25,20 +26,29 @@ void itemDefine(Item * item)
     case 0:
         item->damage = 0;
         item->ammo = -1;
-        item->img = L"imagens/PicaretaMadeira.bmp";
+        item->imgLeft = L"imagens/PicaretaEsquerda.bmp";
+        item->imgRight = L"imagens/PicaretaDireita.bmp";
         break;
 
     case 1:
         item->damage = 2;
         item->ammo = -1;
-        item->img = L"imagens/EspadaMadeira.bmp";
+        item->imgLeft = L"imagens/EspadaEsquerda.bmp";
+        item->imgRight = L"imagens/EspadaDireita.bmp";
         break;
     
     case 2:
         item->damage = 5;
         item->ammo = 10;
-        item->img = L"imagens/Shotgun.bmp";
+        item->imgLeft = L"imagens/ShotgunEsquerda.bmp";
+        item->imgRight = L"imagens/ShotgunDireita.bmp";
         break;
+    
+    case 3:
+        item->damage = 0;
+        item->ammo = 50;
+        item->imgLeft = L"imagens/Bloquinho.bmp";
+        item->imgRight = L"imagens/Bloquinho.bmp";
     
     default:
         break;
