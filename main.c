@@ -92,6 +92,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         if(count == 300)
         {
             regeneration(&player);
+            count = 0;
         }
 
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
