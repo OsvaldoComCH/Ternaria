@@ -98,7 +98,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     B->y = (675 - Mouse.y) / 32;
     B->type = 2;
     int podePor = 0;
-    blockDefine(B);
+    BlockDefine(B);
     if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
     {
         free(B);
