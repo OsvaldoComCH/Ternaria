@@ -52,7 +52,7 @@ void createArchive()
     
     for(int x = 0; x < 30; x++)
     {
-        if(rand()%10 == 1)
+        if(arvore == 0 && rand()%10 == 1)
         {
             arvore = camada + 1;
             arvtam = rand()%4 + 3;
@@ -60,13 +60,17 @@ void createArchive()
             {
                 fprintf(map, "%d,%d,%d\n", x, arvh, 3);
             }
-            for(int folhay = arvore + arvtam; folhay < arvore + arvtam + 3; folhay++)
+            for(int folhay = arvore + arvtam; folhay < arvore + arvtam * 2; folhay++)
             {
-                for(int folhax = x - arvtam / 2; folhax <= x + arvtam / 2; folhax++)
+                for(int folhax = (x - arvtam / 2) + ((folhay - arvore - arvtam) / 2); folhax <= (x + arvtam / 2) - ((folhay - arvore - arvtam) / 2); folhax++)
                 {
                     fprintf(map, "%d,%d,%d\n", folhax, folhay, 4);
                 }
             }
+        }
+        else if(arvore != 0)
+        {
+            arvore = 0;
         }
         for(int y = camada; y >= 0; y--)
         {
@@ -81,7 +85,6 @@ void createArchive()
         {
             camada = 7;
         }
-        arvore = 0;
     }
     fclose(map);
 }
