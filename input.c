@@ -125,29 +125,25 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     /*
     if(GetAsyncKeyState(VK_RBUTTON))
     {
-<<<<<<< HEAD
-        
-=======
         if(DestroyBlocks())
         {
             RenderBkgd(hdc);
             RenderMap(Map, hdc);
             renderLife(hdc, Player->life);
         }
->>>>>>> 5e0b17548844e44218b4ac3f936fd02af3d1018b
     }else
     */
     if(GetAsyncKeyState(VK_LBUTTON))
     {
         switch(Player->inventory[Player->mainSlot].id)
         {
-<<<<<<< HEAD
             case 0:
             {
                 if(DestroyBlocks())
                 {
                     RenderBkgd(hdc);
                     RenderMap(Map, hdc);
+                    renderLife(hdc, Player->life);
                 }
             }
             break;
@@ -175,16 +171,12 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 {
                     RenderBkgd(hdc);
                     RenderMap(Map, hdc);
+                    renderLife(hdc, Player->life);
                 }
             }
             break;
             default:
             break;
-=======
-            RenderBkgd(hdc);
-            RenderMap(Map, hdc);
-            renderLife(hdc, Player->life);
->>>>>>> 5e0b17548844e44218b4ac3f936fd02af3d1018b
         }
     }
     if(GetAsyncKeyState(VK_A) && canMove)
