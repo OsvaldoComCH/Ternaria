@@ -34,7 +34,7 @@ typedef struct zombie
 } zombie;
 
 
-void readItems(character * Player)
+void ReadItems(character * Player)
 {
     int count = 0;
     FILE * ItemFile = fopen("items.txt", "r");
@@ -44,7 +44,7 @@ void readItems(character * Player)
         fscanf(ItemFile, "%i, %i, %i, %i", &Player->inventory[count].id, &Player->inventory[count].damage,
         &Player->inventory[count].durability, &Player->inventory[count].ammo);
         
-        itemDefine(&Player->inventory[count]);
+        ItemDefine(&Player->inventory[count]);
         ++count;
     }
     fclose(ItemFile);

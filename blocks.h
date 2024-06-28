@@ -15,7 +15,7 @@ typedef struct block
 } block;
 
 // Função de definição da textura e colisão dos blocos
-void blockDefine(block * B)
+void BlockDefine(block * B)
 {
     B->hitbox.left = B->x*32;
     B->hitbox.top = 649 - (B->y*32);
@@ -48,7 +48,7 @@ void blockDefine(block * B)
     }
 }
 // função para criar o mapa aleatoriamente
-void createArchive()
+void CreateArchive()
 {
     FILE * map = fopen("Map.txt", "w");
     int camada = rand()%6 + 2;
@@ -97,7 +97,7 @@ void createArchive()
 /* 
 Função de leitura do arquivo de mapa, fazemos a construção do mapa do Ternaria por meio da leitura desse arquivo.
 */ 
-void readArchive(DArray *lista)
+void ReadArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "r");
@@ -107,13 +107,13 @@ void readArchive(DArray *lista)
         ++count;
         block *bloco = malloc(sizeof(block));
         fscanf(File, "%i,%i,%i", &bloco->x, &bloco->y, &bloco->type);
-        blockDefine(bloco);
+        BlockDefine(bloco);
         DArrayAdd(lista, bloco);
     }
     fclose(File);
 }
 
-void writeArchive(DArray *lista)
+void WriteArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "w");

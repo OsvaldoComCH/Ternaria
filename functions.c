@@ -2,7 +2,7 @@
 
 HWND Ghwnd;
 
-int zombieGravity = 0;
+int zombieGravity = 0, knockbackSideZombie;
 
 void EraseRect(HDC hdc, const RECT * Rect)
 {
@@ -84,7 +84,7 @@ int DestroyBlocks()
         {
             free(B);
             DArrayRemove(&Map, i);
-            writeArchive(&Map);
+            WriteArchive(&Map);
             return 1;
         }
     }
@@ -113,18 +113,18 @@ int PlaceBlocks(character * Player, zombie * Zombie)
     B->x = Mouse.x / 32;
     B->y = (675 - Mouse.y) / 32;
     B->type = 2;
-    blockDefine(B);
+    BlockDefine(B);
     if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
     {
         free(B);
         return 0;
     }
     DArrayAdd(&Map, B);
-    writeArchive(&Map);
+    WriteArchive(&Map);
     return 1;
 }
 
-void moveDownZombie(zombie * zombie, int pixels)
+void MoveDownZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top += pixels;
     zombie->hitbox.bottom += pixels;
@@ -137,7 +137,7 @@ void moveDownZombie(zombie * zombie, int pixels)
     }
 }
 
-void moveUpZombie(zombie * zombie, int pixels)
+void MoveUpZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top -= pixels;
     zombie->hitbox.bottom -= pixels;
@@ -150,7 +150,7 @@ void moveUpZombie(zombie * zombie, int pixels)
     }
 }
 
-void moveRightZombie(zombie * zombie, int pixels)
+void MoveRightZombie(zombie * zombie, int pixels)
 {
     zombie->state = zombie->state = 1;
     zombie->hitbox.left += pixels;
@@ -160,11 +160,11 @@ void moveRightZombie(zombie * zombie, int pixels)
     {
         zombie->hitbox.right = B->hitbox.left;
         zombie->hitbox.left = zombie->hitbox.right - 31;
-        moveUpZombie(zombie, 16);
+        MoveUpZombie(zombie, 16);
     }
 }
 
-void moveLeftZombie(zombie * zombie, int pixels)
+void MoveLeftZombie(zombie * zombie, int pixels)
 {
     zombie->state = zombie->state = 0;
     zombie->hitbox.left -= pixels;
@@ -174,33 +174,44 @@ void moveLeftZombie(zombie * zombie, int pixels)
     {
         zombie->hitbox.left = B->hitbox.right;
         zombie->hitbox.right = zombie->hitbox.left + 31;
-        moveUpZombie(zombie, 16);
+        MoveUpZombie(zombie, 16);
     }
 
 }
 
 void ZombieGravity(zombie * zombie)
 {
-    moveDownZombie(zombie, zombieGravity);
+    MoveDownZombie(zombie, zombieGravity);
     if(zombieGravity < 20)
     {
         zombieGravity++;
     }
 }
 
-void moveZombie(character * player, zombie * zombie)
+void MoveZombie(character * player, zombie * zombie)
 {
     int right = player->hitbox.right;
     int left = player->hitbox.left;
     ZombieGravity(zombie);
     if (zombie->hitbox.right < right)
     {
-        moveRightZombie(zombie, 2);
+        MoveRightZombie(zombie, 2);
     }
     if (zombie->hitbox.left > left)
     {
-        moveLeftZombie(zombie, 2);
+        MoveLeftZombie(zombie, 2);
     }
+}
+
+void KnockbackZombie(zombie * zombie)
+{
+    if(knockbackSideZombie == 1)
+    {
+        MoveLeftZombie(zombie, 7);
+    } else {
+        MoveRightZombie(zombie, 7);
+    }
+    MoveUpZombie(zombie, 7);
 }
 
 //Dá tiro de doze

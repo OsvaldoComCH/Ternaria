@@ -104,7 +104,7 @@ void Knockback(character * Player)
     MoveUp(Player, 7);
 }
 
-void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
+void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 {
     if(GetAsyncKeyState(VK_1))
     {
@@ -121,20 +121,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     if(GetAsyncKeyState(VK_4))
     {
         Player->mainSlot = 3;
-        HCURSOR Cursor = (HCURSOR)LoadImage(NULL, L"imagens/Bloquinho.bmp", IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
-        SetCursor(Cursor);
     }
-    /*
-    if(GetAsyncKeyState(VK_RBUTTON))
-    {
-        if(DestroyBlocks())
-        {
-            RenderBkgd(hdc);
-            RenderMap(Map, hdc);
-            renderLife(hdc, Player->life);
-        }
-    }else
-    */
     if(GetAsyncKeyState(VK_LBUTTON))
     {
         switch(Player->inventory[Player->mainSlot].id)
@@ -145,7 +132,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 {
                     RenderBkgd(hdc);
                     RenderMap(Map, hdc);
-                    renderLife(hdc, Player->life);
+                    RenderLife(hdc, Player->life);
                 }
             }
             break;
@@ -173,7 +160,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 {
                     RenderBkgd(hdc);
                     RenderMap(Map, hdc);
-                    renderLife(hdc, Player->life);
+                    RenderLife(hdc, Player->life);
                 }
             }
             break;
@@ -204,7 +191,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         Player->vulnerability = 30;
         Player->life -= Zombie->damage;
         printf("%i",Player->life);
-        renderLife(hdc, Player->life);
+        RenderLife(hdc, Player->life);
         knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)
         {
@@ -226,7 +213,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
 }
 
-void regeneration(character * player)
+void Regeneration(character * player)
 {
     HDC hdc;
     if (player->life < 10)

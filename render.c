@@ -113,7 +113,7 @@ void renderInv(HDC hdc, character * player)
     }
 }
 
-void renderLife(HDC hdc, int life)
+void RenderLife(HDC hdc, int life)
 {
     wchar_t * img1;
     wchar_t * img2;

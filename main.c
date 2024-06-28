@@ -14,7 +14,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 {
     HWND hwnd = *((HWND *)lpParam);
     srand(time(NULL));
-    createArchive();
+    CreateArchive();
 
     int gameover = 0, count = 0;
     character player;
@@ -25,16 +25,16 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.life = 10;
     player.damage = 1;
     player.state = 0;
-    //readItems(&player);
+    //ReadItems(&player);
     player.mainSlot = 0;
     player.inventory[0].id = 0;
     player.inventory[1].id = 1;
     player.inventory[2].id = 2;
     player.inventory[3].id = 3;
-    itemDefine(&player.inventory[0]);
-    itemDefine(&player.inventory[1]);
-    itemDefine(&player.inventory[2]);
-    itemDefine(&player.inventory[3]);
+    ItemDefine(&player.inventory[0]);
+    ItemDefine(&player.inventory[1]);
+    ItemDefine(&player.inventory[2]);
+    ItemDefine(&player.inventory[3]);
 
     zombie zombie;
     zombie.hitbox.left =420;
@@ -48,7 +48,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie.state = 1;
 
     DArrayCreate(&Map, 200);
-    readArchive(&Map); 
+    ReadArchive(&Map); 
     
     /*
     Normalmente, se usa um sleep para esperar uma determinada quantidade de tempo. As funções de sleep são
@@ -66,7 +66,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     GetClientRect(hwnd, &R);
     RenderBkgd(hdc);
     RenderMap(&Map, hdc);
-    renderLife(hdc, player.life);
+    RenderLife(hdc, player.life);
     ReleaseDC(hwnd, hdc);
     
     
@@ -82,8 +82,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
-        input(TempDC, &player, &zombie, &Map);
-        moveZombie(&player, &zombie);
+        Input(TempDC, &player, &zombie, &Map);
+        MoveZombie(&player, &zombie);
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
@@ -93,8 +93,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         count += 1;
         if(count == 300)
         {
-            regeneration(&player);
-            renderLife(TempDC, player.life);
+            Regeneration(&player);
+            RenderLife(TempDC, player.life);
             count = 0;
         }
 
