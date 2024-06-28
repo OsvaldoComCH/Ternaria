@@ -15,7 +15,7 @@ typedef struct block
 } block;
 
 // Função de definição da textura e colisão dos blocos
-void blockDefine(block * B)
+void BlockDefine(block * B)
 {
     B->hitbox.left = B->x*32;
     B->hitbox.top = 649 - (B->y*32);
@@ -38,13 +38,17 @@ void blockDefine(block * B)
     case 4:
         B->img = L"imagens/Folhas.bmp";
         break;
-        
+
+    case 5:
+        B->img = L"imagens/Stone.bmp";
+        break;
+
     default:
         break;
     }
 }
-
-void createArchive()
+// função para criar o mapa aleatoriamente
+void CreateArchive()
 {
     FILE * map = fopen("Map.txt", "w");
     int camada = rand()%6 + 2;
@@ -52,46 +56,48 @@ void createArchive()
     
     for(int x = 0; x < 30; x++)
     {
-        if(arvore == 0 && rand()%10 == 1)
+        if(arvore == 0 && rand()%10 == 1) // criação aleatoria da arvore, 10% de chance de criar uma arvore caso o bloco anterior não tenha uma arvore
         {
             arvore = camada + 1;
-            arvtam = rand()%4 + 3;
-            for(int arvh = arvore; arvh < arvore + arvtam; arvh++)
+            arvtam = rand()%4 + 3; // tamanho aleatorio da arvore
+            for(int arvh = arvore; arvh < arvore + arvtam; arvh++) // criação dos troncos em linha reta para cima de acordo com o tamanho da arvore
             {
-                fprintf(map, "%d,%d,%d\n", x, arvh, 3);
+                fprintf(map, "%d,%d,%d\n", x, arvh, 3); // escreve o local do bloco no txt do mapa
             }
+            // criação das folhas da arvore em volta do tronco de acordo com o tamanho da arvore
             for(int folhay = arvore + arvtam; folhay < arvore + arvtam * 2; folhay++)
             {
                 for(int folhax = (x - arvtam / 2) + ((folhay - arvore - arvtam) / 2); folhax <= (x + arvtam / 2) - ((folhay - arvore - arvtam) / 2); folhax++)
                 {
-                    fprintf(map, "%d,%d,%d\n", folhax, folhay, 4);
+                    fprintf(map, "%d,%d,%d\n", folhax, folhay, 4); // escreve o local do bloco no txt do mapa
                 }
             }
         }
-        else if(arvore != 0)
+        else if(arvore != 0) // caso o bloco anterior possua uma arvore retorna a variavel para 0
         {
             arvore = 0;
         }
-        for(int y = camada; y >= 0; y--)
+        int ypedra = rand()%3 + 3; // escolhe quantos blocos abaixo da grama começara a geração de pedras
+        for(int y = camada; y >= 0; y--) // criação dos blocos do chão
         {
-            fprintf(map, "%d,%d,%d\n", x, y, (y == camada && arvore != camada + 1) ? 1 : 2);
+            fprintf(map, "%d,%d,%d\n", x, y, (y <= camada - ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
         }
-        camada += rand()%3 - 1;
-        if(camada < 2)
+        camada += rand()%3 - 1; // aumenta ou diminui em 1 ou mantem a camada aleatoriamente
+        if(camada < 2) // limita o minimo da camada que será gerada
         {
             camada = 2;
         }
-        if(camada > 7)
+        if(camada > 7) // limita o maximo da camada que será gerada
         {
             camada = 7;
         }
     }
-    fclose(map);
+    fclose(map); // finaliza a criação do mapa
 }
 /* 
 Função de leitura do arquivo de mapa, fazemos a construção do mapa do Ternaria por meio da leitura desse arquivo.
 */ 
-void readArchive(DArray *lista)
+void ReadArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "r");
@@ -101,13 +107,13 @@ void readArchive(DArray *lista)
         ++count;
         block *bloco = malloc(sizeof(block));
         fscanf(File, "%i,%i,%i", &bloco->x, &bloco->y, &bloco->type);
-        blockDefine(bloco);
+        BlockDefine(bloco);
         DArrayAdd(lista, bloco);
     }
     fclose(File);
 }
 
-void writeArchive(DArray *lista)
+void WriteArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "w");

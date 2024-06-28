@@ -225,12 +225,11 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
 }
 
-void regeneration(character * player)
+void Regeneration(character * player)
 {
     HDC hdc;
-    if (player->life <= 10)
+    if (player->life < 10)
     {
         player->life += 1;
-        renderLife(hdc, player->life);
     }
 }

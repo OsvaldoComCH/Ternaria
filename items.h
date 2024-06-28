@@ -18,7 +18,7 @@ typedef struct Item
     wchar_t * imgRight;
 } Item;
 
-void itemDefine(Item * item)
+void ItemDefine(Item * item)
 {
     item->durability = 64;
     switch (item->id)
