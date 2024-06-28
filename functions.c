@@ -218,9 +218,9 @@ void KnockbackZombie(zombie * zombie)
 {
     if(knockbackSideZombie == 1)
     {
-        MoveLeftZombie(zombie, 7);
+        MoveLeftZombie(zombie, 10);
     } else {
-        MoveRightZombie(zombie, 7);
+        MoveRightZombie(zombie, 10);
     }
     MoveUpZombie(zombie, 7);
 }
@@ -280,7 +280,7 @@ int EstragarVelorio(zombie * Zombie, character * Player, POINT Mouse)
     if(Collision(&Zombie->hitbox, &Damage))
     {
         Zombie->life -= Player->inventory[Player->mainSlot].damage;
-        return (Zombie->hitbox.left + 16) - Mouse.x;
+        return (Zombie->hitbox.left + 16) - (Player->hitbox.left + 15);
     }
     return 0;
 }

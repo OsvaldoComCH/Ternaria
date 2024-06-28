@@ -153,13 +153,13 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                     CoolDown = 10;
                     if(res < 0)
                     {
-                        Zombie->knockback = 30;
+                        Zombie->knockback = 5;
                         knockbackSideZombie = 1;
                         KnockbackZombie(Zombie);
                     }else
                     if(res > 0)
                     {
-                        Zombie->knockback = 30;
+                        Zombie->knockback = 5;
                         knockbackSideZombie = 2;
                         KnockbackZombie(Zombie);
                     }
@@ -168,16 +168,19 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 case 2:
                 {
                     int res = EstragarVelorio(Zombie, Player, Mouse);
-                    CoolDown = 40;
+                    CoolDown = 30;
                     if(res < 0)
                     {
+                        Zombie->knockback = 8;
                         knockbackSideZombie = 1;
+                        KnockbackZombie(Zombie);
                     }else
                     if(res > 0)
                     {
+                        Zombie->knockback = 8;
                         knockbackSideZombie = 2;
+                        KnockbackZombie(Zombie);
                     }
-                    KnockbackZombie(Zombie);
                 }
                 break;
                 case 3:
