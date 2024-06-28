@@ -125,13 +125,23 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     /*
     if(GetAsyncKeyState(VK_RBUTTON))
     {
+<<<<<<< HEAD
         
+=======
+        if(DestroyBlocks())
+        {
+            RenderBkgd(hdc);
+            RenderMap(Map, hdc);
+            renderLife(hdc, Player->life);
+        }
+>>>>>>> 5e0b17548844e44218b4ac3f936fd02af3d1018b
     }else
     */
     if(GetAsyncKeyState(VK_LBUTTON))
     {
         switch(Player->inventory[Player->mainSlot].id)
         {
+<<<<<<< HEAD
             case 0:
             {
                 if(DestroyBlocks())
@@ -170,6 +180,11 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
             break;
             default:
             break;
+=======
+            RenderBkgd(hdc);
+            RenderMap(Map, hdc);
+            renderLife(hdc, Player->life);
+>>>>>>> 5e0b17548844e44218b4ac3f936fd02af3d1018b
         }
     }
     if(GetAsyncKeyState(VK_A) && canMove)
@@ -195,6 +210,7 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         Player->vulnerability = 30;
         Player->life -= Zombie->damage;
         printf("%i",Player->life);
+        renderLife(hdc, Player->life);
         knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)
         {
@@ -213,5 +229,15 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     if(Player->vulnerability > 0)
     {
         Player->vulnerability--;
+    }
+}
+
+void regeneration(character * player)
+{
+    HDC hdc;
+    if (player->life <= 10)
+    {
+        player->life += 1;
+        renderLife(hdc, player->life);
     }
 }

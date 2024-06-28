@@ -16,12 +16,12 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     srand(time(NULL));
     createArchive();
 
-    int gameover = 0;
+    int gameover = 0, count = 0;
     character player;
     player.hitbox.left = 320;
     player.hitbox.right = 351;
-    player.hitbox.top = 320;
-    player.hitbox.bottom = 383;
+    player.hitbox.top = 120;
+    player.hitbox.bottom = 183;
     player.life = 10;
     player.damage = 1;
     player.state = 0;
@@ -39,8 +39,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie zombie;
     zombie.hitbox.left =420;
     zombie.hitbox.right = 451;
-    zombie.hitbox.top = 420;
-    zombie.hitbox.bottom = 483;
+    zombie.hitbox.top = 120;
+    zombie.hitbox.bottom = 183;
     zombie.life = 12;
     zombie.damage = 2;
     zombie.jumpBot = 0;
@@ -66,7 +66,9 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     GetClientRect(hwnd, &R);
     RenderBkgd(hdc);
     RenderMap(&Map, hdc);
+    renderLife(hdc, player.life);
     ReleaseDC(hwnd, hdc);
+    
     
     while(player.life >= 0)
     {
@@ -87,13 +89,17 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderTool(&player, TempDC);
 
         renderInv(TempDC);
-        renderLife(TempDC);
-
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);
         DeleteObject(Bitmap);
         ReleaseDC(hwnd, hdc);
+        count += 1;
+        if(count == 300)
+        {
+            regeneration(&player);
+        }
+
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
 }
