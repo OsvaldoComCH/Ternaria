@@ -2,7 +2,7 @@
 
 HWND Ghwnd;
 
-int zombieGravity = 0;
+int zombieGravity = 0, knockbackSideZombie;
 
 void EraseRect(HDC hdc, const RECT * Rect)
 {
@@ -67,16 +67,8 @@ block * MapCollision(const RECT * R)
     return NULL;
 }
 
-int DestroyBlocks()
+int DestroyBlocks(POINT Mouse)
 {
-    POINT Mouse;
-    RECT WindowRect;
-    GetWindowRect(Ghwnd, &WindowRect);
-    if(!GetCursorPos(&Mouse))
-    {
-        return -1;
-    }
-    ScreenToClient(Ghwnd, &Mouse);
     for(int i = 0; i < Map.Size; ++i)
     {
         block * B = (block *) Map.List[i];
@@ -84,23 +76,15 @@ int DestroyBlocks()
         {
             free(B);
             DArrayRemove(&Map, i);
-            writeArchive(&Map);
+            WriteArchive(&Map);
             return 1;
         }
     }
     return 0;
 }
 
-int PlaceBlocks(character * Player, zombie * Zombie)
+int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
 {
-    POINT Mouse;
-    RECT WindowRect;
-    GetWindowRect(Ghwnd, &WindowRect);
-    if(!GetCursorPos(&Mouse))
-    {
-        return -1;
-    }
-    ScreenToClient(Ghwnd, &Mouse);
     for(int i = 0; i < Map.Size; ++i)
     {
         block * B = (block *) Map.List[i];
@@ -150,11 +134,11 @@ int PlaceBlocks(character * Player, zombie * Zombie)
         return 0;
     }
     DArrayAdd(&Map, B);
-    writeArchive(&Map);
+    WriteArchive(&Map);
     return 1;
 }
 
-void moveDownZombie(zombie * zombie, int pixels)
+void MoveDownZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top += pixels;
     zombie->hitbox.bottom += pixels;
@@ -167,7 +151,7 @@ void moveDownZombie(zombie * zombie, int pixels)
     }
 }
 
-void moveUpZombie(zombie * zombie, int pixels)
+void MoveUpZombie(zombie * zombie, int pixels)
 {
     zombie->hitbox.top -= pixels;
     zombie->hitbox.bottom -= pixels;
@@ -180,7 +164,7 @@ void moveUpZombie(zombie * zombie, int pixels)
     }
 }
 
-void moveRightZombie(zombie * zombie, int pixels)
+void MoveRightZombie(zombie * zombie, int pixels)
 {
     zombie->state = zombie->state = 1;
     zombie->hitbox.left += pixels;
@@ -190,11 +174,11 @@ void moveRightZombie(zombie * zombie, int pixels)
     {
         zombie->hitbox.right = B->hitbox.left;
         zombie->hitbox.left = zombie->hitbox.right - 31;
-        moveUpZombie(zombie, 16);
+        MoveUpZombie(zombie, 16);
     }
 }
 
-void moveLeftZombie(zombie * zombie, int pixels)
+void MoveLeftZombie(zombie * zombie, int pixels)
 {
     zombie->state = zombie->state = 0;
     zombie->hitbox.left -= pixels;
@@ -204,37 +188,79 @@ void moveLeftZombie(zombie * zombie, int pixels)
     {
         zombie->hitbox.left = B->hitbox.right;
         zombie->hitbox.right = zombie->hitbox.left + 31;
-        moveUpZombie(zombie, 16);
+        MoveUpZombie(zombie, 16);
     }
 
 }
 
 void ZombieGravity(zombie * zombie)
 {
-    moveDownZombie(zombie, zombieGravity);
+    MoveDownZombie(zombie, zombieGravity);
     if(zombieGravity < 20)
     {
         zombieGravity++;
     }
 }
 
-void moveZombie(character * player, zombie * zombie)
+void MoveZombie(character * player, zombie * zombie)
 {
     int right = player->hitbox.right;
     int left = player->hitbox.left;
     ZombieGravity(zombie);
     if (zombie->hitbox.right < right)
     {
-        moveRightZombie(zombie, 2);
+        MoveRightZombie(zombie, 2);
     }
     if (zombie->hitbox.left > left)
     {
-        moveLeftZombie(zombie, 2);
+        MoveLeftZombie(zombie, 2);
     }
 }
 
-//Dá tiro de doze
-int EstragarVelorio(zombie * Zombie, character * Player)
+void KnockbackZombie(zombie * zombie)
 {
+    if(knockbackSideZombie == 1)
+    {
+        MoveLeftZombie(zombie, 7);
+    } else {
+        MoveRightZombie(zombie, 7);
+    }
+    MoveUpZombie(zombie, 7);
+}
 
+//Espada
+int Slash(zombie * Zombie, character * Player)
+{
+    RECT Damage;
+    Damage.top = Player->hitbox.top;
+    Damage.bottom = Player->hitbox.bottom;
+    if(Player->facing == 1)
+    {
+        Damage.right = Player->hitbox.left;
+        Damage.left = Damage.right - 64;
+    }else
+    {
+        Damage.left = Player->hitbox.right;
+        Damage.right = Damage.left + 64;
+    }
+    if(Collision(&Zombie->hitbox, &Damage))
+    {
+        Zombie->life -= Player->inventory[Player->mainSlot].damage;
+        return 1;
+    }
+    return 0;
+}
+//Dá tiro de doze
+int EstragarVelorio(zombie * Zombie, character * Player, POINT Mouse)
+{
+    RECT Damage;
+    Damage.top = Mouse.y - 16;
+    Damage.bottom = Mouse.y + 15;
+    Damage.left = Mouse.x - 16;
+    Damage.right = Mouse.x + 15;
+    if(Collision(&Zombie->hitbox, &Damage))
+    {
+        Zombie->life -= Player->inventory[Player->mainSlot].damage;
+        return 1;
+    }
 }

@@ -104,8 +104,14 @@ void Knockback(character * Player)
     MoveUp(Player, 7);
 }
 
+int CoolDown = 0;
+
 void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 {
+    if(CoolDown)
+    {
+        --CoolDown;
+    }
     if(GetAsyncKeyState(VK_1))
     {
         Player->mainSlot = 0;
@@ -122,62 +128,58 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     {
         Player->mainSlot = 3;
     }
-    /*
-    if(GetAsyncKeyState(VK_RBUTTON))
-    {
-        if(DestroyBlocks())
-        {
-            RenderBkgd(hdc);
-            RenderMap(Map, hdc);
-            renderLife(hdc, Player->life);
-        }
-    }else
-    */
     if(GetAsyncKeyState(VK_LBUTTON))
     {
-        switch(Player->inventory[Player->mainSlot].id)
+        if(!CoolDown)
         {
-            case 0:
+            POINT Mouse;
+            GetCursorPos(&Mouse);
+            ScreenToClient(Ghwnd, &Mouse);
+            switch(Player->inventory[Player->mainSlot].id)
             {
-                if(DestroyBlocks())
+                case 0:
                 {
-                    RenderBkgd(hdc);
-                    RenderMap(Map, hdc);
-                    renderLife(hdc, Player->life);
+                    if(DestroyBlocks(Mouse))
+                    {
+                        RenderBkgd(hdc);
+                        RenderMap(Map, hdc);
+                        renderLife(hdc, Player->life);
+                    }
                 }
-            }
-            break;
-            case 1:
-            {
-                if(DestroyBlocks())
+                break;
+                case 1:
                 {
-                    RenderBkgd(hdc);
-                    RenderMap(Map, hdc);
+                    if(Slash(Zombie, Player))
+                    {
+                        printf("%d\n", Zombie->life);
+                        CoolDown = 10;
+                    }
                 }
-            }
-            break;
-            case 2:
-            {
-                if(DestroyBlocks())
+                break;
+                case 2:
                 {
-                    RenderBkgd(hdc);
-                    RenderMap(Map, hdc);
+                    if(EstragarVelorio(Zombie, Player, Mouse))
+                    {
+                        printf("%d\n", Zombie->life);
+                        CoolDown = 40;
+                    }
                 }
-            }
-            break;
-            case 3:
-            {
-                if(PlaceBlocks(Player, Zombie))
+                break;
+                case 3:
                 {
-                    RenderBkgd(hdc);
-                    RenderMap(Map, hdc);
-                    renderLife(hdc, Player->life);
+                    if(PlaceBlocks(Player, Zombie, Mouse))
+                    {
+                        RenderBkgd(hdc);
+                        RenderMap(Map, hdc);
+                        renderLife(hdc, Player->life);
+                    }
                 }
+                break;
+                default:
+                break;
             }
-            break;
-            default:
-            break;
         }
+
     }
     if(GetAsyncKeyState(VK_A) && canMove)
     {
@@ -201,7 +203,6 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     {
         Player->vulnerability = 30;
         Player->life -= Zombie->damage;
-        printf("%i",Player->life);
         renderLife(hdc, Player->life);
         knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)
@@ -224,12 +225,11 @@ void input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
 }
 
-void regeneration(character * player)
+void Regeneration(character * player)
 {
     HDC hdc;
-    if (player->life <= 10)
+    if (player->life < 10)
     {
         player->life += 1;
-        renderLife(hdc, player->life);
     }
 }

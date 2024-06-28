@@ -14,7 +14,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 {
     HWND hwnd = *((HWND *)lpParam);
     srand(time(NULL));
-    createArchive();
+    CreateArchive();
 
     int gameover = 0, count = 0;
     character player;
@@ -25,16 +25,16 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     player.life = 10;
     player.damage = 1;
     player.state = 0;
-    //readItems(&player);
+    //ReadItems(&player);
     player.mainSlot = 0;
     player.inventory[0].id = 0;
     player.inventory[1].id = 1;
     player.inventory[2].id = 2;
     player.inventory[3].id = 3;
-    itemDefine(&player.inventory[0]);
-    itemDefine(&player.inventory[1]);
-    itemDefine(&player.inventory[2]);
-    itemDefine(&player.inventory[3]);
+    ItemDefine(&player.inventory[0]);
+    ItemDefine(&player.inventory[1]);
+    ItemDefine(&player.inventory[2]);
+    ItemDefine(&player.inventory[3]);
 
     zombie zombie;
     zombie.hitbox.left =420;
@@ -48,7 +48,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     zombie.state = 1;
 
     DArrayCreate(&Map, 200);
-    readArchive(&Map); 
+    ReadArchive(&Map); 
     
     /*
     Normalmente, se usa um sleep para esperar uma determinada quantidade de tempo. As funções de sleep são
@@ -66,7 +66,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     GetClientRect(hwnd, &R);
     RenderBkgd(hdc);
     RenderMap(&Map, hdc);
-    renderLife(hdc, player.life);
+    RenderLife(hdc, player.life);
     ReleaseDC(hwnd, hdc);
     
     
@@ -82,27 +82,42 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
-        input(TempDC, &player, &zombie, &Map);
-        moveZombie(&player, &zombie);
-        RenderZombie(&zombie, TempDC);
+        Input(TempDC, &player, &zombie, &Map);
+        MoveZombie(&player, &zombie);
+        if(zombie.life > 0)
+        {
+            RenderZombie(&zombie, TempDC);
+        }
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
 
-        renderInv(TempDC);
+        renderInv(TempDC, &player);
+
+        count += 1;
+        if(count == 300)
+        {
+            Regeneration(&player);
+            RenderLife(TempDC, player.life);
+            count = 0;
+        }
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);
         DeleteObject(Bitmap);
         ReleaseDC(hwnd, hdc);
-        count += 1;
-        if(count == 300)
-        {
-            regeneration(&player);
-            count = 0;
-        }
 
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
+
+    HFONT Font = CreateFont(72, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+    hdc = GetDC(hwnd);
+    RECT R1 = {200, 300, 675, 450};
+    SelectObject(hdc, Font);
+    DrawRect(hdc, &R1, RGB(100,100,100));
+    SetBkColor(hdc, RGB(100,100,100));
+    TextOut(hdc, R1.left + 50, R1.top + 40, L"GAME OVER", 10);
+    ReleaseDC(hwnd, hdc);
 }
 
 //Função para o tratamanto de mensagens
@@ -174,7 +189,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     } else {
         MessageBox(NULL, L"Erro ao carregar o icone!", L"Erro", MB_ICONERROR);
     }
-    
+
+    HCURSOR Cursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+
+    SetCursor(Cursor);
     
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);

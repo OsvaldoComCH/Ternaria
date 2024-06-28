@@ -96,18 +96,27 @@ void RenderZombie(const zombie * zombie, HDC hdc)
     DrawImg(hdc, &zombie->hitbox, img);
 }
 
-void renderInv(HDC hdc)
+void renderInv(HDC hdc, character * player)
 {
     wchar_t * img = L"imagens/BarraInv.bmp";
     RECT rect = {10, 10, 317, 42};
+    int left = 20, top = 18, right = 36, bottom = 34;
     DrawImg(hdc, &rect, img);
+    for(int i = 0; i <= 3; i ++)
+    {
+        img = (player->inventory[i].imgLeft);
+        // img = L"imagens/terra.bmp";
+        RECT rect = {left, top, right, bottom};
+        DrawImg(hdc, &rect, img);
+        left +=34;
+        right +=34;
+    }
 }
 
-void renderLife(HDC hdc, int life)
+void RenderLife(HDC hdc, int life)
 {
     wchar_t * img1;
     wchar_t * img2;
-    printf("%d", life);
     int left = 5, top = 50, right = 37, bottom = 82;
     for(int i = 1; i <= life; i ++)
     {
@@ -126,3 +135,5 @@ void renderLife(HDC hdc, int life)
         right += 20;
     }
 }
+
+
