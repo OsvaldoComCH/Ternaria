@@ -79,9 +79,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         RenderZombie(&zombie, TempDC);
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
-
+        renderLife(TempDC, player.life);
         renderInv(TempDC);
-        renderLife(TempDC);
 
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
