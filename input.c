@@ -1,13 +1,6 @@
 #include "imports.h"
 #include "render.c"
 
-int gravity = 0;
-int canJump = 1;
-int knockback = 0;
-int knockbackSide = 0;
-int canMove = 1;
-
-
 void MoveLeft(character * Player, int Pixels)
 {
     Player->state = Player->state ^ 1;
@@ -43,10 +36,10 @@ void MoveDown(character * Player, int Pixels)
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
-        gravity = 0;
-        canJump = 1;
-        knockback = 0;
-        canMove = 1;
+        Player->gravity = 0;
+        Player->canJump = 1;
+        Player->knockback = 0;
+        Player->canMove = 1;
         Player->hitbox.bottom = B->hitbox.top;
         Player->hitbox.top = Player->hitbox.bottom - 63;
     }
@@ -59,10 +52,10 @@ void MoveUp(character * Player, int Pixels)
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
-        canJump = 0;
-        gravity = 0;
-        knockback = 0;
-        canMove = 1;
+        Player->canJump = 0;
+        Player->gravity = 0;
+        Player->knockback = 0;
+        Player->canMove = 1;
         Player->hitbox.top = B->hitbox.bottom;
         Player->hitbox.bottom = Player->hitbox.top + 63;
     }
@@ -70,12 +63,12 @@ void MoveUp(character * Player, int Pixels)
 
 void Jump(character * Player, int Pixels) 
 {
-    if(canJump == 1)
+    if(Player->canJump == 1)
     {
-        if(gravity == 15)
+        if(Player->gravity == 15)
         {
-            canJump = 0;
-            gravity = 0;
+            Player->canJump = 0;
+            Player->gravity = 0;
             return;
         }
         MoveUp(Player, Pixels);
@@ -84,16 +77,16 @@ void Jump(character * Player, int Pixels)
 
 void Gravity(character * Player)
 {
-    MoveDown(Player, gravity);
-    if(gravity < 20)
+    MoveDown(Player, Player->gravity);
+    if(Player->gravity < 20)
     {
-        gravity++;
+        Player->gravity++;
     }
 }
 
 void Knockback(character * Player)
 {
-    if(knockbackSide == 1)
+    if(Player->knockbackSide == 1)
     {
         MoveLeft(Player, 7);
     }
@@ -143,6 +136,7 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                     {
                         RenderBkgd(hdc);
                         RenderMap(Map, hdc);
+                        RenderInv(hdc, Player);
                         RenderLife(hdc, Player->life);
                     }
                 }
@@ -150,17 +144,17 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 case 1:
                 {
                     int res = Slash(Zombie, Player);
-                    CoolDown = 10;
+                    CoolDown = 20;
                     if(res < 0)
                     {
                         Zombie->knockback = 5;
-                        knockbackSideZombie = 1;
+                        Zombie->knockbackSide = 1;
                         KnockbackZombie(Zombie);
                     }else
                     if(res > 0)
                     {
                         Zombie->knockback = 5;
-                        knockbackSideZombie = 2;
+                        Zombie->knockbackSide = 2;
                         KnockbackZombie(Zombie);
                     }
                 }
@@ -168,17 +162,17 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 case 2:
                 {
                     int res = EstragarVelorio(Zombie, Player, Mouse);
-                    CoolDown = 30;
+                    CoolDown = 60;
                     if(res < 0)
                     {
-                        Zombie->knockback = 8;
-                        knockbackSideZombie = 1;
+                        Zombie->knockback = 15;
+                        Zombie->knockbackSide = 1;
                         KnockbackZombie(Zombie);
                     }else
                     if(res > 0)
                     {
-                        Zombie->knockback = 8;
-                        knockbackSideZombie = 2;
+                        Zombie->knockback = 15;
+                        Zombie->knockbackSide = 2;
                         KnockbackZombie(Zombie);
                     }
                 }
@@ -189,6 +183,7 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                     {
                         RenderBkgd(hdc);
                         RenderMap(Map, hdc);
+                        RenderInv(hdc, Player);
                         RenderLife(hdc, Player->life);
                     }
                 }
@@ -199,22 +194,22 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         }
 
     }
-    if(GetAsyncKeyState(VK_A) && canMove)
+    if(GetAsyncKeyState(VK_A) && Player->canMove)
     {
         MoveLeft(Player, 5);
     }
-    if(GetAsyncKeyState(VK_D) && canMove)
+    if(GetAsyncKeyState(VK_D) && Player->canMove)
     {
         MoveRight(Player, 5);
     }
-    if(GetAsyncKeyState(VK_SPACE) && canMove)
+    if(GetAsyncKeyState(VK_SPACE) && Player->canMove)
     {
         Jump(Player, 15);
     }
-    else if(canJump == 1)
+    else if(Player->canJump == 1)
     {
-        canJump = 0;
-        gravity = 0;
+        Player->canJump = 0;
+        Player->gravity = 0;
     }
     Gravity(Player);
     if (Collision(&Player->hitbox, &Zombie->hitbox) && Player->vulnerability == 0)
@@ -222,20 +217,20 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
         Player->vulnerability = 30;
         Player->life -= Zombie->damage;
         RenderLife(hdc, Player->life);
-        knockback = 1;
+        Player->knockback = 1;
         if(Player->hitbox.left > Zombie->hitbox.left)
         {
-            knockbackSide = 2;
+            Player->knockbackSide = 2;
         }
         else if (Zombie->hitbox.right > Player->hitbox.right)
         {
-            knockbackSide = 1;
+            Player->knockbackSide = 1;
         }
     }
-    if(knockback)
+    if(Player->knockback)
     {
         Knockback(Player);
-        canMove = 0;
+        Player->canMove = 0;
     }
     if(Player->vulnerability > 0)
     {
@@ -245,8 +240,7 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
 
 void Regeneration(character * player)
 {
-    HDC hdc;
-    if (player->life < 10)
+    if(player->life < 10)
     {
         player->life += 1;
     }

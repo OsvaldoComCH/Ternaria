@@ -16,6 +16,11 @@ typedef struct character
     int vulnerability;
     int state;
     int facing;
+    int canJump;
+    int gravity;
+    int knockback;
+    int knockbackSide;
+    int canMove;
 } character;
 
 /*
@@ -28,26 +33,12 @@ typedef struct zombie
     int life;
     int damage;
     int state;
-    int jumpBot;
-    int canJumpBot;
+    int canJump;
     int knockback;
+    int knockbackSide;
+    int canMove;
+    int gravity;
+    int respawn;
 } zombie;
-
-// Faz a leitura dos itens
-void ReadItems(character * Player)
-{
-    int count = 0;
-    FILE * ItemFile = fopen("items.txt", "r");
-
-    while (!feof(ItemFile) && count < 9)
-    {
-        fscanf(ItemFile, "%i, %i, %i, %i", &Player->inventory[count].id, &Player->inventory[count].damage,
-        &Player->inventory[count].durability, &Player->inventory[count].ammo);
-        
-        ItemDefine(&Player->inventory[count]);
-        ++count;
-    }
-    fclose(ItemFile);
-}
 
 #endif

@@ -118,6 +118,8 @@ void RenderLife(HDC hdc, int life)
     wchar_t * img1;
     wchar_t * img2;
     int left = 5, top = 50, right = 37, bottom = 82;
+    RECT Frame = {10, 50, 215, 82};
+    DrawRect(hdc, &Frame, RGB(200,200,255));
     for(int i = 1; i <= life; i ++)
     {
         img1 = L"imagens/Vida.bmp";

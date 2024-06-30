@@ -16,39 +16,15 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     srand(time(NULL));
     CreateArchive();
 
-    int gameover = 0, count = 0;
-    character player;
-    player.hitbox.left = 320;
-    player.hitbox.right = 351;
-    player.hitbox.top = 120;
-    player.hitbox.bottom = 183;
-    player.life = 10;
-    player.damage = 1;
-    player.state = 0;
-    //ReadItems(&player);
-    player.mainSlot = 0;
-    player.inventory[0].id = 0;
-    player.inventory[1].id = 1;
-    player.inventory[2].id = 2;
-    player.inventory[3].id = 3;
-    ItemDefine(&player.inventory[0]);
-    ItemDefine(&player.inventory[1]);
-    ItemDefine(&player.inventory[2]);
-    ItemDefine(&player.inventory[3]);
-
-    zombie zombie;
-    zombie.hitbox.left =420;
-    zombie.hitbox.right = 451;
-    zombie.hitbox.top = 120;
-    zombie.hitbox.bottom = 183;
-    zombie.life = 12;
-    zombie.damage = 2;
-    zombie.jumpBot = 0;
-    zombie.canJumpBot = 1;
-    zombie.state = 1;
-
     DArrayCreate(&Map, 200);
     ReadArchive(&Map); 
+
+    int gameover = 0, count = 0;
+    character player;
+    SpawnPlayer(&player);
+
+    zombie zombie;
+    SpawnZombie(&zombie, &player);
     
     /*
     Normalmente, se usa um sleep para esperar uma determinada quantidade de tempo. As funções de sleep são
@@ -67,9 +43,11 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     RenderBkgd(hdc);
     RenderMap(&Map, hdc);
     RenderLife(hdc, player.life);
+    RenderInv(hdc, &player);
     ReleaseDC(hwnd, hdc);
-    
-    
+
+    RECT hud = {10, 10, 317, 82};
+    int renderHud = 0;
     while(player.life >= 0)
     {
         HDC hdc = GetDC(hwnd);
@@ -80,21 +58,31 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         SelectObject(TempDC, Bitmap);
         BitBlt(TempDC, 0, 0, R.right-R.left, R.bottom-R.top, hdc, 0, 0, SRCCOPY);
 
+        if(Collision(&player.hitbox, &hud) || Collision(&zombie.hitbox, &hud))
+        {
+            renderHud = 1;
+        }else
+        {
+            renderHud = 0;
+        }
+
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
         Input(TempDC, &player, &zombie, &Map);
-        if(zombie.life > 0)
+        MoveZombie(&player, &zombie);
+
+        if(renderHud)
         {
-            MoveZombie(&player, &zombie);
+            RenderInv(TempDC, &player);
+            RenderLife(TempDC, player.life);
+        }
+
+        if(zombie.life >= 0)
+        {
             RenderZombie(&zombie, TempDC);
-        }else
-        {
-            MoveUpZombie(&zombie, 800);
         }
         RenderPlayer(&player, TempDC);
         RenderTool(&player, TempDC);
-
-        RenderInv(TempDC, &player);
 
         count += 1;
         if(count == 300)
@@ -102,6 +90,15 @@ DWORD WINAPI MainThread(LPVOID lpParam)
             Regeneration(&player);
             RenderLife(TempDC, player.life);
             count = 0;
+        }
+
+        if(player.hitbox.top > 700)
+        {
+            player.life = -1;
+        }
+        if(zombie.hitbox.top > 700)
+        {
+            DamageZombie(&zombie, 200);
         }
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
