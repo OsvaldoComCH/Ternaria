@@ -125,15 +125,18 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     {
         if(!CoolDown)
         {
-            POINT Mouse;
+            POINT Mouse, P;
             GetCursorPos(&Mouse);
             ScreenToClient(Ghwnd, &Mouse);
+            P.x = Player->hitbox.right - Player->hitbox.left;
+            P.y = Player->hitbox.bottom - Player->hitbox.top;
             switch(Player->inventory[Player->mainSlot].id)
             {
                 case 0:
                 {
                     if(DestroyBlocks(Mouse))
                     {
+                        CoolDown = 5;
                         RenderBkgd(hdc);
                         RenderMap(Map, hdc);
                         RenderInv(hdc, Player);

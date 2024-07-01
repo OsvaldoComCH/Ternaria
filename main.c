@@ -5,16 +5,19 @@ gcc main.c -o Ternaria.exe -l gdi32 -l msimg32
 #include "imports.h"
 #include "input.c"
 
-DWORD ThreadID;
+int ThreadRunning = 1;
 HANDLE Thread;
-
 
 //Função da thread principal
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
-    HWND hwnd = *((HWND *)lpParam);
     srand(time(NULL));
-    CreateArchive();
+    if(ThreadRunning)
+    {
+        CreateArchive();
+    }
+    ThreadRunning = 1;
+    HWND hwnd = *((HWND *)lpParam);
 
     DArrayCreate(&Map, 200);
     ReadArchive(&Map); 
@@ -48,7 +51,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
     RECT hud = {10, 10, 317, 82};
     int renderHud = 0;
-    while(player.life >= 0)
+    while(player.life > 0)
     {
         HDC hdc = GetDC(hwnd);
         RECT R;
@@ -77,7 +80,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
             RenderLife(TempDC, player.life);
         }
 
-        if(zombie.life >= 0)
+        if(zombie.life > 0)
         {
             RenderZombie(&zombie, TempDC);
         }
@@ -94,7 +97,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         if(player.hitbox.top > 700)
         {
-            player.life = -1;
+            player.life = 0;
         }
         if(zombie.hitbox.top > 700)
         {
@@ -118,6 +121,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     SetBkColor(hdc, RGB(100,100,100));
     TextOut(hdc, R1.left + 50, R1.top + 40, L"GAME OVER", 10);
     ReleaseDC(hwnd, hdc);
+    DArrayDestroy(&Map);
+    ThreadRunning = 0;
 }
 
 //Função para o tratamanto de mensagens
@@ -140,6 +145,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
             PostQuitMessage(0);
         break;
+        case WM_KEYDOWN:
+        {
+            if(wParam == VK_RETURN && ThreadRunning == 0)
+            {
+                TerminateThread(Thread, 0);
+                Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, NULL);
+            }
+        }
         default:
             return DefWindowProc(hwnd, Msg, wParam, lParam);
     }
@@ -154,7 +167,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Window.lpfnWndProc = WndProc;
     Window.hInstance = hInstance;
     Window.lpszClassName = WClassName;
-
+    Window.hCursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+    Window.hIcon = (HICON)LoadImage(NULL, L"imagens/iconeTernaria.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
 
     if(!RegisterClass(&Window))
     {
@@ -179,26 +193,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     Ghwnd = hwnd;
     
-    HICON hIcon = (HICON)LoadImage(NULL, L"imagens/iconeTernaria.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-    
-    if (hIcon != NULL) {
-        // Definindo o ícone grande da janela
-        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
-        // Definindo o ícone pequeno da janela
-        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
-    } else {
-        MessageBox(NULL, L"Erro ao carregar o icone!", L"Erro", MB_ICONERROR);
-    }
-
-    HCURSOR Cursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-
-    SetCursor(Cursor);
     
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
     //Abrindo uma thread separada para rodar o jogo
-    Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, &ThreadID);
+    Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, NULL);
 
     //Loop para receber as mensagens da WINAPI
     while(GetMessage(&Msg, NULL, 0, 0))

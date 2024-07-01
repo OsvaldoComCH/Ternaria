@@ -19,6 +19,7 @@ void DArrayCreate(DArray * Array, int MaxSize)
 void DArrayGrow(DArray * Array)
 {
     Array->List = (void **) realloc(Array->List, Array->MaxSize * sizeof(void *) * 2);
+    Array->MaxSize = Array->MaxSize << 1;
 }
 
 void DArrayAdd(DArray * Array, void * Value)
