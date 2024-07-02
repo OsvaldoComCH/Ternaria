@@ -53,6 +53,7 @@ void CreateArchive()
     FILE * map = fopen("Map.txt", "w");
     int camada = rand()%6 + 2;
     int arvore = 0, arvtam = 0;
+    int ypedra = camada - (rand()%3 + 3);
     
     for(int x = 0; x < 30; x++)
     {
@@ -77,10 +78,9 @@ void CreateArchive()
         {
             arvore = 0;
         }
-        int ypedra = rand()%3 + 3; // escolhe quantos blocos abaixo da grama começara a geração de pedras
         for(int y = camada; y >= 0; y--) // criação dos blocos do chão
         {
-            fprintf(map, "%d,%d,%d\n", x, y, (y <= camada - ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
+            fprintf(map, "%d,%d,%d\n", x, y, (y <= ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
         }
         camada += rand()%3 - 1; // aumenta ou diminui em 1 ou mantem a camada aleatoriamente
         if(camada < 2) // limita o minimo da camada que será gerada
@@ -90,6 +90,15 @@ void CreateArchive()
         if(camada > 7) // limita o maximo da camada que será gerada
         {
             camada = 7;
+        }
+        ypedra += rand()%3 - 1; // aumenta ou diminui em 1 ou mantem a camada da pedra aleatoriamente
+        if(ypedra > camada - 3) // limita o minimo da camada de pedra que será gerada
+        {
+            ypedra = camada - 3;
+        }
+        if(ypedra < camada - 5) // limita o maximo da camada de pedra que será gerada
+        {
+            ypedra = camada - 5;
         }
     }
     fclose(map); // finaliza a criação do mapa
