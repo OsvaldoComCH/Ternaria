@@ -71,8 +71,12 @@ block * MapCollision(const RECT * R)
 }
 
 // Função de destruir blocos
-int DestroyBlocks(POINT Mouse)
+int DestroyBlocks(character * Player, POINT Mouse)
 {
+    if(sqrt(pow(abs(Mouse.x - ((Player->hitbox.left + Player->hitbox.right) / 2)), 2) + pow(abs(Mouse.y - ((Player->hitbox.bottom + Player->hitbox.top) / 2)), 2)) > 128)
+    {
+        return 0;
+    }
     for(int i = 0; i < Map.Size; ++i)
     {
         block * B = (block *) Map.List[i];
@@ -90,6 +94,10 @@ int DestroyBlocks(POINT Mouse)
 // Função de colocar blocos, caso não tenha nenhum bloco adjacente a outro, não é possível colocar bloco
 int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
 {
+    if(sqrt(pow(abs(Mouse.x - ((Player->hitbox.left + Player->hitbox.right) / 2)), 2) + pow(abs(Mouse.y - ((Player->hitbox.bottom + Player->hitbox.top) / 2)), 2)) > 128)
+    {
+        return 0;
+    }
     block * B = malloc(sizeof(block));
     B->x = Mouse.x / 32;
     B->y = (675 - Mouse.y) / 32;
@@ -104,22 +112,27 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     for(int i = 0; i < Map.Size; ++i)
     {
         block * C = (block *) Map.List[i];
-        B->hitbox.right += 32;
-        B->hitbox.left -= 32;
+        B->hitbox.bottom += 1;
+        B->hitbox.top -= 1;
+        if(Collision(&B->hitbox, &C->hitbox))
+        {
+            canPlace = 1;
+            if(C->hitbox.bottom > B->hitbox.bottom && C->type == 1)
+            {
+                C->type = 2;
+                BlockDefine(C);
+            }  
+        }
+        B->hitbox.bottom -= 1;
+        B->hitbox.top += 1;
+        B->hitbox.right += 1;
+        B->hitbox.left -= 1;
         if(Collision(&B->hitbox, &C->hitbox))
         {
             canPlace = 1;
         }
-        B->hitbox.right -= 32;
-        B->hitbox.left += 32;
-        B->hitbox.bottom += 32;
-        B->hitbox.top -= 32;
-        if(Collision(&B->hitbox, &C->hitbox))
-        {
-            canPlace = 1;
-        }
-        B->hitbox.bottom -= 32;
-        B->hitbox.top += 32;
+        B->hitbox.right -= 1;
+        B->hitbox.left += 1;
         if(Collision(&B->hitbox, &C->hitbox))
         {
             canPlace = 0;
@@ -139,6 +152,8 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
 void SpawnZombie(zombie * Zombie, const character * Player)
 {
     int PlayerX = Player->hitbox.left >> 5;
+
+    Zombie->baseLife *= 1.5;
     
     Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
     Zombie->hitbox.right = Zombie->hitbox.left + 31;
@@ -149,7 +164,7 @@ void SpawnZombie(zombie * Zombie, const character * Player)
         Zombie->hitbox.top -= 32;
         Zombie->hitbox.bottom -= 32;
     }
-    Zombie->life = 12;
+    Zombie->life = Zombie->baseLife;
     Zombie->damage = 2;
     Zombie->canJump = 1;
     Zombie->state = 1;

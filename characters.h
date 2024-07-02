@@ -31,6 +31,7 @@ typedef struct zombie
 {
     RECT hitbox;
     int life;
+    int baseLife;
     int damage;
     int state;
     int canJump;

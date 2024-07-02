@@ -134,7 +134,7 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
             {
                 case 0:
                 {
-                    if(DestroyBlocks(Mouse))
+                    if(DestroyBlocks(Player, Mouse))
                     {
                         CoolDown = 5;
                         RenderBkgd(hdc);

@@ -27,6 +27,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     SpawnPlayer(&player);
 
     zombie zombie;
+    zombie.baseLife = 10;
     SpawnZombie(&zombie, &player);
     
     /*
@@ -73,6 +74,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         EraseRect(TempDC, &zombie.hitbox);
         Input(TempDC, &player, &zombie, &Map);
         MoveZombie(&player, &zombie);
+        printf("%i\n", zombie.life);
 
         if(renderHud)
         {
