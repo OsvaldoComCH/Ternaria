@@ -87,11 +87,21 @@ void RenderZombie(const zombie * zombie, HDC hdc)
     wchar_t * img;
     if(zombie->state == 0)
     {
-        img = L"imagens/Zumbi.bmp";
+        if(zombie->damage < 5)
+        {
+            img = L"imagens/Zumbi.bmp";
+        } else {
+            img = L"imagens/Boss.bmp";
+        }
     }
     else
     {
-        img = L"imagens/ZumbiDireita.bmp";
+        if(zombie->damage < 5)
+        {
+            img = L"imagens/ZumbiDireita.bmp";
+        } else {
+            img = L"imagens/BossDireita.bmp";
+        }
     }
     DrawImg(hdc, &zombie->hitbox, img);
 }

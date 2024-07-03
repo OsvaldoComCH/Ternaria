@@ -153,23 +153,42 @@ void SpawnZombie(zombie * Zombie, const character * Player)
 {
     int PlayerX = Player->hitbox.left >> 5;
 
-    Zombie->baseLife *= 1.5;
-    
-    Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
-    Zombie->hitbox.right = Zombie->hitbox.left + 31;
-    Zombie->hitbox.top = 512;
-    Zombie->hitbox.bottom = Zombie->hitbox.top + 63;
-    while(MapCollision(&Zombie->hitbox))
+    if(Zombie->baseLife < 22)
     {
-        Zombie->hitbox.top -= 32;
-        Zombie->hitbox.bottom -= 32;
+        Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
+        Zombie->hitbox.right = Zombie->hitbox.left + 31;
+        Zombie->hitbox.top = 512;
+        Zombie->hitbox.bottom = Zombie->hitbox.top + 63;
+        while(MapCollision(&Zombie->hitbox))
+        {
+            Zombie->hitbox.top -= 32;
+            Zombie->hitbox.bottom -= 32;
+        }
+        Zombie->life = Zombie->baseLife;
+        Zombie->damage = 2;
+        Zombie->canJump = 1;
+        Zombie->state = 1;
+        Zombie->knockback = 0;
+        Zombie->canMove = 1;
+        Zombie->baseLife *= 1.5;
+    } else {
+        Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
+        Zombie->hitbox.right = Zombie->hitbox.left + 97;
+        Zombie->hitbox.top = 512;
+        Zombie->hitbox.bottom = Zombie->hitbox.top + 127;
+        while(MapCollision(&Zombie->hitbox))
+        {
+            Zombie->hitbox.top -= 32;
+            Zombie->hitbox.bottom -= 32;
+        }
+        Zombie->damage = 5;
+        Zombie->canJump = 1;
+        Zombie->state = 1;
+        Zombie->canMove = 1;
+        Zombie->knockback = 0;
+        Zombie->life = 150;
     }
-    Zombie->life = Zombie->baseLife;
-    Zombie->damage = 2;
-    Zombie->canJump = 1;
-    Zombie->state = 1;
-    Zombie->knockback = 0;
-    Zombie->canMove = 1;
+
 }
 
 void SpawnPlayer(character * Player)
@@ -224,7 +243,12 @@ void MoveDownZombie(zombie * zombie, int pixels)
         zombie->gravity = 0;
         zombie->canJump = 1;
         zombie->hitbox.bottom = B->hitbox.top;
-        zombie->hitbox.top = zombie->hitbox.bottom - 63;
+        if (zombie->damage < 5)
+        {
+            zombie->hitbox.top = zombie->hitbox.bottom - 63;
+        } else {
+            zombie->hitbox.top = zombie->hitbox.bottom - 127;
+        }
         zombie->canMove = 1;
     }
 }
@@ -240,7 +264,12 @@ void MoveUpZombie(zombie * zombie, int pixels)
         zombie->gravity = 0;
         zombie->canJump = 0;
         zombie->hitbox.top = B->hitbox.bottom;
-        zombie->hitbox.bottom = zombie->hitbox.top + 63;
+        if(zombie->damage < 5)
+        {
+            zombie->hitbox.bottom = zombie->hitbox.top + 63;
+        } else {
+            zombie->hitbox.bottom = zombie->hitbox.top + 127;
+        }
     }
 }
 
@@ -269,7 +298,12 @@ void MoveRightZombie(zombie * zombie, int pixels)
     if(B != NULL)
     {
         zombie->hitbox.right = B->hitbox.left;
-        zombie->hitbox.left = zombie->hitbox.right - 31;
+        if (zombie->damage < 5)
+        {
+            zombie->hitbox.left = zombie->hitbox.right - 31;
+        } else {
+            zombie->hitbox.left = zombie->hitbox.right - 97;
+        }
         if(zombie->canJump)
         {
             ZombieJump(zombie, 15);
@@ -287,7 +321,13 @@ void MoveLeftZombie(zombie * zombie, int pixels)
     if(B != NULL)
     {
         zombie->hitbox.left = B->hitbox.right;
-        zombie->hitbox.right = zombie->hitbox.left + 31;
+        if (zombie->damage < 5)
+        {
+            zombie->hitbox.right = zombie->hitbox.left + 31;
+        } else {
+            zombie->hitbox.right = zombie->hitbox.left + 97;
+        }
+        
         if(zombie->canJump)
         {
             ZombieJump(zombie, 15);
