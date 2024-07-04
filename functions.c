@@ -7,7 +7,7 @@ HWND Ghwnd;
 void EraseRect(HDC hdc, const RECT * Rect)
 {
     BITMAP bm;
-    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround1920.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
     HDC BitmapDC = CreateCompatibleDC(hdc);
     SelectObject(BitmapDC, Image);
     GetObject((HGDIOBJ)Image, sizeof(bm), &bm);

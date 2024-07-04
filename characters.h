@@ -34,6 +34,7 @@ typedef struct zombie
     int baseLife;
     int damage;
     int state;
+    int facing;
     int canJump;
     int knockback;
     int knockbackSide;
