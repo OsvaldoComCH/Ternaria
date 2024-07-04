@@ -98,7 +98,7 @@ int DestroyBlocks(character * Player, POINT Mouse)
 }
 
 // Função de colocar blocos, caso não tenha nenhum bloco adjacente a outro, não é possível colocar bloco
-int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
+int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
 {
     if(sqrt(pow(abs(Mouse.x - ((Player->hitbox.left + Player->hitbox.right) / 2)), 2) + pow(abs(Mouse.y - ((Player->hitbox.bottom + Player->hitbox.top) / 2)), 2)) > 128)
     {
@@ -107,7 +107,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     block * B = malloc(sizeof(block));
     B->x = Mouse.x / 32;
     B->y = (1010 - Mouse.y) / 32;
-    B->type = 2;
+    B->type = Type;
     int canPlace = 0;
     BlockDefine(B);
     if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
@@ -213,7 +213,7 @@ void SpawnPlayer(character * Player)
         block * B = malloc(sizeof(block));
         B->type = 1;
         B->x = Player->hitbox.left >> 5;
-        B->y = ((649 - Player->hitbox.bottom) >> 5) + 1;
+        B->y = ((977 - Player->hitbox.bottom) >> 5) + 1;
         BlockDefine(B);
         DArrayAdd(&Map, B);
     }
@@ -230,11 +230,22 @@ void SpawnPlayer(character * Player)
     Player->inventory[0].id = 0;
     Player->inventory[1].id = 1;
     Player->inventory[2].id = 2;
+
     Player->inventory[3].id = 3;
+    Player->inventory[3].damage = 2;
+
+    Player->inventory[4].id = 3;
+    Player->inventory[4].damage = 3;
+
+    Player->inventory[5].id = 3;
+    Player->inventory[5].damage = 5;
+
     ItemDefine(&Player->inventory[0]);
     ItemDefine(&Player->inventory[1]);
     ItemDefine(&Player->inventory[2]);
     ItemDefine(&Player->inventory[3]);
+    ItemDefine(&Player->inventory[4]);
+    ItemDefine(&Player->inventory[5]);
     Player->gravity = 0;
     Player->canJump = 1;
     Player->knockback = 0;
