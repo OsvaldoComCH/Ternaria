@@ -199,11 +199,25 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
     if(GetAsyncKeyState(VK_A) && Player->canMove)
     {
-        MoveLeft(Player, 5);
+        if(GetAsyncKeyState(VK_LSHIFT))
+        {
+            MoveLeft(Player, 10);
+        }
+        else
+        {
+            MoveLeft(Player, 5);
+        }
     }
     if(GetAsyncKeyState(VK_D) && Player->canMove)
     {
-        MoveRight(Player, 5);
+        if(GetAsyncKeyState(VK_LSHIFT))
+        {
+            MoveRight(Player, 10);
+        }
+        else
+        {
+            MoveRight(Player, 5);
+        }
     }
     if(GetAsyncKeyState(VK_SPACE) && Player->canMove)
     {
