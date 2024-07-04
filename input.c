@@ -127,6 +127,14 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     if(GetAsyncKeyState(VK_4))
     {
         Player->mainSlot = 3;
+    }else
+    if(GetAsyncKeyState(VK_5))
+    {
+        Player->mainSlot = 4;
+    }else
+    if(GetAsyncKeyState(VK_6))
+    {
+        Player->mainSlot = 5;
     }
     if(GetAsyncKeyState(VK_LBUTTON))
     {
@@ -203,7 +211,7 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                 break;
                 case 3:
                 {
-                    if(PlaceBlocks(Player, Zombie, Mouse))
+                    if(PlaceBlocks(Player, Zombie, Mouse, Player->inventory[Player->mainSlot].damage))
                     {
                         RenderBkgd(hdc);
                         RenderMap(Map, hdc);

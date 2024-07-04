@@ -139,7 +139,7 @@ void RenderInv(HDC hdc, character * player)
     RECT rect = {10, 10, 317, 42};
     int left = 20, top = 18, right = 36, bottom = 34;
     DrawImg(hdc, &rect, img);
-    for(int i = 0; i <= 3; i ++)
+    for(int i = 0; i <= 5; i ++)
     {
         img = (player->inventory[i].imgLeft);
         RECT rect = {left, top, right, bottom};
