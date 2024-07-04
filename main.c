@@ -103,7 +103,10 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         }
         if(zombie.hitbox.top > 1000)
         {
-            DamageZombie(&zombie, 200);
+            if(!zombie.respawn)
+            {
+                DamageZombie(&zombie, 200);
+            }
         }
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
