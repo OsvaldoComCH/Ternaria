@@ -31,7 +31,7 @@ void RenderTool(const character * Player, HDC hdc)
     wchar_t * img;
     R.top = Player->hitbox.top + 24;
     R.bottom = R.top + 15;
-    if(Player->state & 4)
+    if(Player->state & 4 >> Player->run)
     {
         if(Player->facing == 1)
         {
@@ -64,7 +64,7 @@ void RenderTool(const character * Player, HDC hdc)
 void RenderPlayer(const character * Player, HDC hdc)
 {
     wchar_t * img;
-    if(Player->state & 4)
+    if(Player->state & 4 >> Player->run)
     {
         if (Player->facing == 1)
         {

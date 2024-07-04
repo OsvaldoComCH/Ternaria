@@ -20,6 +20,7 @@ typedef struct character
     int knockback;
     int knockbackSide;//Direção do knockback
     int canMove;
+    int run;
 } character;
 
 /*

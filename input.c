@@ -105,6 +105,13 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     {
         --CoolDown;
     }
+    if(GetAsyncKeyState(VK_LSHIFT))
+    {
+        Player->run = 1;
+    }else
+    {
+        Player->run = 0;
+    }
     if(GetAsyncKeyState(VK_1))
     {
         Player->mainSlot = 0;
@@ -213,25 +220,11 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
     if(GetAsyncKeyState(VK_A) && Player->canMove)
     {
-        if(GetAsyncKeyState(VK_LSHIFT))
-        {
-            MoveLeft(Player, 10);
-        }
-        else
-        {
-            MoveLeft(Player, 5);
-        }
+        MoveLeft(Player, 5 << Player->run);
     }
     if(GetAsyncKeyState(VK_D) && Player->canMove)
     {
-        if(GetAsyncKeyState(VK_LSHIFT))
-        {
-            MoveRight(Player, 10);
-        }
-        else
-        {
-            MoveRight(Player, 5);
-        }
+        MoveRight(Player, 5 << Player->run);
     }
     if(GetAsyncKeyState(VK_SPACE) && Player->canMove)
     {
