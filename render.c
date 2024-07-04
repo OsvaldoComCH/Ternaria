@@ -28,20 +28,7 @@ void RenderTool(const character * Player, HDC hdc)
     wchar_t * img;
     R.top = Player->hitbox.top + 24;
     R.bottom = R.top + 15;
-    if(Player->state)
-    {
-        if(Player->facing == 1)
-        {
-            R.left = Player->hitbox.left;
-            R.right = R.left + 15;
-            img = Player->inventory[Player->mainSlot].imgLeft;
-        }else
-        {
-            R.left = Player->hitbox.left + 16;
-            R.right = R.left + 15;
-            img = Player->inventory[Player->mainSlot].imgRight;
-        }
-    }else
+    if(Player->state & 4)
     {
         if(Player->facing == 1)
         {
@@ -52,6 +39,19 @@ void RenderTool(const character * Player, HDC hdc)
         }
         R.left = Player->hitbox.left + 8;
         R.right = R.left + 15;
+    } else
+    {
+        if(Player->facing == 1)
+        {
+            R.left = Player->hitbox.left;
+            R.right = R.left + 15;
+            img = Player->inventory[Player->mainSlot].imgLeft;
+        } else
+        {
+            R.left = Player->hitbox.left + 16;
+            R.right = R.left + 15;
+            img = Player->inventory[Player->mainSlot].imgRight;
+        }
     }
 
     DrawImg(hdc, &R, img);
@@ -60,7 +60,7 @@ void RenderTool(const character * Player, HDC hdc)
 void RenderPlayer(const character * Player, HDC hdc)
 {
     wchar_t * img;
-    if(Player->state == 0)
+    if(Player->state & 4)
     {
         if (Player->facing == 1)
         {
@@ -85,24 +85,45 @@ void RenderPlayer(const character * Player, HDC hdc)
 void RenderZombie(const zombie * zombie, HDC hdc)
 {
     wchar_t * img;
-    if(zombie->state == 0)
+    if(zombie->state & 8)
     {
         if(zombie->damage < 5)
         {
-            img = L"imagens/Zumbi.bmp";
+            if(zombie->facing == 1)
+            {
+                img = L"imagens/Zumbi.bmp";
+            } else {
+                img = L"imagens/ZumbiDireita.bmp";
+            }
         } else {
-            img = L"imagens/Boss.bmp";
+            if(zombie->facing == 1)
+            {
+                img = L"imagens/Boss.bmp";
+            } else {
+                img = L"imagens/Bossdireita.bmp";
+            }
         }
     }
     else
     {
         if(zombie->damage < 5)
         {
-            img = L"imagens/ZumbiDireita.bmp";
+            if(zombie->facing == 1)
+            {
+                img = L"imagens/ZumbiAndando.bmp";
+            } else {
+                img = L"imagens/ZumbiAndandoDireita.bmp";
+            }
         } else {
-            img = L"imagens/BossDireita.bmp";
+            if(zombie->facing == 1)
+            {
+                img = L"imagens/BossAndando.bmp";
+            } else {
+                img = L"imagens/BossAndandoDireita.bmp";
+            }
         }
     }
+
     DrawImg(hdc, &zombie->hitbox, img);
 }
 
