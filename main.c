@@ -83,7 +83,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         EraseRect(TempDC, &zombie.hitbox);
         Input(TempDC, &player, &zombie, &Map);
         MoveZombie(&player, &zombie);
-        printf("%i\n", zombie.life);
 
         if(renderHud)
         {

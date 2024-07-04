@@ -3,7 +3,7 @@
 
 void MoveLeft(character * Player, int Pixels)
 {
-    Player->state = Player->state ^ 1;
+    Player->state = Player->state + 1;
     Player->facing = 1;
     Player->hitbox.left -= Pixels;
     Player->hitbox.right -= Pixels;
@@ -17,7 +17,7 @@ void MoveLeft(character * Player, int Pixels)
 
 void MoveRight(character * Player, int Pixels)
 {
-    Player->state = Player->state ^ 1;
+    Player->state = Player->state + 1;
     Player->facing = 2;
     Player->hitbox.left += Pixels;
     Player->hitbox.right += Pixels;
