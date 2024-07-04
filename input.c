@@ -168,13 +168,27 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
                     CoolDown = 60;
                     if(res < 0)
                     {
-                        Zombie->knockback = 15;
+                        if(Zombie->damage < 5)
+                        {
+                            Zombie->knockback = 15;
+                        }
+                        else
+                        {
+                            Zombie->knockback = 5;
+                        }
                         Zombie->knockbackSide = 1;
                         KnockbackZombie(Zombie);
                     }else
                     if(res > 0)
                     {
-                        Zombie->knockback = 15;
+                        if(Zombie->damage < 5)
+                        {
+                            Zombie->knockback = 15;
+                        }
+                        else
+                        {
+                            Zombie->knockback = 5;
+                        }
                         Zombie->knockbackSide = 2;
                         KnockbackZombie(Zombie);
                     }
