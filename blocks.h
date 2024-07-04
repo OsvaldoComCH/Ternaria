@@ -18,7 +18,7 @@ typedef struct block
 void BlockDefine(block * B)
 {
     B->hitbox.left = B->x*32;
-    B->hitbox.top = 649 - (B->y*32);
+    B->hitbox.top = 977 - (B->y*32);
     B->hitbox.right = B->hitbox.left + 32;
     B->hitbox.bottom = B->hitbox.top + 32;
     switch (B->type)
@@ -51,16 +51,16 @@ void BlockDefine(block * B)
 void CreateArchive()
 {
     FILE * map = fopen("Map.txt", "w");
-    int camada = rand()%6 + 2;
+    int camada = rand()%8 + 6;
     int arvore = 0, arvtam = 0;
-    int ypedra = camada - (rand()%3 + 3);
+    int ypedra = camada - (rand()%2 + 5);
     
-    for(int x = 0; x < 30; x++)
+    for(int x = 0; x < 60; x++)
     {
         if(arvore == 0 && rand()%10 == 1) // criação aleatoria da arvore, 10% de chance de criar uma arvore caso o bloco anterior não tenha uma arvore
         {
             arvore = camada + 1;
-            arvtam = rand()%4 + 3; // tamanho aleatorio da arvore
+            arvtam = rand()%6 + 3; // tamanho aleatorio da arvore
             for(int arvh = arvore; arvh < arvore + arvtam; arvh++) // criação dos troncos em linha reta para cima de acordo com o tamanho da arvore
             {
                 fprintf(map, "%d,%d,%d\n", x, arvh, 3); // escreve o local do bloco no txt do mapa
@@ -83,22 +83,22 @@ void CreateArchive()
             fprintf(map, "%d,%d,%d\n", x, y, (y <= ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
         }
         camada += rand()%3 - 1; // aumenta ou diminui em 1 ou mantem a camada aleatoriamente
-        if(camada < 2) // limita o minimo da camada que será gerada
+        if(camada < 6) // limita o minimo da camada que será gerada
         {
-            camada = 2;
+            camada = 6;
         }
-        if(camada > 7) // limita o maximo da camada que será gerada
+        if(camada > 14) // limita o maximo da camada que será gerada
         {
-            camada = 7;
+            camada = 14;
         }
         ypedra += rand()%3 - 1; // aumenta ou diminui em 1 ou mantem a camada da pedra aleatoriamente
-        if(ypedra > camada - 3) // limita o minimo da camada de pedra que será gerada
-        {
-            ypedra = camada - 3;
-        }
-        if(ypedra < camada - 5) // limita o maximo da camada de pedra que será gerada
+        if(ypedra > camada - 5) // limita o minimo da camada de pedra que será gerada
         {
             ypedra = camada - 5;
+        }
+        if(ypedra < camada - 7) // limita o maximo da camada de pedra que será gerada
+        {
+            ypedra = camada - 7;
         }
     }
     fclose(map); // finaliza a criação do mapa

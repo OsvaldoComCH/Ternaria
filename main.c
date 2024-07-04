@@ -106,13 +106,16 @@ DWORD WINAPI MainThread(LPVOID lpParam)
             count = 0;
         }
 
-        if(player.hitbox.top > 700)
+        if(player.hitbox.top > 1000)
         {
             player.life = 0;
         }
-        if(zombie.hitbox.top > 700)
+        if(zombie.hitbox.top > 1000)
         {
-            DamageZombie(&zombie, 200);
+            if(!zombie.respawn)
+            {
+                DamageZombie(&zombie, 200);
+            }
         }
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
@@ -194,7 +197,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         WClassName,
         L"Ternaria",
         WS_OVERLAPPEDWINDOW,
-        200, 10, 975, 720,
+        0, 0, 1920, 1080,
         NULL, NULL, hInstance, NULL
     );
 

@@ -33,6 +33,7 @@ typedef struct zombie
     int baseLife;//Vida base do zumbi
     int damage;//Dano de contato do zumbi
     int state;//Estado da animação de corrida
+    int facing;//Direção que está olhando
     int canJump;//Flag para permitir pulo
     int knockback;
     int knockbackSide;//Direção do knockback
