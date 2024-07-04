@@ -21,6 +21,7 @@ typedef struct character
     int knockback;
     int knockbackSide;
     int canMove;
+    int run;
 } character;
 
 /*
