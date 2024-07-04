@@ -5,6 +5,7 @@ gcc main.c -o Ternaria.exe -l gdi32 -l msimg32
 #include "imports.h"
 #include "input.c"
 
+//Flag para indicar se a thread está rodando
 int ThreadRunning = 1;
 HANDLE Thread;
 
@@ -12,12 +13,13 @@ HANDLE Thread;
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
     srand(time(NULL));
+    //Se o jogo for reiniciado depois do game over, esta flag é falsa e o mapa não é gerado
     if(ThreadRunning)
     {
         CreateArchive();
     }
     ThreadRunning = 1;
-    HWND hwnd = *((HWND *)lpParam);
+    HWND hwnd = *((HWND *)lpParam);//Recupera-se o Handle para a janela do parâmetro da thread
 
     DArrayCreate(&Map, 200);
     ReadArchive(&Map); 
@@ -41,7 +43,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     DueTime.QuadPart = -333333;
     SetWaitableTimer(Timer, &DueTime, 33, NULL, NULL, 0);//Timer com intervalo de 33ms (30 fps)
     
-    HDC hdc = GetDC(hwnd);
+    HDC hdc = GetDC(hwnd);//Handle com as informações necessárias para se desenhar na tela
     RECT R;
     GetClientRect(hwnd, &R);
     RenderBkgd(hdc);
@@ -57,11 +59,18 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         HDC hdc = GetDC(hwnd);
         RECT R;
         GetClientRect(hwnd, &R);
+        /*
+        Para se desenhar na tela, se cria um handle HDC compatível com a tela na memória (TempDC).
+        Selecionamos um bitmap neste HDC para definir o tamanho e as cores.
+        Desenhamos tudo neste DC da memória primeiro, depois fazemos uma única transferência para a tela
+        usando o BitBlt
+        */
         HDC TempDC = CreateCompatibleDC(hdc);
         HBITMAP Bitmap = CreateCompatibleBitmap(hdc, (R.right-R.left), (R.bottom - R.top));
         SelectObject(TempDC, Bitmap);
         BitBlt(TempDC, 0, 0, R.right-R.left, R.bottom-R.top, hdc, 0, 0, SRCCOPY);
 
+        //Isto redesenha o hud caso o jogador ou o zumbi passem na frente dele
         if(Collision(&player.hitbox, &hud) || Collision(&zombie.hitbox, &hud))
         {
             renderHud = 1;
@@ -149,6 +158,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         break;
         case WM_KEYDOWN:
         {
+            //Se a thread estiver acabado e o jogador pressionar Return (Enter), a thread roda novamente
             if(wParam == VK_RETURN && ThreadRunning == 0)
             {
                 TerminateThread(Thread, 0);

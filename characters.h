@@ -2,24 +2,23 @@
 #define CHARACTERS
 #include "imports.h"
 /* 
-Estrutura dos personagens, especificando posição e subposição.
-A subposição serve para calcular colisões entre personagem e bloco.
+Estrutura do jogador.
 */
 
 typedef struct character
 {
-    RECT hitbox;
-    Item inventory[9];
-    int mainSlot;
-    int life;
+    RECT hitbox;//Retângulo usado para colisão e desenho
+    Item inventory[9];//Lista de itens do jogador
+    int mainSlot;//Indice do item na mão do jogador
+    int life;//Vida do jogador
     int damage;
-    int vulnerability;
-    int state;
-    int facing;
-    int canJump;
-    int gravity;
+    int vulnerability;//Flag para invencibilidade
+    int state;//Estado da animação de corrida
+    int facing;//Direção que está olhando
+    int canJump;//Flag para permitir pulo
+    int gravity;//Velocidade atual da gravidade
     int knockback;
-    int knockbackSide;
+    int knockbackSide;//Direção do knockback
     int canMove;
 } character;
 
@@ -29,17 +28,17 @@ Estrutura do zumbi.
 
 typedef struct zombie
 {
-    RECT hitbox;
-    int life;
-    int baseLife;
-    int damage;
-    int state;
-    int canJump;
+    RECT hitbox;//Retângulo usado para colisão e desenho
+    int life;//Vida atual do zumbi
+    int baseLife;//Vida base do zumbi
+    int damage;//Dano de contato do zumbi
+    int state;//Estado da animação de corrida
+    int canJump;//Flag para permitir pulo
     int knockback;
-    int knockbackSide;
+    int knockbackSide;//Direção do knockback
     int canMove;
-    int gravity;
-    int respawn;
+    int gravity;//Velocidade atual da gravidade
+    int respawn;//Tempo até que o zumbi volte após morrer
 } zombie;
 
 #endif

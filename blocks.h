@@ -7,11 +7,11 @@
 // Estrutura dos blocos, especificando com posição e tipo.
 typedef struct block
 {
-    RECT hitbox;
-    int x;
+    RECT hitbox;//Retângulo usado para colisão e desenho
+    int x;//posições simplificadas
     int y;
     int type;
-    wchar_t * img;
+    wchar_t * img;//Caminho para a imagem que deve ser desenhada
 } block;
 
 // Função de definição da textura e colisão dos blocos

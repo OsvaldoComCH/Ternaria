@@ -1,6 +1,7 @@
 #include "imports.h"
 #include "functions.c"
 
+//Renderiza a imagem de Background
 void RenderBkgd(HDC hdc)
 {
     BITMAP bm;
@@ -13,6 +14,7 @@ void RenderBkgd(HDC hdc)
     DeleteObject(Image);
 }
 
+//Função que renderiza o mapa
 void RenderMap(const DArray * Map, HDC hdc)
 {
     for(int i = 0; i < Map->Size; ++i)
@@ -22,6 +24,7 @@ void RenderMap(const DArray * Map, HDC hdc)
     }
 }
 
+//Renderiza a ferramenta na mão do jogador
 void RenderTool(const character * Player, HDC hdc)
 {
     RECT R;
@@ -57,6 +60,7 @@ void RenderTool(const character * Player, HDC hdc)
     DrawImg(hdc, &R, img);
 }
 
+//Renderiza o jogador, com a imagem correta
 void RenderPlayer(const character * Player, HDC hdc)
 {
     wchar_t * img;
@@ -82,6 +86,7 @@ void RenderPlayer(const character * Player, HDC hdc)
     DrawImg(hdc, &Player->hitbox, img);
 }
 
+//Renderiza o zumbi
 void RenderZombie(const zombie * zombie, HDC hdc)
 {
     wchar_t * img;
@@ -106,6 +111,7 @@ void RenderZombie(const zombie * zombie, HDC hdc)
     DrawImg(hdc, &zombie->hitbox, img);
 }
 
+//Renderiza o inventário
 void RenderInv(HDC hdc, character * player)
 {
     wchar_t * img = L"imagens/BarraInv.bmp";
@@ -115,7 +121,6 @@ void RenderInv(HDC hdc, character * player)
     for(int i = 0; i <= 3; i ++)
     {
         img = (player->inventory[i].imgLeft);
-        // img = L"imagens/terra.bmp";
         RECT rect = {left, top, right, bottom};
         DrawImg(hdc, &rect, img);
         left +=34;
@@ -123,6 +128,7 @@ void RenderInv(HDC hdc, character * player)
     }
 }
 
+//Renderiza a vida do jogador
 void RenderLife(HDC hdc, int life)
 {
     wchar_t * img1;

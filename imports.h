@@ -1,6 +1,6 @@
 /*
 
-Essa header possui todos os imports que precisamos, para garantira que não vai dar errado
+Essa header possui todos os imports que precisamos, para garantir que não vai dar errado
 
 */
 
@@ -17,7 +17,7 @@ Essa header possui todos os imports que precisamos, para garantira que não vai 
 #include <windows.h>
 #include <time.h>
 #include <math.h>
-#include "VirtualKeyCodes.h"
+#include "VirtualKeyCodes.h" //Arquivo com os códigos de teclas não definidas no Windows.h
 #include "Stack&Queue.h"
 #include "DynamicArray.h"
 #include "LinkedStackQueue.h"
@@ -27,6 +27,6 @@ Essa header possui todos os imports que precisamos, para garantira que não vai 
 #include "items.h"
 #include "characters.h"
 
-DArray Map;
+DArray Map;//Mapa criado aqui para ser acessado em qualquer lugar do programa
 
 #endif

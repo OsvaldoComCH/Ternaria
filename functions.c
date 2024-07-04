@@ -3,7 +3,7 @@
 HWND Ghwnd;
 
 
-// Apaga o retângulo
+// Apaga o retângulo, desenhando uma parte do background em cima dele
 void EraseRect(HDC hdc, const RECT * Rect)
 {
     BITMAP bm;
@@ -149,12 +149,14 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     return 1;
 }
 
+//Função para criar o zumbi
 void SpawnZombie(zombie * Zombie, const character * Player)
 {
     int PlayerX = Player->hitbox.left >> 5;
 
     if(Zombie->baseLife < 22)
     {
+        //Zumbi Pequeno
         Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
         Zombie->hitbox.right = Zombie->hitbox.left + 31;
         Zombie->hitbox.top = 512;
@@ -172,6 +174,7 @@ void SpawnZombie(zombie * Zombie, const character * Player)
         Zombie->canMove = 1;
         Zombie->baseLife *= 1.5;
     } else {
+        //Zumbi Gigante
         Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
         Zombie->hitbox.right = Zombie->hitbox.left + 97;
         Zombie->hitbox.top = 512;
@@ -191,6 +194,7 @@ void SpawnZombie(zombie * Zombie, const character * Player)
 
 }
 
+//Função para criar o jogador
 void SpawnPlayer(character * Player)
 {
     Player->hitbox.left = 320;
@@ -359,6 +363,7 @@ void KnockbackZombie(zombie * zombie)
     ZombieGravity(zombie);
 }
 
+//Função com a inteligência artificial do zumbi
 void MoveZombie(character * player, zombie * zombie)
 {
     if(zombie->respawn)
@@ -393,6 +398,7 @@ void MoveZombie(character * player, zombie * zombie)
     ZombieGravity(zombie);
 }
 
+//Função para dar dano ao zumbi, certificando a sua morte
 void DamageZombie(zombie * Zombie, int Damage)
 {
     Zombie->life -= Damage;
