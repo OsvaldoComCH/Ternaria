@@ -100,7 +100,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse)
     }
     block * B = malloc(sizeof(block));
     B->x = Mouse.x / 32;
-    B->y = (675 - Mouse.y) / 32;
+    B->y = (1010 - Mouse.y) / 32;
     B->type = 2;
     int canPlace = 0;
     BlockDefine(B);
@@ -155,9 +155,9 @@ void SpawnZombie(zombie * Zombie, const character * Player)
 
     if(Zombie->baseLife < 22)
     {
-        Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
+        Zombie->hitbox.left = ((PlayerX + 30) % 60) * 32;
         Zombie->hitbox.right = Zombie->hitbox.left + 31;
-        Zombie->hitbox.top = 512;
+        Zombie->hitbox.top = 812;
         Zombie->hitbox.bottom = Zombie->hitbox.top + 63;
         while(MapCollision(&Zombie->hitbox))
         {
@@ -172,7 +172,7 @@ void SpawnZombie(zombie * Zombie, const character * Player)
         Zombie->canMove = 1;
         Zombie->baseLife *= 1.5;
     } else {
-        Zombie->hitbox.left = ((PlayerX + 15) % 30) * 32;
+        Zombie->hitbox.left = ((PlayerX + 30) % 60) * 32;
         Zombie->hitbox.right = Zombie->hitbox.left + 97;
         Zombie->hitbox.top = 512;
         Zombie->hitbox.bottom = Zombie->hitbox.top + 127;
@@ -195,8 +195,8 @@ void SpawnPlayer(character * Player)
 {
     Player->hitbox.left = 320;
     Player->hitbox.right = Player->hitbox.left + 31;
-    Player->hitbox.top = 512;
-    Player->hitbox.bottom = 700;
+    Player->hitbox.top = 812;
+    Player->hitbox.bottom = 1000;
     if(!MapCollision(&Player->hitbox))
     {
         Player->hitbox.bottom = Player->hitbox.top + 63;
@@ -398,7 +398,7 @@ void DamageZombie(zombie * Zombie, int Damage)
     Zombie->life -= Damage;
     if(Zombie->life <= 0)
     {
-        MoveUpZombie(Zombie, 800);
+        MoveDownZombie(Zombie, 1000);
         Zombie->respawn = 150;
     }
 }
