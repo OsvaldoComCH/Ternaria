@@ -28,5 +28,7 @@ Essa header possui todos os imports que precisamos, para garantir que não vai d
 #include "characters.h"
 
 DArray Map;//Mapa criado aqui para ser acessado em qualquer lugar do programa
+int mapax = 0;
+int mapay = 0;
 
 #endif
