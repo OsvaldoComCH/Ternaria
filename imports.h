@@ -12,6 +12,8 @@ Essa header possui todos os imports que precisamos, para garantir que não vai d
 #define UNICODE
 #endif
 
+int mapax = 0;
+int mapay = 0;
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -28,7 +30,6 @@ Essa header possui todos os imports que precisamos, para garantir que não vai d
 #include "characters.h"
 
 DArray Map;//Mapa criado aqui para ser acessado em qualquer lugar do programa
-int mapax = 0;
-int mapay = 0;
+
 
 #endif

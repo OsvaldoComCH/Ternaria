@@ -276,7 +276,6 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     {
         Player->vulnerability--;
     }
-    printf("%d %d\n", mapax, mapay);
 }
 
 void Regeneration(character * player)

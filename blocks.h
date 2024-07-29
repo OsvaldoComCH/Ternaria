@@ -17,8 +17,8 @@ typedef struct block
 // Função de definição da textura e colisão dos blocos
 void BlockDefine(block * B)
 {
-    B->hitbox.left = B->x*32;
-    B->hitbox.top = 977 - (B->y*32);
+    B->hitbox.left = (B->x*32) - mapax;
+    B->hitbox.top = 977 - (B->y*32) + mapay;
     B->hitbox.right = B->hitbox.left + 32;
     B->hitbox.bottom = B->hitbox.top + 32;
     switch (B->type)
@@ -47,6 +47,16 @@ void BlockDefine(block * B)
         break;
     }
 }
+
+void DefineMap(DArray *lista)
+{
+    for(int i = 0; i < lista->Size; i++)
+    {
+        block * B = lista->List[i];
+        BlockDefine(B);
+    }
+}
+
 // função para criar o mapa aleatoriamente
 void CreateArchive()
 {
