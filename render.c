@@ -5,7 +5,7 @@
 void RenderBkgd(HDC hdc)
 {
     BITMAP bm;
-    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround1920.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    HBITMAP Image = (HBITMAP)LoadImage(GetModuleHandle(NULL), L"Background", IMAGE_BITMAP, 0, 0, LR_COPYFROMRESOURCE);
     HDC BitmapDC = CreateCompatibleDC(hdc);
     SelectObject(BitmapDC, Image);
     GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
@@ -68,18 +68,18 @@ void RenderPlayer(const character * Player, HDC hdc)
     {
         if (Player->facing == 1)
         {
-            img = L"imagens/Fer.bmp";
+            img = L"FerE";
         } else {
-            img = L"imagens/FerDireita.bmp";
+            img = L"FerD";
         }
     }
     else
     {
         if (Player->facing == 1)
         {
-            img = L"imagens/FerAndante.bmp";
+            img = L"FerEA";
         } else {
-            img = L"imagens/FerDireitaAndante.bmp";
+            img = L"FerDA";
         }
     }
 
@@ -96,16 +96,16 @@ void RenderZombie(const zombie * zombie, HDC hdc)
         {
             if(zombie->facing == 1)
             {
-                img = L"imagens/Zumbi.bmp";
+                img = L"ZumbiE";
             } else {
-                img = L"imagens/ZumbiDireita.bmp";
+                img = L"ZumbiD";
             }
         } else {
             if(zombie->facing == 1)
             {
-                img = L"imagens/Boss.bmp";
+                img = L"BossE";
             } else {
-                img = L"imagens/Bossdireita.bmp";
+                img = L"BossD";
             }
         }
     }
@@ -115,16 +115,16 @@ void RenderZombie(const zombie * zombie, HDC hdc)
         {
             if(zombie->facing == 1)
             {
-                img = L"imagens/ZumbiAndando.bmp";
+                img = L"ZumbiEA";
             } else {
-                img = L"imagens/ZumbiAndandoDireita.bmp";
+                img = L"ZumbiDA";
             }
         } else {
             if(zombie->facing == 1)
             {
-                img = L"imagens/BossAndando.bmp";
+                img = L"BossEA";
             } else {
-                img = L"imagens/BossAndandoDireita.bmp";
+                img = L"BossDA";
             }
         }
     }
@@ -135,7 +135,7 @@ void RenderZombie(const zombie * zombie, HDC hdc)
 //Renderiza o inventário
 void RenderInv(HDC hdc, character * player)
 {
-    wchar_t * img = L"imagens/BarraInv.bmp";
+    wchar_t * img = L"BarraInv";
     RECT rect = {10, 10, 317, 42};
     int left = 20, top = 18, right = 36, bottom = 34;
     DrawImg(hdc, &rect, img);
@@ -159,7 +159,7 @@ void RenderLife(HDC hdc, int life)
     DrawRect(hdc, &Frame, RGB(200,200,255));
     for(int i = 1; i <= life; i ++)
     {
-        img1 = L"imagens/Vida.bmp";
+        img1 = L"Heart";
         RECT R1 = {left, top, right, bottom};
         DrawImg(hdc, &R1, img1);
         left += 20;
@@ -167,7 +167,7 @@ void RenderLife(HDC hdc, int life)
     }
     for(int i = life + 1; i <= 10; i++)
     {
-        img1 = L"imagens/BrokenHeart.bmp";
+        img1 = L"BrokenHeart";
         RECT R1 = {left, top, right, bottom};
         DrawImg(hdc, &R1, img1);
         left += 20;

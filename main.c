@@ -181,8 +181,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Window.lpfnWndProc = WndProc;
     Window.hInstance = hInstance;
     Window.lpszClassName = WClassName;
-    Window.hCursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-    Window.hIcon = (HICON)LoadImage(NULL, L"imagens/iconeTernaria.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+    Window.hCursor = (HCURSOR)LoadImage(GetModuleHandle(NULL), L"Hand", IMAGE_ICON, 0, 0, LR_COPYFROMRESOURCE);
+    //Window.hCursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+    Window.hIcon = (HICON)LoadIcon(GetModuleHandle(NULL), L"TernariaIcon");
+    //Window.hIcon = (HICON)LoadImage(NULL, L"imagens/iconeTernaria.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
 
     if(!RegisterClass(&Window))
     {

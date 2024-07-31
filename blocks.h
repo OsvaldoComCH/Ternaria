@@ -24,23 +24,23 @@ void BlockDefine(block * B)
     switch (B->type)
     {
     case 1:
-        B->img = L"imagens/Grama.bmp";
+        B->img = L"Grama";
         break;
 
     case 2:
-        B->img = L"imagens/Terra.bmp";
+        B->img = L"Terra";
         break;
 
     case 3:
-        B->img = L"imagens/Tronco.bmp";
+        B->img = L"Tronco";
         break;
 
     case 4:
-        B->img = L"imagens/Folhas.bmp";
+        B->img = L"Folhas";
         break;
 
     case 5:
-        B->img = L"imagens/Stone.bmp";
+        B->img = L"Stone";
         break;
 
     default:
