@@ -1,11 +1,45 @@
 #include "imports.h"
 #include "functions.c"
 
+
+// Apaga o retângulo, desenhando uma parte do background em cima dele
+void EraseRect(HDC hdc, const RECT * Rect)
+{
+    BITMAP bm;
+    HBITMAP Image = LoadBitmap(GInstance, L"Background");
+    HDC BitmapDC = CreateCompatibleDC(hdc);
+    SelectObject(BitmapDC, Image);
+    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
+    BitBlt(hdc, Rect->left, Rect->top, Rect->right - Rect->left+1, Rect->bottom - Rect->top+1, BitmapDC, Rect->left, Rect->top, SRCCOPY);
+    DeleteDC(BitmapDC);
+    DeleteObject(Image);
+}
+
+//Desenha a imagem
+void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
+{
+    BITMAP bm;
+    static HBITMAP Image = NULL;
+    static wchar_t * LastImg = NULL;
+    if(ImgPath != LastImg)
+    {
+        DeleteObject(Image);
+        Image = LoadBitmap(GInstance, ImgPath);
+    }
+    HDC BitmapDC = CreateCompatibleDC(hdc);
+    SelectObject(BitmapDC, Image);
+    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
+    TransparentBlt(hdc, Rect->left, Rect->top, bm.bmWidth, bm.bmHeight, BitmapDC,
+    0, 0, Rect->right - Rect->left, Rect->bottom - Rect->top, RGB(255, 0, 255));
+    DeleteDC(BitmapDC);
+    LastImg = ImgPath;
+}
+
 //Renderiza a imagem de Background
 void RenderBkgd(HDC hdc)
 {
     BITMAP bm;
-    HBITMAP Image = (HBITMAP)LoadImage(GetModuleHandle(NULL), L"Background", IMAGE_BITMAP, 0, 0, LR_COPYFROMRESOURCE);
+    HBITMAP Image = LoadBitmap(GInstance, L"Background");
     HDC BitmapDC = CreateCompatibleDC(hdc);
     SelectObject(BitmapDC, Image);
     GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
@@ -167,7 +201,7 @@ void RenderLife(HDC hdc, int life)
     }
     for(int i = life + 1; i <= 10; i++)
     {
-        img1 = L"BrokenHeart";
+        img1 = L"HeartBroken";
         RECT R1 = {left, top, right, bottom};
         DrawImg(hdc, &R1, img1);
         left += 20;

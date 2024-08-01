@@ -122,6 +122,23 @@ void ReadArchive(DArray *lista)
     fclose(File);
 }
 
+// Lê o Arquivo do Mundo Senai
+void ReadSenai(DArray *lista)
+{
+    int count = 0;
+    FILE * File = fopen("Map Senai.txt", "r");
+
+    while(!feof(File))
+    {
+        ++count;
+        block *bloco = malloc(sizeof(block));
+        fscanf(File, "%i,%i,%i", &bloco->x, &bloco->y, &bloco->type);
+        BlockDefine(bloco);
+        DArrayAdd(lista, bloco);
+    }
+    fclose(File);
+}
+
 // Escreve no txt
 void WriteArchive(DArray *lista)
 {
