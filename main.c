@@ -1,5 +1,5 @@
 /* Compile:
-gcc main.c -o Ternaria.exe -l gdi32 -l msimg32
+gcc main.c resources.coff -o Ternaria.exe -l gdi32 -l msimg32
 */
 
 #include "imports.h"
@@ -20,10 +20,14 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     DArrayCreate(&Map, 200);
     if(Mode == 0)
     {
+        Mode = 1;
+        ThreadRunning = 0;
     	ReadArchive(&Map);
         HDC hdc = GetDC(hwnd);
         RenderBkgd(hdc);
         RenderMap(&Map, hdc);
+        RenderLogo(hdc, 0);
+        RenderMenu(Mode);
         ReleaseDC(hwnd, hdc);
         return 0;
     }
@@ -140,18 +144,11 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
-
-    HFONT Font = CreateFont(72, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
     hdc = GetDC(hwnd);
-    RECT R1 = {200, 300, 675, 450};
-    SelectObject(hdc, Font);
-    DrawRect(hdc, &R1, RGB(100,100,100));
-    SetBkColor(hdc, RGB(100,100,100));
-    TextOut(hdc, R1.left + 50, R1.top + 40, L"GAME OVER", 10);
+    RenderLogo(hdc, 1);
+    RenderMenu(Mode);
     ReleaseDC(hwnd, hdc);
     DArrayDestroy(&Map);
-    Mode = 0;
     ThreadRunning = 0;
 }
 
@@ -179,17 +176,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         {
 			if(ThreadRunning == 0)
 			{
-				if(GetAsyncKeyState(VK_1) & 0x8000)
+				if(GetAsyncKeyState(VK_DOWN) & 0x8000)
 				{
-					Mode == 1;
+					++Mode;
+                    if(Mode > 3){Mode = 1;}
+                    RenderMenu(Mode);
 				}else
-				if(GetAsyncKeyState(VK_2) & 0x8000)
+				if(GetAsyncKeyState(VK_UP) & 0x8000)
 				{
-					Mode == 2;
-				}else
-				if(GetAsyncKeyState(VK_3) & 0x8000)
-				{
-					Mode == 3;
+					--Mode;
+                    if(Mode < 1){Mode = 3;}
+                    RenderMenu(Mode);
 				}else
                 if(GetAsyncKeyState(VK_RETURN) & 0x8000 && Mode != 0)
                 {

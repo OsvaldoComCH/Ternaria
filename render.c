@@ -209,4 +209,61 @@ void RenderLife(HDC hdc, int life)
     }
 }
 
+void RenderMenu(int Mode)
+{
+    HDC hdc = GetDC(Ghwnd);
+    RECT R;
+    GetClientRect(Ghwnd, &R);
+    R.left = R.right / 2 - 200;
+    R.right = R.left + 400;
+    R.top += 450;
+    R.bottom = R.top + 210;
+    HFONT Font = CreateFont(30, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+    SelectObject(hdc, Font);
+    DrawRect(hdc, &R, RGB(128,128,128));
+    SetBkColor(hdc, RGB(128,128,128));
+    TextOut(hdc, R.left + 50, R.top + 30, L"Novo Mapa", 9);
+    TextOut(hdc, R.left + 50, R.top + 90, L"Carregar Mapa", 13);
+    TextOut(hdc, R.left + 50, R.top + 150, L"Jogar Mapa Do Mundo Senai", 25);
+    R.left += 10;
+    R.right = R.left + 32;
+    if(Mode == 1)
+    {
+        R.top += 30;
+    }else
+    if(Mode == 2)
+    {
+        R.top += 90;
+    }else
+    {
+        R.top += 150;
+    }
+    R.bottom = R.top + 32;
+    DrawImg(hdc, &R, L"Heart");
+    DeleteObject(Font);
+    ReleaseDC(Ghwnd, hdc);
+}
 
+void RenderLogo(HDC hdc, int GameOver)
+{
+    RECT R;
+    GetClientRect(Ghwnd, &R);
+    R.left = R.right / 2 - 237;
+    R.right = R.left + 475;
+    R.top += 200;
+    R.bottom = R.top + 150;
+    if(GameOver)
+    {
+        HFONT Font = CreateFont(72, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+        SelectObject(hdc, Font);
+        DrawRect(hdc, &R, RGB(128,128,128));
+        SetBkColor(hdc, RGB(128,128,128));
+        TextOut(hdc, R.left + 50, R.top + 40, L"GAME OVER", 10);
+        DeleteObject(Font);
+    }else
+    {
+        DrawImg(hdc, &R, L"TernariaLogo");
+    }
+}

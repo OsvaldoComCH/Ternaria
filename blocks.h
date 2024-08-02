@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "imports.h"
 
+char * MapPath = "Map.txt";
 
 // Estrutura dos blocos, especificando com posição e tipo.
 typedef struct block
@@ -110,6 +111,7 @@ void ReadArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "r");
+    MapPath = "Map.txt";
 
     while(!feof(File))
     {
@@ -127,6 +129,7 @@ void ReadSenai(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map Senai.txt", "r");
+    MapPath = "Map Senai.txt";
 
     while(!feof(File))
     {
@@ -143,7 +146,7 @@ void ReadSenai(DArray *lista)
 void WriteArchive(DArray *lista)
 {
     int count = 0;
-    FILE * File = fopen("Map.txt", "w");
+    FILE * File = fopen(MapPath, "w");
     for(int i = 0; i < lista->Size; ++i)
     {
         block * B = (block *) lista->List[i];
