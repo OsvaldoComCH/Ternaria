@@ -6,36 +6,38 @@ void MoveLeft(character * Player, int Pixels)
     Player->state = Player->state + 1;
     Player->facing = 1;
     Player->hitbox.left -= Pixels;
-    Player->hitbox.right -= Pixels;
+    // Player->hitbox.right -= Pixels;
     mapax -= Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
         mapax += B->hitbox.right - Player->hitbox.left;
-        Player->hitbox.left = B->hitbox.right;
-        Player->hitbox.right = Player->hitbox.left + 31;
+        // Player->hitbox.left = B->hitbox.right;
+        // Player->hitbox.right = Player->hitbox.left + 31;
     }
+    Player->hitbox.left += Pixels;
 }
 
 void MoveRight(character * Player, int Pixels)
 {
     Player->state = Player->state + 1;
     Player->facing = 2;
-    Player->hitbox.left += Pixels;
+    // Player->hitbox.left += Pixels;
     Player->hitbox.right += Pixels;
     mapax += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
         mapax -= Player->hitbox.right - B->hitbox.left + 1;
-        Player->hitbox.right = B->hitbox.left - 1;
-        Player->hitbox.left = Player->hitbox.right - 31;
+        // Player->hitbox.right = B->hitbox.left - 1;
+        // Player->hitbox.left = Player->hitbox.right - 31;
     }
+    Player->hitbox.right -= Pixels;
 }
 
 void MoveDown(character * Player, int Pixels)
 {
-    Player->hitbox.top += Pixels;
+    // Player->hitbox.top += Pixels;
     Player->hitbox.bottom += Pixels;
     mapay -= Pixels;
     block * B = MapCollision(&Player->hitbox);
@@ -46,15 +48,16 @@ void MoveDown(character * Player, int Pixels)
         Player->knockback = 0;
         Player->canMove = 1;
         mapay += Player->hitbox.bottom - B->hitbox.top;
-        Player->hitbox.bottom = B->hitbox.top;
-        Player->hitbox.top = Player->hitbox.bottom - 63;
+        // Player->hitbox.bottom = B->hitbox.top;
+        // Player->hitbox.top = Player->hitbox.bottom - 63;
     }
+    Player->hitbox.bottom -= Pixels;
 }
 
 void MoveUp(character * Player, int Pixels)
 {
     Player->hitbox.top -= Pixels;
-    Player->hitbox.bottom -= Pixels;
+    // Player->hitbox.bottom -= Pixels;
     mapay += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
@@ -64,9 +67,10 @@ void MoveUp(character * Player, int Pixels)
         Player->knockback = 0;
         Player->canMove = 1;
         mapay -= B->hitbox.bottom - Player->hitbox.top;
-        Player->hitbox.top = B->hitbox.bottom;
-        Player->hitbox.bottom = Player->hitbox.top + 63;
+        // Player->hitbox.top = B->hitbox.bottom;
+        // Player->hitbox.bottom = Player->hitbox.top + 63;
     }
+    Player->hitbox.top += Pixels;
 }
 
 void Jump(character * Player, int Pixels) 
