@@ -16,7 +16,7 @@ void EraseRect(HDC hdc, const RECT * Rect)
 }
 
 //Desenha a imagem
-void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
+void DrawImg(HDC hdc, const RECT * Rect, wchar_t * ImgPath)
 {
     BITMAP bm;
     static HBITMAP Image = NULL;

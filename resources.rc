@@ -1,4 +1,5 @@
 //windres resources.rc resources.coff
+MAINICON ICON "imagens/iconeTernaria.ico"
 Background BITMAP "imagens/Background1920.bmp"
 BarraInv BITMAP "imagens/BarraInv.bmp"
 Bloquinho BITMAP "imagens/Bloquinho.bmp"

@@ -210,8 +210,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Window.hInstance = hInstance;
     GInstance = hInstance;
     Window.lpszClassName = WClassName;
-    Window.hCursor = (HCURSOR)LoadImage(GInstance, L"Hand", IMAGE_ICON, 0, 0, 0);
-    Window.hIcon = (HICON)LoadIcon(GInstance, L"TernariaIcon");
+    Window.hIcon = (HICON)LoadImage(GetModuleHandle(NULL), L"TernariaIcon", IMAGE_ICON, 0, 0, 0);
+    Window.hCursor = (HCURSOR)LoadImage(GetModuleHandle(NULL), L"Hand", IMAGE_ICON, 0, 0, 0);
 
     if(!RegisterClass(&Window))
     {
@@ -238,9 +238,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
-
     
     Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, NULL);
+    FreeConsole();
 
     //Loop para receber as mensagens da WINAPI
     while(GetMessage(&Msg, NULL, 0, 0))
