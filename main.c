@@ -87,12 +87,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         DefineMap(&Map);
         RenderBkgd(TempDC);
         RenderMap(&Map, TempDC);
-
-        // if(renderHud)
-        // {
-        //     RenderInv(TempDC, &player);
-        //     RenderLife(TempDC, player.life);
-        // }
+        RenderInv(TempDC, &player);
+        RenderLife(TempDC, player.life);
 
         if(zombie.life > 0)
         {
