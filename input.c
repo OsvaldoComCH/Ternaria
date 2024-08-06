@@ -36,7 +36,7 @@ void MoveRight(character * Player, zombie * Zombie, int Pixels)
 void MoveDown(character * Player, zombie * Zombie, int Pixels)
 {
     Player->hitbox.bottom += Pixels;
-    int antigo = mapay;
+    int antigo = mapay + 7;
     mapay -= Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
@@ -54,7 +54,7 @@ void MoveDown(character * Player, zombie * Zombie, int Pixels)
 void MoveUp(character * Player, zombie * Zombie, int Pixels)
 {
     Player->hitbox.top -= Pixels;
-    int antigo = mapay;
+    int antigo = mapay - 7;
     mapay += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
