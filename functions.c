@@ -105,8 +105,8 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
         return 0;
     }
     block * B = malloc(sizeof(block));
-    B->x = Mouse.x / 32;
-    B->y = (1010 - Mouse.y) / 32;
+    B->x = (Mouse.x + mapax) / 32;
+    B->y = (1010 - Mouse.y + mapay) / 32 ;
     B->type = Type;
     int canPlace = 0;
     BlockDefine(B);

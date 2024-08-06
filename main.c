@@ -81,10 +81,19 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
+        int antigox = mapax;
+        int antigoy = mapay;
         Input(TempDC, &player, &zombie, &Map);
+
         MoveZombie(&player, &zombie);
         
         DefineMap(&Map);
+        
+        zombie.hitbox.left += antigox - mapax;
+        zombie.hitbox.right += antigox - mapax;
+        zombie.hitbox.top -= antigoy - mapay;
+        zombie.hitbox.bottom -= antigoy - mapay;
+
         RenderBkgd(TempDC);
         RenderMap(&Map, TempDC);
         RenderInv(TempDC, &player);

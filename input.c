@@ -6,7 +6,6 @@ void MoveLeft(character * Player, zombie * Zombie, int Pixels)
     Player->state = Player->state + 1;
     Player->facing = 1;
     Player->hitbox.left -= Pixels;
-    int antigo = mapax;
     mapax -= Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
@@ -14,7 +13,6 @@ void MoveLeft(character * Player, zombie * Zombie, int Pixels)
         mapax += B->hitbox.right - Player->hitbox.left;
     }
     Player->hitbox.left += Pixels;
-    MoveRightZombie(Zombie, antigo - mapax);
 }
 
 void MoveRight(character * Player, zombie * Zombie, int Pixels)
@@ -22,7 +20,6 @@ void MoveRight(character * Player, zombie * Zombie, int Pixels)
     Player->state = Player->state + 1;
     Player->facing = 2;
     Player->hitbox.right += Pixels;
-    int antigo = mapax;
     mapax += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
@@ -30,13 +27,11 @@ void MoveRight(character * Player, zombie * Zombie, int Pixels)
         mapax -= Player->hitbox.right - B->hitbox.left + 1;
     }
     Player->hitbox.right -= Pixels;
-    MoveLeftZombie(Zombie, mapax - antigo);
 }
 
 void MoveDown(character * Player, zombie * Zombie, int Pixels)
 {
     Player->hitbox.bottom += Pixels;
-    int antigo = mapay + 7;
     mapay -= Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
@@ -48,13 +43,11 @@ void MoveDown(character * Player, zombie * Zombie, int Pixels)
         mapay += Player->hitbox.bottom - B->hitbox.top;
     }
     Player->hitbox.bottom -= Pixels;
-    MoveUpZombie(Zombie, antigo - mapay);
 }
 
 void MoveUp(character * Player, zombie * Zombie, int Pixels)
 {
     Player->hitbox.top -= Pixels;
-    int antigo = mapay - 7;
     mapay += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
@@ -64,9 +57,9 @@ void MoveUp(character * Player, zombie * Zombie, int Pixels)
         Player->knockback = 0;
         Player->canMove = 1;
         mapay -= B->hitbox.bottom - Player->hitbox.top;
+
     }
     Player->hitbox.top += Pixels;
-    MoveDownZombie(Zombie, mapay - antigo);
 }
 
 void Jump(character * Player, zombie * Zombie, int Pixels) 
