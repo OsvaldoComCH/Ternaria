@@ -73,8 +73,8 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
         return 0;
     }
     block * B = malloc(sizeof(block));
-    B->x = Mouse.x / 32;
-    B->y = (1010 - Mouse.y) / 32;
+    B->x = (Mouse.x + mapax) / 32;
+    B->y = (1010 - Mouse.y + mapay) / 32 ;
     B->type = Type;
     int canPlace = 0;
     BlockDefine(B);
@@ -131,7 +131,7 @@ void SpawnZombie(zombie * Zombie, const character * Player)
     if(Zombie->baseLife < 22)
     {
         //Zumbi Pequeno
-        Zombie->hitbox.left = ((PlayerX + 30) % 60) * 32;
+        Zombie->hitbox.left = ((PlayerX + 20) % 60) * 32;
         Zombie->hitbox.right = Zombie->hitbox.left + 31;
         Zombie->hitbox.top = 812;
         Zombie->hitbox.bottom = Zombie->hitbox.top + 63;
@@ -149,7 +149,7 @@ void SpawnZombie(zombie * Zombie, const character * Player)
         Zombie->baseLife *= 1.5;
     } else {
         //Zumbi Gigante
-        Zombie->hitbox.left = ((PlayerX + 30) % 60) * 32;
+        Zombie->hitbox.left = ((PlayerX + 20) % 60) * 32;
         Zombie->hitbox.right = Zombie->hitbox.left + 97;
         Zombie->hitbox.top = 512;
         Zombie->hitbox.bottom = Zombie->hitbox.top + 127;
@@ -171,10 +171,10 @@ void SpawnZombie(zombie * Zombie, const character * Player)
 //Função para criar o jogador
 void SpawnPlayer(character * Player)
 {
-    Player->hitbox.left = 320;
+    Player->hitbox.left = 944;
     Player->hitbox.right = Player->hitbox.left + 31;
-    Player->hitbox.top = 812;
-    Player->hitbox.bottom = 1000;
+    Player->hitbox.top = 572;
+    Player->hitbox.bottom = 508;
     if(!MapCollision(&Player->hitbox))
     {
         Player->hitbox.bottom = Player->hitbox.top + 63;

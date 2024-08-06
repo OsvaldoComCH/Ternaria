@@ -1,38 +1,38 @@
 #include "imports.h"
 #include "render.c"
 
-void MoveLeft(character * Player, int Pixels)
+void MoveLeft(character * Player, zombie * Zombie, int Pixels)
 {
     Player->state = Player->state + 1;
     Player->facing = 1;
     Player->hitbox.left -= Pixels;
-    Player->hitbox.right -= Pixels;
+    mapax -= Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
-        Player->hitbox.left = B->hitbox.right;
-        Player->hitbox.right = Player->hitbox.left + 31;
+        mapax += B->hitbox.right - Player->hitbox.left;
     }
+    Player->hitbox.left += Pixels;
 }
 
-void MoveRight(character * Player, int Pixels)
+void MoveRight(character * Player, zombie * Zombie, int Pixels)
 {
     Player->state = Player->state + 1;
     Player->facing = 2;
-    Player->hitbox.left += Pixels;
     Player->hitbox.right += Pixels;
+    mapax += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
-        Player->hitbox.right = B->hitbox.left - 1;
-        Player->hitbox.left = Player->hitbox.right - 31;
+        mapax -= Player->hitbox.right - B->hitbox.left + 1;
     }
+    Player->hitbox.right -= Pixels;
 }
 
-void MoveDown(character * Player, int Pixels)
+void MoveDown(character * Player, zombie * Zombie, int Pixels)
 {
-    Player->hitbox.top += Pixels;
     Player->hitbox.bottom += Pixels;
+    mapay -= Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
@@ -40,15 +40,15 @@ void MoveDown(character * Player, int Pixels)
         Player->canJump = 1;
         Player->knockback = 0;
         Player->canMove = 1;
-        Player->hitbox.bottom = B->hitbox.top;
-        Player->hitbox.top = Player->hitbox.bottom - 63;
+        mapay += Player->hitbox.bottom - B->hitbox.top;
     }
+    Player->hitbox.bottom -= Pixels;
 }
 
-void MoveUp(character * Player, int Pixels)
+void MoveUp(character * Player, zombie * Zombie, int Pixels)
 {
     Player->hitbox.top -= Pixels;
-    Player->hitbox.bottom -= Pixels;
+    mapay += Pixels;
     block * B = MapCollision(&Player->hitbox);
     if(B != NULL)
     {
@@ -56,12 +56,13 @@ void MoveUp(character * Player, int Pixels)
         Player->gravity = 0;
         Player->knockback = 0;
         Player->canMove = 1;
-        Player->hitbox.top = B->hitbox.bottom;
-        Player->hitbox.bottom = Player->hitbox.top + 63;
+        mapay -= B->hitbox.bottom - Player->hitbox.top;
+
     }
+    Player->hitbox.top += Pixels;
 }
 
-void Jump(character * Player, int Pixels) 
+void Jump(character * Player, zombie * Zombie, int Pixels) 
 {
     if(Player->canJump == 1)
     {
@@ -71,30 +72,30 @@ void Jump(character * Player, int Pixels)
             Player->gravity = 0;
             return;
         }
-        MoveUp(Player, Pixels);
+        MoveUp(Player, Zombie, Pixels);
     }
 }
 
-void Gravity(character * Player)
+void Gravity(character * Player, zombie * Zombie)
 {
-    MoveDown(Player, Player->gravity);
+    MoveDown(Player, Zombie, Player->gravity);
     if(Player->gravity < 20)
     {
         Player->gravity++;
     }
 }
 
-void Knockback(character * Player)
+void Knockback(character * Player, zombie * Zombie)
 {
     if(Player->knockbackSide == 1)
     {
-        MoveLeft(Player, 7);
+        MoveLeft(Player, Zombie, 7);
     }
     else
     {
-        MoveRight(Player, 7);
+        MoveRight(Player, Zombie, 7);
     }
-    MoveUp(Player, 7);
+    MoveUp(Player, Zombie, 7);
 }
 
 int CoolDown = 0;
@@ -228,22 +229,22 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
     if(GetAsyncKeyState(VK_A) && Player->canMove)
     {
-        MoveLeft(Player, 5 << Player->run);
+        MoveLeft(Player, Zombie, 5 << Player->run);
     }
     if(GetAsyncKeyState(VK_D) && Player->canMove)
     {
-        MoveRight(Player, 5 << Player->run);
+        MoveRight(Player, Zombie, 5 << Player->run);
     }
     if(GetAsyncKeyState(VK_SPACE) && Player->canMove)
     {
-        Jump(Player, 15);
+        Jump(Player, Zombie, 15);
     }
     else if(Player->canJump == 1)
     {
         Player->canJump = 0;
         Player->gravity = 0;
     }
-    Gravity(Player);
+    Gravity(Player, Zombie);
     if (Collision(&Player->hitbox, &Zombie->hitbox) && Player->vulnerability == 0)
     {
         Player->vulnerability = 30;
@@ -261,7 +262,7 @@ void Input(HDC hdc, character * Player, zombie * Zombie, DArray * Map)
     }
     if(Player->knockback)
     {
-        Knockback(Player);
+        Knockback(Player, Zombie);
         Player->canMove = 0;
     }
     if(Player->vulnerability > 0)

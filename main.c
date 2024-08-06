@@ -101,14 +101,23 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
+        int antigox = mapax;
+        int antigoy = mapay;
         Input(TempDC, &player, &zombie, &Map);
-        MoveZombie(&player, &zombie);
 
-        if(renderHud)
-        {
-            RenderInv(TempDC, &player);
-            RenderLife(TempDC, player.life);
-        }
+        MoveZombie(&player, &zombie);
+        
+        DefineMap(&Map);
+        
+        zombie.hitbox.left += antigox - mapax;
+        zombie.hitbox.right += antigox - mapax;
+        zombie.hitbox.top -= antigoy - mapay;
+        zombie.hitbox.bottom -= antigoy - mapay;
+
+        RenderBkgd(TempDC);
+        RenderMap(&Map, TempDC);
+        RenderInv(TempDC, &player);
+        RenderLife(TempDC, player.life);
 
         if(zombie.life > 0)
         {
@@ -136,6 +145,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
                 DamageZombie(&zombie, 200);
             }
         }
+        printf("%d, %d\n", mapax, mapay);
 
         BitBlt(hdc, 0, 0, R.right-R.left, R.bottom-R.top, TempDC, 0, 0, SRCCOPY);
         DeleteDC(TempDC);
