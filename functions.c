@@ -1,40 +1,8 @@
 #include "imports.h"
 
 HWND Ghwnd;
+HINSTANCE GInstance;
 
-
-// Apaga o retângulo, desenhando uma parte do background em cima dele
-void EraseRect(HDC hdc, const RECT * Rect)
-{
-    BITMAP bm;
-    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround1920.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-    HDC BitmapDC = CreateCompatibleDC(hdc);
-    SelectObject(BitmapDC, Image);
-    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
-    BitBlt(hdc, Rect->left, Rect->top, Rect->right - Rect->left+1, Rect->bottom - Rect->top+1, BitmapDC, Rect->left, Rect->top, SRCCOPY);
-    DeleteDC(BitmapDC);
-    DeleteObject(Image);
-}
-
-//Desenha a imagem
-void DrawImg(HDC hdc, const RECT * Rect, const wchar_t * ImgPath)
-{
-    BITMAP bm;
-    static HBITMAP Image = NULL;
-    static wchar_t * LastImg = NULL;
-    if(ImgPath != LastImg)
-    {
-        DeleteObject(Image);
-        Image = (HBITMAP)LoadImage(NULL, ImgPath, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-    }
-    HDC BitmapDC = CreateCompatibleDC(hdc);
-    SelectObject(BitmapDC, Image);
-    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
-    TransparentBlt(hdc, Rect->left, Rect->top, bm.bmWidth, bm.bmHeight, BitmapDC,
-    0, 0, Rect->right - Rect->left, Rect->bottom - Rect->top, RGB(255, 0, 255));
-    DeleteDC(BitmapDC);
-    LastImg = ImgPath;
-}
 
 // Desenha retângulo
 void DrawRect(HDC hdc, const RECT * Rect, COLORREF Color)

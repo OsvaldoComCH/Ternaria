@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "imports.h"
 
+char * MapPath = "Map.txt";
 
 // Estrutura dos blocos, especificando com posição e tipo.
 typedef struct block
@@ -24,23 +25,23 @@ void BlockDefine(block * B)
     switch (B->type)
     {
     case 1:
-        B->img = L"imagens/Grama.bmp";
+        B->img = L"Grama";
         break;
 
     case 2:
-        B->img = L"imagens/Terra.bmp";
+        B->img = L"Terra";
         break;
 
     case 3:
-        B->img = L"imagens/Tronco.bmp";
+        B->img = L"Tronco";
         break;
 
     case 4:
-        B->img = L"imagens/Folhas.bmp";
+        B->img = L"Folhas";
         break;
 
     case 5:
-        B->img = L"imagens/Stone.bmp";
+        B->img = L"Stone";
         break;
 
     default:
@@ -120,6 +121,25 @@ void ReadArchive(DArray *lista)
 {
     int count = 0;
     FILE * File = fopen("Map.txt", "r");
+    MapPath = "Map.txt";
+
+    while(!feof(File))
+    {
+        ++count;
+        block *bloco = malloc(sizeof(block));
+        fscanf(File, "%i,%i,%i", &bloco->x, &bloco->y, &bloco->type);
+        BlockDefine(bloco);
+        DArrayAdd(lista, bloco);
+    }
+    fclose(File);
+}
+
+// Lê o Arquivo do Mundo Senai
+void ReadSenai(DArray *lista)
+{
+    int count = 0;
+    FILE * File = fopen("Map Senai.txt", "r");
+    MapPath = "Map Senai.txt";
 
     while(!feof(File))
     {
@@ -136,7 +156,7 @@ void ReadArchive(DArray *lista)
 void WriteArchive(DArray *lista)
 {
     int count = 0;
-    FILE * File = fopen("Map.txt", "w");
+    FILE * File = fopen(MapPath, "w");
     for(int i = 0; i < lista->Size; ++i)
     {
         block * B = (block *) lista->List[i];

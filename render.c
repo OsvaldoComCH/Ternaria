@@ -1,11 +1,45 @@
 #include "imports.h"
 #include "functions.c"
 
+
+// Apaga o retângulo, desenhando uma parte do background em cima dele
+void EraseRect(HDC hdc, const RECT * Rect)
+{
+    BITMAP bm;
+    HBITMAP Image = LoadBitmap(GInstance, L"Background");
+    HDC BitmapDC = CreateCompatibleDC(hdc);
+    SelectObject(BitmapDC, Image);
+    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
+    BitBlt(hdc, Rect->left, Rect->top, Rect->right - Rect->left+1, Rect->bottom - Rect->top+1, BitmapDC, Rect->left, Rect->top, SRCCOPY);
+    DeleteDC(BitmapDC);
+    DeleteObject(Image);
+}
+
+//Desenha a imagem
+void DrawImg(HDC hdc, const RECT * Rect, wchar_t * ImgPath)
+{
+    BITMAP bm;
+    static HBITMAP Image = NULL;
+    static wchar_t * LastImg = NULL;
+    if(ImgPath != LastImg)
+    {
+        DeleteObject(Image);
+        Image = LoadBitmap(GInstance, ImgPath);
+    }
+    HDC BitmapDC = CreateCompatibleDC(hdc);
+    SelectObject(BitmapDC, Image);
+    GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
+    TransparentBlt(hdc, Rect->left, Rect->top, bm.bmWidth, bm.bmHeight, BitmapDC,
+    0, 0, Rect->right - Rect->left, Rect->bottom - Rect->top, RGB(255, 0, 255));
+    DeleteDC(BitmapDC);
+    LastImg = ImgPath;
+}
+
 //Renderiza a imagem de Background
 void RenderBkgd(HDC hdc)
 {
     BITMAP bm;
-    HBITMAP Image = (HBITMAP)LoadImage(NULL, L"imagens/BackGround1920.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    HBITMAP Image = LoadBitmap(GInstance, L"Background");
     HDC BitmapDC = CreateCompatibleDC(hdc);
     SelectObject(BitmapDC, Image);
     GetObject((HGDIOBJ)Image, sizeof(bm), &bm);
@@ -68,18 +102,18 @@ void RenderPlayer(const character * Player, HDC hdc)
     {
         if (Player->facing == 1)
         {
-            img = L"imagens/Fer.bmp";
+            img = L"FerE";
         } else {
-            img = L"imagens/FerDireita.bmp";
+            img = L"FerD";
         }
     }
     else
     {
         if (Player->facing == 1)
         {
-            img = L"imagens/FerAndante.bmp";
+            img = L"FerEA";
         } else {
-            img = L"imagens/FerDireitaAndante.bmp";
+            img = L"FerDA";
         }
     }
 
@@ -96,16 +130,16 @@ void RenderZombie(const zombie * zombie, HDC hdc)
         {
             if(zombie->facing == 1)
             {
-                img = L"imagens/Zumbi.bmp";
+                img = L"ZumbiE";
             } else {
-                img = L"imagens/ZumbiDireita.bmp";
+                img = L"ZumbiD";
             }
         } else {
             if(zombie->facing == 1)
             {
-                img = L"imagens/Boss.bmp";
+                img = L"BossE";
             } else {
-                img = L"imagens/Bossdireita.bmp";
+                img = L"BossD";
             }
         }
     }
@@ -115,16 +149,16 @@ void RenderZombie(const zombie * zombie, HDC hdc)
         {
             if(zombie->facing == 1)
             {
-                img = L"imagens/ZumbiAndando.bmp";
+                img = L"ZumbiEA";
             } else {
-                img = L"imagens/ZumbiAndandoDireita.bmp";
+                img = L"ZumbiDA";
             }
         } else {
             if(zombie->facing == 1)
             {
-                img = L"imagens/BossAndando.bmp";
+                img = L"BossEA";
             } else {
-                img = L"imagens/BossAndandoDireita.bmp";
+                img = L"BossDA";
             }
         }
     }
@@ -135,7 +169,7 @@ void RenderZombie(const zombie * zombie, HDC hdc)
 //Renderiza o inventário
 void RenderInv(HDC hdc, character * player)
 {
-    wchar_t * img = L"imagens/BarraInv.bmp";
+    wchar_t * img = L"BarraInv";
     RECT rect = {10, 10, 317, 42};
     int left = 20, top = 18, right = 36, bottom = 34;
     DrawImg(hdc, &rect, img);
@@ -159,7 +193,7 @@ void RenderLife(HDC hdc, int life)
     DrawRect(hdc, &Frame, RGB(200,200,255));
     for(int i = 1; i <= life; i ++)
     {
-        img1 = L"imagens/Vida.bmp";
+        img1 = L"Heart";
         RECT R1 = {left, top, right, bottom};
         DrawImg(hdc, &R1, img1);
         left += 20;
@@ -167,7 +201,7 @@ void RenderLife(HDC hdc, int life)
     }
     for(int i = life + 1; i <= 10; i++)
     {
-        img1 = L"imagens/BrokenHeart.bmp";
+        img1 = L"HeartBroken";
         RECT R1 = {left, top, right, bottom};
         DrawImg(hdc, &R1, img1);
         left += 20;
@@ -175,4 +209,61 @@ void RenderLife(HDC hdc, int life)
     }
 }
 
+void RenderMenu(int Mode)
+{
+    HDC hdc = GetDC(Ghwnd);
+    RECT R;
+    GetClientRect(Ghwnd, &R);
+    R.left = R.right / 2 - 200;
+    R.right = R.left + 400;
+    R.top += 450;
+    R.bottom = R.top + 210;
+    HFONT Font = CreateFont(30, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+    SelectObject(hdc, Font);
+    DrawRect(hdc, &R, RGB(128,128,128));
+    SetBkColor(hdc, RGB(128,128,128));
+    TextOut(hdc, R.left + 50, R.top + 30, L"Novo Mapa", 9);
+    TextOut(hdc, R.left + 50, R.top + 90, L"Carregar Mapa", 13);
+    TextOut(hdc, R.left + 50, R.top + 150, L"Jogar Mapa Do Mundo Senai", 25);
+    R.left += 10;
+    R.right = R.left + 32;
+    if(Mode == 1)
+    {
+        R.top += 30;
+    }else
+    if(Mode == 2)
+    {
+        R.top += 90;
+    }else
+    {
+        R.top += 150;
+    }
+    R.bottom = R.top + 32;
+    DrawImg(hdc, &R, L"Heart");
+    DeleteObject(Font);
+    ReleaseDC(Ghwnd, hdc);
+}
 
+void RenderLogo(HDC hdc, int GameOver)
+{
+    RECT R;
+    GetClientRect(Ghwnd, &R);
+    R.left = R.right / 2 - 237;
+    R.right = R.left + 475;
+    R.top += 200;
+    R.bottom = R.top + 150;
+    if(GameOver)
+    {
+        HFONT Font = CreateFont(72, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+        SelectObject(hdc, Font);
+        DrawRect(hdc, &R, RGB(128,128,128));
+        SetBkColor(hdc, RGB(128,128,128));
+        TextOut(hdc, R.left + 50, R.top + 40, L"GAME OVER", 10);
+        DeleteObject(Font);
+    }else
+    {
+        DrawImg(hdc, &R, L"TernariaLogo");
+    }
+}

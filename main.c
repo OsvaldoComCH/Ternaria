@@ -1,12 +1,13 @@
 /* Compile:
-gcc main.c -o Ternaria.exe -l gdi32 -l msimg32
+gcc main.c resources.coff -o Ternaria.exe -l gdi32 -l msimg32
 */
 
 #include "imports.h"
 #include "input.c"
 
 //Flag para indicar se a thread está rodando
-int ThreadRunning = 1;
+int Mode = 0;
+int ThreadRunning = 0;
 HANDLE Thread;
 
 //Função da thread principal
@@ -14,16 +15,35 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 {
     srand(time(NULL));
     //Se o jogo for reiniciado depois do game over, esta flag é falsa e o mapa não é gerado
-    if(ThreadRunning)
-    {
-        CreateArchive();
-    }
-    ThreadRunning = 1;
     HWND hwnd = *((HWND *)lpParam);//Recupera-se o Handle para a janela do parâmetro da thread
 
     DArrayCreate(&Map, 200);
-    ReadArchive(&Map); 
-
+    if(Mode == 0)
+    {
+        Mode = 1;
+        ThreadRunning = 0;
+    	ReadArchive(&Map);
+        HDC hdc = GetDC(hwnd);
+        RenderBkgd(hdc);
+        RenderMap(&Map, hdc);
+        RenderLogo(hdc, 0);
+        RenderMenu(Mode);
+        ReleaseDC(hwnd, hdc);
+        return 0;
+    }
+    if(Mode == 1)
+    {
+        CreateArchive();
+    	ReadArchive(&Map);
+    }else
+	if(Mode == 2)
+	{
+        ReadArchive(&Map);
+	}else
+	if(Mode == 3)
+	{
+    	ReadSenai(&Map); 
+	}
     int gameover = 0, count = 0;
     character player;
     SpawnPlayer(&player);
@@ -134,15 +154,9 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
         WaitForSingleObject(Timer, INFINITE);//Aqui se espera até o timer terminar
     }
-
-    HFONT Font = CreateFont(72, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-    CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
     hdc = GetDC(hwnd);
-    RECT R1 = {200, 300, 675, 450};
-    SelectObject(hdc, Font);
-    DrawRect(hdc, &R1, RGB(100,100,100));
-    SetBkColor(hdc, RGB(100,100,100));
-    TextOut(hdc, R1.left + 50, R1.top + 40, L"GAME OVER", 10);
+    RenderLogo(hdc, 1);
+    RenderMenu(Mode);
     ReleaseDC(hwnd, hdc);
     DArrayDestroy(&Map);
     ThreadRunning = 0;
@@ -170,12 +184,26 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         break;
         case WM_KEYDOWN:
         {
-            //Se a thread estiver acabado e o jogador pressionar Return (Enter), a thread roda novamente
-            if(wParam == VK_RETURN && ThreadRunning == 0)
-            {
-                TerminateThread(Thread, 0);
-                Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, NULL);
-            }
+			if(ThreadRunning == 0)
+			{
+				if(GetAsyncKeyState(VK_DOWN) & 0x8000)
+				{
+					++Mode;
+                    if(Mode > 3){Mode = 1;}
+                    RenderMenu(Mode);
+				}else
+				if(GetAsyncKeyState(VK_UP) & 0x8000)
+				{
+					--Mode;
+                    if(Mode < 1){Mode = 3;}
+                    RenderMenu(Mode);
+				}else
+                if(GetAsyncKeyState(VK_RETURN) & 0x8000 && Mode != 0)
+                {
+                    Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, NULL);
+                    ThreadRunning = 1;
+                }
+			}
         }
         default:
             return DefWindowProc(hwnd, Msg, wParam, lParam);
@@ -190,9 +218,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     WNDCLASS Window = {};
     Window.lpfnWndProc = WndProc;
     Window.hInstance = hInstance;
+    GInstance = hInstance;
     Window.lpszClassName = WClassName;
-    Window.hCursor = (HCURSOR)LoadImage(NULL, L"imagens/Hand.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-    Window.hIcon = (HICON)LoadImage(NULL, L"imagens/iconeTernaria.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+    Window.hIcon = (HICON)LoadImage(GetModuleHandle(NULL), L"TernariaIcon", IMAGE_ICON, 0, 0, 0);
+    Window.hCursor = (HCURSOR)LoadImage(GetModuleHandle(NULL), L"Hand", IMAGE_ICON, 0, 0, 0);
 
     if(!RegisterClass(&Window))
     {
@@ -217,12 +246,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     Ghwnd = hwnd;
     
-    
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
-
-    //Abrindo uma thread separada para rodar o jogo
+    
     Thread = CreateThread(NULL, 0, MainThread, &hwnd, 0, NULL);
+    FreeConsole();
 
     //Loop para receber as mensagens da WINAPI
     while(GetMessage(&Msg, NULL, 0, 0))

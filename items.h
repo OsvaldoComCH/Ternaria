@@ -27,38 +27,38 @@ void ItemDefine(Item * item)
         case 0:
             item->damage = 0;
             item->ammo = -1;
-            item->imgLeft = L"imagens/PicaretaEsquerda.bmp";
-            item->imgRight = L"imagens/PicaretaDireita.bmp";
+            item->imgLeft = L"PickE";
+            item->imgRight = L"PickD";
         break;
 
         case 1:
             item->damage = 2;
             item->ammo = -1;
-            item->imgLeft = L"imagens/EspadaEsquerda.bmp";
-            item->imgRight = L"imagens/EspadaDireita.bmp";
+            item->imgLeft = L"EspadaE";
+            item->imgRight = L"EspadaD";
         break;
 
         case 2:
             item->damage = 5;
             item->ammo = 10;
-            item->imgLeft = L"imagens/ShotgunEsquerda.bmp";
-            item->imgRight = L"imagens/ShotgunDireita.bmp";
+            item->imgLeft = L"ShotE";
+            item->imgRight = L"ShotD";
         break;
 
         case 3:
             switch(item->damage)
             {
                 case 2:
-                    item->imgLeft = L"imagens/Bloquinho.bmp";
-                    item->imgRight = L"imagens/Bloquinho.bmp";
+                    item->imgLeft = L"Bloquinho";
+                    item->imgRight = L"Bloquinho";
                 break;
                 case 3:
-                    item->imgLeft = L"imagens/Bloquinho2.bmp";
-                    item->imgRight = L"imagens/Bloquinho2.bmp";
+                    item->imgLeft = L"Bloquinho2";
+                    item->imgRight = L"Bloquinho2";
                 break;
                 case 5:
-                    item->imgLeft = L"imagens/Bloquinho3.bmp";
-                    item->imgRight = L"imagens/Bloquinho3.bmp";
+                    item->imgLeft = L"Bloquinho3";
+                    item->imgRight = L"Bloquinho3";
                 break;
                 default:
                 break;
