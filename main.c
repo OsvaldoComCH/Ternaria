@@ -134,6 +134,13 @@ DWORD WINAPI MainThread(LPVOID lpParam)
             count = 0;
         }
 
+        if(count % 30 == 0)
+        {
+            DArrayDestroy(&Map);
+            DArrayCreate(&Map, 200);
+            ReadArchive(&Map);
+        }
+
         if(player.hitbox.top > 1000)
         {
             player.life = 0;

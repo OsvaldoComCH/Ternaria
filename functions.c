@@ -58,7 +58,7 @@ int DestroyBlocks(character * Player, POINT Mouse)
         {
             free(B);
             DArrayRemove(&Map, i);
-            WriteArchive(&Map);
+            RemoveBlockArchive(&Map, B);
             return 1;
         }
     }
@@ -119,7 +119,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
         return 0;
     }
     DArrayAdd(&Map, B);
-    WriteArchive(&Map);
+    AddBlockArchive(&Map, B);
     return 1;
 }
 
