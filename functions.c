@@ -56,10 +56,15 @@ int DestroyBlocks(character * Player, POINT Mouse)
         block * B = (block *) Map.List[i];
         if(PtInRect(&B->hitbox, Mouse))
         {
-            free(B);
-            DArrayRemove(&Map, i);
-            WriteArchive(&Map);
-            return 1;
+            if (B->life == 0)
+            {
+                free(B);
+                DArrayRemove(&Map, i);
+                WriteArchive(&Map);
+                return 1;
+            }
+
+            B->life -= 1;
         }
     }
     return 0;
@@ -76,6 +81,32 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
     B->x = (Mouse.x + mapax) / 32;
     B->y = (1010 - Mouse.y + mapay) / 32 ;
     B->type = Type;
+    
+    switch (B->type)
+    {
+    case 1:
+        B->life = GrassLife;
+        break;
+
+    case 2:
+        B->life = DirtLife;
+        break;
+
+    case 3:
+        B->life = LogLife;
+        break;
+
+    case 4:
+        B->life = LeavesLife;
+        break;
+
+    case 5:
+        B->life = StoneLife;
+        break;  
+
+    default:
+        break;
+    }
     int canPlace = 0;
     BlockDefine(B);
     if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
