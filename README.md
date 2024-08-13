@@ -1,3 +1,5 @@
+# TERNARIA #
+
 O Ternaria é um projeto de conclusão da matéria de Lógica de Programação que tive no curso de desenvolvimento de sistemas do Senai.
 Este projeto foi desenvolvido em conjunto com 2 amigos meus, e a sua primeira versão foi concluída com um prazo de 7 dias.
 
