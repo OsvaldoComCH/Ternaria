@@ -59,8 +59,7 @@ int DestroyBlocks(character * Player, POINT Mouse)
             if (B->life == 0)
             {
                 free(B);
-                DArrayRemove(&Map, i);
-                WriteArchive(&Map);
+                RemoveBlockArchive(&Map, B);
                 return 1;
             }
             B->life -= 1;
@@ -149,8 +148,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
         free(B);
         return 0;
     }
-    DArrayAdd(&Map, B);
-    WriteArchive(&Map);
+    AddBlockArchive(&Map, B);
     return 1;
 }
 
@@ -197,56 +195,6 @@ void SpawnZombie(zombie * Zombie, const character * Player)
         Zombie->life = 150;
     }
 
-}
-
-//Função para criar o jogador
-void SpawnPlayer(character * Player, zombie * Zombie)
-{
-    CenterPlayer(Player, Zombie);
-    if(!MapCollision(&Player->hitbox))
-    {
-        Player->hitbox.bottom = Player->hitbox.top + 63;
-        block * B = malloc(sizeof(block));
-        B->type = 1;
-        B->x = Player->hitbox.left >> 5;
-        B->y = ((977 - Player->hitbox.bottom) >> 5) + 1;
-        BlockDefine(B);
-        DArrayAdd(&Map, B);
-    }
-    Player->hitbox.bottom = Player->hitbox.top + 63;
-    while(MapCollision(&Player->hitbox))
-    {
-        Player->hitbox.top -= 32;
-        Player->hitbox.bottom -= 32;
-    }
-    Player->life = 10;
-    Player->damage = 1;
-    Player->state = 0;
-    Player->mainSlot = 0;
-    Player->inventory[0].id = 0;
-    Player->inventory[1].id = 1;
-    Player->inventory[2].id = 2;
-
-    Player->inventory[3].id = 3;
-    Player->inventory[3].damage = 2;
-
-    Player->inventory[4].id = 3;
-    Player->inventory[4].damage = 3;
-
-    Player->inventory[5].id = 3;
-    Player->inventory[5].damage = 5;
-
-    ItemDefine(&Player->inventory[0]);
-    ItemDefine(&Player->inventory[1]);
-    ItemDefine(&Player->inventory[2]);
-    ItemDefine(&Player->inventory[3]);
-    ItemDefine(&Player->inventory[4]);
-    ItemDefine(&Player->inventory[5]);
-    Player->gravity = 0;
-    Player->canJump = 1;
-    Player->knockback = 0;
-    Player->knockbackSide = 0;
-    Player->canMove = 1;
 }
 
 // Move o zumbi para baixo
@@ -423,8 +371,7 @@ void MoveZombie(character * player, zombie * zombie)
                     if (B->life == 0)
                     {
                         free(B);
-                        DArrayRemove(&Map, B.);
-                        WriteArchive(&Map);
+                        RemoveBlockArchive(&Map, B);
                     }
                     B->life -= 1;
                 }
@@ -511,3 +458,50 @@ void CenterPlayer(character * Player, zombie * Zombie)
     Player->hitbox = ClientRect;
 }
 
+//Função para criar o jogador
+void SpawnPlayer(character * Player, zombie * Zombie)
+{
+    CenterPlayer(Player, Zombie);
+    if(!MapCollision(&Player->hitbox))
+    {
+        Player->hitbox.bottom = Player->hitbox.top + 63;
+        block * B = malloc(sizeof(block));
+        B->type = 1;
+        B->x = Player->hitbox.left >> 5;
+        B->y = ((977 - Player->hitbox.bottom) >> 5) + 1;
+    }
+    Player->hitbox.bottom = Player->hitbox.top + 63;
+    while(MapCollision(&Player->hitbox))
+    {
+        Player->hitbox.top -= 32;
+        Player->hitbox.bottom -= 32;
+    }
+    Player->life = 10;
+    Player->damage = 1;
+    Player->state = 0;
+    Player->mainSlot = 0;
+    Player->inventory[0].id = 0;
+    Player->inventory[1].id = 1;
+    Player->inventory[2].id = 2;
+
+    Player->inventory[3].id = 3;
+    Player->inventory[3].damage = 2;
+
+    Player->inventory[4].id = 3;
+    Player->inventory[4].damage = 3;
+
+    Player->inventory[5].id = 3;
+    Player->inventory[5].damage = 5;
+
+    ItemDefine(&Player->inventory[0]);
+    ItemDefine(&Player->inventory[1]);
+    ItemDefine(&Player->inventory[2]);
+    ItemDefine(&Player->inventory[3]);
+    ItemDefine(&Player->inventory[4]);
+    ItemDefine(&Player->inventory[5]);
+    Player->gravity = 0;
+    Player->canJump = 1;
+    Player->knockback = 0;
+    Player->knockbackSide = 0;
+    Player->canMove = 1;
+}
