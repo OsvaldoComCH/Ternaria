@@ -102,6 +102,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
         {
             renderHud = 0;
         }
+
         EraseRect(TempDC, &player.hitbox);
         EraseRect(TempDC, &zombie.hitbox);
         int antigox = mapax;
@@ -137,11 +138,18 @@ DWORD WINAPI MainThread(LPVOID lpParam)
             count = 0;
         }
 
-        if(mapay < -2000)
+        if(count % 30 == 0)
+        {
+            DArrayDestroy(&Map);
+            DArrayCreate(&Map, 200);
+            ReadArchive(&Map);
+        }
+
+        if(player.hitbox.top > 1000)
         {
             player.life = 0;
         }
-        if(zombie.hitbox.top > 2000)
+        if(zombie.hitbox.top > 1000)
         {
             if(!zombie.respawn)
             {

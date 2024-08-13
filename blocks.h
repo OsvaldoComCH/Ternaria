@@ -91,7 +91,6 @@ void BlockDefine(block * B)
             default:
                 break;
         }
-        
         break;
 
     case 4:
@@ -126,7 +125,7 @@ void CreateArchive()
     int arvore = 0, arvtam = 0;
     int ypedra = camada - (rand()%2 + 5);
     
-    for(int x = 0; x < 60; x++)
+    for(int x = -150; x <= 150; x++)
     {
         if(arvore == 0 && rand()%10 == 1) // criação aleatoria da arvore, 10% de chance de criar uma arvore caso o bloco anterior não tenha uma arvore
         {
@@ -149,7 +148,7 @@ void CreateArchive()
         {
             arvore = 0;
         }
-        for(int y = camada; y >= 0; y--) // criação dos blocos do chão
+        for(int y = camada; y >= -50; y--) // criação dos blocos do chão
         {
             fprintf(map, "%d,%d,%d\n", x, y, (y <= ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
         }
@@ -214,8 +213,14 @@ void ReadArchive(DArray *lista)
                 break;
         }
         BlockDefine(bloco);
-
-        DArrayAdd(lista, bloco);
+        if((bloco->x*32) < -(5 * 32) + mapax || (bloco->x*32) > (60 * 32) + mapax || (bloco->y*32) > (30 * 32) + mapay || (bloco->y*32) < -(5 * 32) + mapay)
+        {
+            free(bloco);
+        }
+        else
+        {
+            DArrayAdd(lista, bloco);
+        }
     }
     fclose(File);
 }
@@ -238,16 +243,77 @@ void ReadSenai(DArray *lista)
     fclose(File);
 }
 
-// Escreve no txt
-void WriteArchive(DArray *lista)
+void AddBlockArchive(DArray *lista, block * B)
 {
-    int count = 0;
-    FILE * File = fopen(MapPath, "w");
-    for(int i = 0; i < lista->Size; ++i)
+    FILE * File = fopen(MapPath, "r");
+    FILE * File2 = fopen("Map2.txt", "w");
+    fprintf(File2, "%i,%i,%i\n", B->x, B->y, B->type);
+    while(!feof(File))
     {
-        block * B = (block *) lista->List[i];
-        fprintf(File, "%i,%i,%i\n", B->x, B->y, B->type);
+        int x = 0, y = 0, type = 0;
+        fscanf(File, "%i,%i,%i", &x, &y, &type);
+        if(type != 0)
+        {
+            fprintf(File2, "%i,%i,%i\n", x, y, type);
+        }
     }
     fclose(File);
+    fclose(File2);
+    File = fopen(MapPath, "w");
+    File2 = fopen("Map2.txt", "r");
+    while(!feof(File2))
+    {
+        int x = 0, y = 0, type = 0;
+        fscanf(File2, "%i,%i,%i", &x, &y, &type);
+        if(type != 0)
+        {
+            fprintf(File, "%i,%i,%i\n", x, y, type);
+        }
+    }
+    fclose(File);
+    fclose(File2);
+}
+
+// Escreve no txt
+// void WriteArchive(DArray *lista)
+// {
+//     int count = 0;
+//     FILE * File = fopen(MapPath, "w");
+//     for(int i = 0; i < lista->Size; ++i)
+//     {
+//         block * B = (block *) lista->List[i];
+//         fprintf(File, "%i,%i,%i\n", B->x, B->y, B->type);
+//     }
+//     fclose(File);
+// }
+
+void RemoveBlockArchive(DArray *lista, block * B)
+{
+    FILE * File = fopen(MapPath, "r");
+    FILE * File2 = fopen("Map2.txt", "w");
+    while(!feof(File))
+    {
+        int x = 0, y = 0, type = 0;
+        fscanf(File, "%i,%i,%i", &x, &y, &type);
+        if(type != 0)
+        {
+            fprintf(File2, "%i,%i,%i\n", x, y, type);
+        }
+    }
+    fclose(File);
+    fclose(File2);
+    File = fopen(MapPath, "w");
+    File2 = fopen("Map2.txt", "r");
+    while(!feof(File2))
+    {
+        int x = 0, y = 0, type = 0;
+        fscanf(File2, "%i,%i,%i", &x, &y, &type);
+        if(!(B->type == type && B->x == x && B->y == y) && type != 0)
+        {
+            fprintf(File, "%i,%i,%i\n", x, y, type);
+        }
+    }
+    fclose(File);
+    fclose(File2);
 }
 #endif

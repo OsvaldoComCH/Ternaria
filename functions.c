@@ -63,7 +63,6 @@ int DestroyBlocks(character * Player, POINT Mouse)
                 WriteArchive(&Map);
                 return 1;
             }
-
             B->life -= 1;
         }
     }
@@ -107,6 +106,7 @@ int PlaceBlocks(character * Player, zombie * Zombie, POINT Mouse, int Type)
     default:
         break;
     }
+
     int canPlace = 0;
     BlockDefine(B);
     if(Collision(&B->hitbox, &Player->hitbox) || Collision(&B->hitbox, &Zombie->hitbox))
@@ -197,6 +197,56 @@ void SpawnZombie(zombie * Zombie, const character * Player)
         Zombie->life = 150;
     }
 
+}
+
+//Função para criar o jogador
+void SpawnPlayer(character * Player, zombie * Zombie)
+{
+    CenterPlayer(Player, Zombie);
+    if(!MapCollision(&Player->hitbox))
+    {
+        Player->hitbox.bottom = Player->hitbox.top + 63;
+        block * B = malloc(sizeof(block));
+        B->type = 1;
+        B->x = Player->hitbox.left >> 5;
+        B->y = ((977 - Player->hitbox.bottom) >> 5) + 1;
+        BlockDefine(B);
+        DArrayAdd(&Map, B);
+    }
+    Player->hitbox.bottom = Player->hitbox.top + 63;
+    while(MapCollision(&Player->hitbox))
+    {
+        Player->hitbox.top -= 32;
+        Player->hitbox.bottom -= 32;
+    }
+    Player->life = 10;
+    Player->damage = 1;
+    Player->state = 0;
+    Player->mainSlot = 0;
+    Player->inventory[0].id = 0;
+    Player->inventory[1].id = 1;
+    Player->inventory[2].id = 2;
+
+    Player->inventory[3].id = 3;
+    Player->inventory[3].damage = 2;
+
+    Player->inventory[4].id = 3;
+    Player->inventory[4].damage = 3;
+
+    Player->inventory[5].id = 3;
+    Player->inventory[5].damage = 5;
+
+    ItemDefine(&Player->inventory[0]);
+    ItemDefine(&Player->inventory[1]);
+    ItemDefine(&Player->inventory[2]);
+    ItemDefine(&Player->inventory[3]);
+    ItemDefine(&Player->inventory[4]);
+    ItemDefine(&Player->inventory[5]);
+    Player->gravity = 0;
+    Player->canJump = 1;
+    Player->knockback = 0;
+    Player->knockbackSide = 0;
+    Player->canMove = 1;
 }
 
 // Move o zumbi para baixo
@@ -351,13 +401,40 @@ void MoveZombie(character * player, zombie * zombie)
     {
         int left = player->hitbox.left;
         int right = player->hitbox.right;
+        int top = player->hitbox.top;
+        int bottom = player->hitbox.bottom;
+
         if(zombie->hitbox.right < right)
         {
             MoveRightZombie(zombie, 2);
         }
-        if(zombie->hitbox.left > left)
+        else if(zombie->hitbox.left > left)
         {
             MoveLeftZombie(zombie, 2);
+        }
+        else
+        {
+            if (zombie->hitbox.bottom < top)
+            {
+                zombie->hitbox.bottom += 5;
+                block * B = MapCollision(&zombie->hitbox);
+                if (Collision(&zombie->hitbox, &B->hitbox))
+                {
+                    if (B->life == 0)
+                    {
+                        free(B);
+                        DArrayRemove(&Map, B.);
+                        WriteArchive(&Map);
+                    }
+                    B->life -= 1;
+                }
+                zombie->hitbox.bottom -= 5;
+            }
+            else if (zombie->hitbox.top < bottom)
+            {
+
+            }
+            
         }
     }
     ZombieGravity(zombie);
@@ -434,59 +511,3 @@ void CenterPlayer(character * Player, zombie * Zombie)
     Player->hitbox = ClientRect;
 }
 
-
-//Função para criar o jogador
-void SpawnPlayer(character * Player, zombie * Zombie)
-{
-    /*
-    Player->hitbox.left = 944;
-    Player->hitbox.right = Player->hitbox.left + 31;
-    Player->hitbox.top = 572;
-    Player->hitbox.bottom = 508;
-    */
-    CenterPlayer(Player, Zombie);
-    if(!MapCollision(&Player->hitbox))
-    {
-        Player->hitbox.bottom = Player->hitbox.top + 63;
-        block * B = malloc(sizeof(block));
-        B->type = 1;
-        B->x = Player->hitbox.left >> 5;
-        B->y = ((977 - Player->hitbox.bottom) >> 5) + 1;
-        BlockDefine(B);
-        DArrayAdd(&Map, B);
-    }
-    Player->hitbox.bottom = Player->hitbox.top + 63;
-    while(MapCollision(&Player->hitbox))
-    {
-        Player->hitbox.top -= 32;
-        Player->hitbox.bottom -= 32;
-    }
-    Player->life = 10;
-    Player->damage = 1;
-    Player->state = 0;
-    Player->mainSlot = 0;
-    Player->inventory[0].id = 0;
-    Player->inventory[1].id = 1;
-    Player->inventory[2].id = 2;
-
-    Player->inventory[3].id = 3;
-    Player->inventory[3].damage = 2;
-
-    Player->inventory[4].id = 3;
-    Player->inventory[4].damage = 3;
-
-    Player->inventory[5].id = 3;
-    Player->inventory[5].damage = 5;
-
-    ItemDefine(&Player->inventory[0]);
-    ItemDefine(&Player->inventory[1]);
-    ItemDefine(&Player->inventory[2]);
-    ItemDefine(&Player->inventory[3]);
-    ItemDefine(&Player->inventory[4]);
-    ItemDefine(&Player->inventory[5]);
-    Player->gravity = 0;
-    Player->canJump = 1;
-    Player->knockback = 0;
-    Player->knockbackSide = 0;
-    Player->canMove = 1;
-}
