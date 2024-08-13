@@ -5,6 +5,10 @@ Este projeto foi desenvolvido em conjunto com 2 amigos meus, e a sua primeira ve
 
 O projeto é uma releitura do jogo Terraria. Nele nós fizemos apenas a jogabilidade básica do jogo, incluindo construção, combate e movimentação do jogo.
 
+<div>
+  <img src="Ternaria.png">
+</div>
+
 # TUTORIAL #
 
 A - Anda para a esquerda; <br>
