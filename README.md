@@ -7,14 +7,14 @@ O projeto é uma releitura do jogo Terraria. Nele nós fizemos apenas a jogabili
 
 # TUTORIAL #
 
-A - Anda para a esquerda;
-D - Anda para a direita;
-Barra de Espaço - Pula.
-SHIFT - Corre;
-1 - Seleciona a picareta para poder quebrar itens;
-2 - Seleciona a espada para atacar o zumbi;
-3 - Seleciona a espingarda para atacar o zumbi;
-4 - Seleciona o bloco de Terra para poder construir;
-5 - Seleciona o bloco de Tronco para poder construir;
-6 - Seleciona o bloco de Pedra para poder construir;
+A - Anda para a esquerda; <br>
+D - Anda para a direita; <br>
+Barra de Espaço - Pula; <br>
+SHIFT - Corre; <br>
+1 - Seleciona a picareta para poder quebrar itens; <br>
+2 - Seleciona a espada para atacar o zumbi; <br>
+3 - Seleciona a espingarda para atacar o zumbi; <br>
+4 - Seleciona o bloco de Terra para poder construir; <br>
+5 - Seleciona o bloco de Tronco para poder construir; <br>
+6 - Seleciona o bloco de Pedra para poder construir; <br>
 Botão Esquerdo do Mouse - Utiliza o item que está selecionado.
