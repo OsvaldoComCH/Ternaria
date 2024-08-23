@@ -70,7 +70,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
     RECT R;
     GetClientRect(hwnd, &R);
     RenderBkgd(hdc);
-    RenderMap(&Map, hdc);
+    // RenderMap(&Map, hdc);
     RenderLife(hdc, player.life);
     RenderInv(hdc, &player);
     ReleaseDC(hwnd, hdc);

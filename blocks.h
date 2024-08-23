@@ -133,14 +133,14 @@ void CreateArchive()
             arvtam = rand()%6 + 3; // tamanho aleatorio da arvore
             for(int arvh = arvore; arvh < arvore + arvtam; arvh++) // criação dos troncos em linha reta para cima de acordo com o tamanho da arvore
             {
-                fprintf(map, "%d,%d,%d\n", x, arvh, 3); // escreve o local do bloco no txt do mapa
+                fprintf(map, "%d,%d,%d,%d\n", x, arvh, 3, LogLife); // escreve o local do bloco no txt do mapa
             }
             // criação das folhas da arvore em volta do tronco de acordo com o tamanho da arvore
             for(int folhay = arvore + arvtam; folhay < arvore + arvtam * 2; folhay++)
             {
                 for(int folhax = (x - arvtam / 2) + ((folhay - arvore - arvtam) / 2); folhax <= (x + arvtam / 2) - ((folhay - arvore - arvtam) / 2); folhax++)
                 {
-                    fprintf(map, "%d,%d,%d\n", folhax, folhay, 4); // escreve o local do bloco no txt do mapa
+                    fprintf(map, "%d,%d,%d,%d\n", folhax, folhay, 4, LeavesLife); // escreve o local do bloco no txt do mapa
                 }
             }
         }
@@ -150,7 +150,8 @@ void CreateArchive()
         }
         for(int y = camada; y >= -50; y--) // criação dos blocos do chão
         {
-            fprintf(map, "%d,%d,%d\n", x, y, (y <= ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
+            int tipoBloco = (y <= ypedra) ? 5 : (y == camada && arvore != camada + 1) ? 1 : 2;
+            fprintf(map, "%d,%d,%d,%d\n", x, y, tipoBloco, (tipoBloco == 5) ? StoneLife : (tipoBloco == 1) ? GrassLife : DirtLife); // escreve o local do bloco no txt do mapa e escolhe o tipo do bloco de acordo com a camada
         }
         camada += rand()%3 - 1; // aumenta ou diminui em 1 ou mantem a camada aleatoriamente
         if(camada < 6) // limita o minimo da camada que será gerada
@@ -173,6 +174,7 @@ void CreateArchive()
     }
     fclose(map); // finaliza a criação do mapa
 }
+
 /* 
 Função de leitura do arquivo de mapa, fazemos a construção do mapa do Ternaria por meio da leitura desse arquivo.
 */ 
@@ -185,33 +187,9 @@ void ReadArchive(DArray *lista)
     while(!feof(File))
     {
         ++count;
-        block *bloco = malloc(sizeof(block));
-        fscanf(File, "%i,%i,%i", &bloco->x, &bloco->y, &bloco->type);
-        switch (bloco->type)
-        {
-            case 1:
-                bloco->life = GrassLife;
-                break;
-
-            case 2:
-                bloco->life = DirtLife;
-                break;
-
-            case 3:
-                bloco->life = LogLife;
-                break;
-
-            case 4:
-                bloco->life = LeavesLife;
-                break;
-
-            case 5:
-                bloco->life = StoneLife;
-                break;
-            
-            default:
-                break;
-        }
+        block * bloco = malloc(sizeof(block));
+        fscanf(File, "%i,%i,%i,%i", &bloco->x, &bloco->y, &bloco->type, &bloco->life);
+        
         BlockDefine(bloco);
         if((bloco->x*32) < -(5 * 32) + mapax || (bloco->x*32) > (60 * 32) + mapax || (bloco->y*32) > (30 * 32) + mapay || (bloco->y*32) < -(5 * 32) + mapay)
         {
@@ -247,14 +225,14 @@ void AddBlockArchive(DArray *lista, block * B)
 {
     FILE * File = fopen(MapPath, "r");
     FILE * File2 = fopen("Map2.txt", "w");
-    fprintf(File2, "%i,%i,%i\n", B->x, B->y, B->type);
+    fprintf(File2, "%i,%i,%i,%i\n", B->x, B->y, B->type, B->life);
     while(!feof(File))
     {
-        int x = 0, y = 0, type = 0;
-        fscanf(File, "%i,%i,%i", &x, &y, &type);
+        int x = 0, y = 0, type = 0, life = 0;
+        fscanf(File, "%i,%i,%i,%i", &x, &y, &type, &life);
         if(type != 0)
         {
-            fprintf(File2, "%i,%i,%i\n", x, y, type);
+            fprintf(File2, "%i,%i,%i,%i\n", x, y, type, life);
         }
     }
     fclose(File);
@@ -263,11 +241,11 @@ void AddBlockArchive(DArray *lista, block * B)
     File2 = fopen("Map2.txt", "r");
     while(!feof(File2))
     {
-        int x = 0, y = 0, type = 0;
-        fscanf(File2, "%i,%i,%i", &x, &y, &type);
+        int x = 0, y = 0, type = 0, life = 0;
+        fscanf(File2, "%i,%i,%i,%i", &x, &y, &type, &life);
         if(type != 0)
         {
-            fprintf(File, "%i,%i,%i\n", x, y, type);
+            fprintf(File, "%i,%i,%i,%i\n", x, y, type, life);
         }
     }
     fclose(File);
@@ -293,11 +271,11 @@ void RemoveBlockArchive(DArray *lista, block * B)
     FILE * File2 = fopen("Map2.txt", "w");
     while(!feof(File))
     {
-        int x = 0, y = 0, type = 0;
-        fscanf(File, "%i,%i,%i", &x, &y, &type);
+        int x = 0, y = 0, type = 0, life = 0;
+        fscanf(File, "%i,%i,%i,%i", &x, &y, &type, &life);
         if(type != 0)
         {
-            fprintf(File2, "%i,%i,%i\n", x, y, type);
+            fprintf(File2, "%i,%i,%i,%i\n", x, y, type, life);
         }
     }
     fclose(File);
@@ -306,11 +284,11 @@ void RemoveBlockArchive(DArray *lista, block * B)
     File2 = fopen("Map2.txt", "r");
     while(!feof(File2))
     {
-        int x = 0, y = 0, type = 0;
-        fscanf(File2, "%i,%i,%i", &x, &y, &type);
+        int x = 0, y = 0, type = 0, life = 0;
+        fscanf(File2, "%i,%i,%i,%i", &x, &y, &type, &life);
         if(!(B->type == type && B->x == x && B->y == y) && type != 0)
         {
-            fprintf(File, "%i,%i,%i\n", x, y, type);
+            fprintf(File, "%i,%i,%i,%i\n", x, y, type, life);
         }
     }
     fclose(File);
